@@ -3,7 +3,7 @@ import React from "react";
 
 export default function CardLogo({ children, wd, hg, p }) {
   return (
-    <Center h="100vh" bgImage={"../../../public/bg.svg"}>
+    <Center h="100vh" bgImage={"url(https://svgshare.com/i/yYp.svg)"}>
       <Box
         bg="white"
         width={wd}
@@ -17,7 +17,7 @@ export default function CardLogo({ children, wd, hg, p }) {
         borderColor={"gray.300"}
       >
         <Image
-          src="../../../public/Logo1.jpg"
+          src="https://i.ibb.co/Cwg7p4d/Logo1.jpg"
           borderRadius="full"
           boxSize="150px"
           mx="auto"
