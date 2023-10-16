@@ -1,7 +1,6 @@
 import { React, createContext, useState, useEffect } from "react";
 import jwt_decode from "jwt-decode";
 import toast from "react-hot-toast";
-import { AiFillInfoCircle } from "react-icons/ai";
 
 export const AppContext = createContext();
 
@@ -23,7 +22,6 @@ export function AppProvider({ children }) {
 
 
   useEffect(() => {
-    console.log("Rol",role)
     if (user) {
       const timeout = setTimeout(() => {
         localStorage.removeItem("token");
@@ -41,13 +39,12 @@ export function AppProvider({ children }) {
             secondary: "#fff",
           },
         });
-      }, 3600);
+      }, 3600000);
     }
   }, [user]);
 
   const decodeToken = (a) => {
     const decode = jwt_decode(localStorage.getItem(a));
-    //const decode = jwt_decode(Cookies.get(a))
     const rol = decode.tipo;
     const email = decode.username;
     const id = decode.id;
