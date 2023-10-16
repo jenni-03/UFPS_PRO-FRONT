@@ -42,14 +42,11 @@ export default function FormularioCategoria() {
       },
     }).catch((e)=>{
       toast.error(e.response.data.error)
-    }).finally(()=>{
-      navigate("/categorias")
     })
-
-    
 
     if(response.status===200){
       toast.success("¡Categoría agregada correctamente!")
+      navigate("/categorias")
     }
 
   }
