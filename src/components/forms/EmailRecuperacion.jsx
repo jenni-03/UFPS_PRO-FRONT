@@ -22,7 +22,6 @@ import Btn from "../pure/Btn";
       email:email,
       redirectURL:url
     }
-    console.log(body)
     let response = await axiosApi.post("/api/auth/requestPasswordReset",body,{
 
     }).catch((e)=>{
