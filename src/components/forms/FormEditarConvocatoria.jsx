@@ -1,16 +1,16 @@
 import React, { useState , useContext, useEffect} from 'react'
-import { useLocation, useRoute } from 'wouter';
 import { AppContext } from "../context/AppProvider";
 import { Box, FormLabel, FormErrorMessage, FormControl, Button, Input, Select, useSafeLayoutEffect } from '@chakra-ui/react';
 import * as Yup from "yup"
 import {Formik, Form, Field} from "formik"
 import axiosApi from '../../utils/config/axios.config';
 import { toast } from 'react-hot-toast';
+import { useNavigate, useParams } from 'react-router-dom';
 export default function FormEditarConvocatoria() {
-  const [match, params] = useRoute('/editarConvocatoria/:id');
+  const {id} = useParams()
   const [datos, setDatos] = useState()
   const [loading, setLoading] = useState(true)
-  const [loc, setLoc] = useLocation()
+  const navigate = useNavigate()
   const [pruebas, setPruebas] = useState(true)
   const { token } = useContext(AppContext);
   const initialValues = {
@@ -35,7 +35,7 @@ export default function FormEditarConvocatoria() {
 
   useEffect(()=>{
     obtenerPruebas()
-    getConvocatoriaById(params.id)
+    getConvocatoriaById(id)
   },[]) 
 
   const actualizarConvocatoria = async (nombre, prueba_id, descripcion, fecha_inicio, fecha_fin, id) =>{
@@ -53,12 +53,11 @@ export default function FormEditarConvocatoria() {
       }
     }).catch((e)=>{
         toast.error(e.response.data.error)
-    }).finally(
-        setLoc("/convocatorias")
-    )
+    })
 
     if(response.status === 200){
         toast.success("¡La convocatoria se actualizón correctamente!")
+        navigate("/convocatorias")
     }
 
   }
@@ -112,7 +111,7 @@ if(loading){
             initialValues={datos}
             validationSchema={validationSchema}
             onSubmit={({ nombre,prueba_id, fecha_inicio, fecha_fin,descripcion, email, semestre, estado }, { setFieldValue }) => {
-              actualizarConvocatoria(nombre, prueba_id, descripcion, fecha_inicio, fecha_fin,params.id)
+              actualizarConvocatoria(nombre, prueba_id, descripcion, fecha_inicio, fecha_fin,id)
             }}
           >
             {(props) => {

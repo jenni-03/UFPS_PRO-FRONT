@@ -1,11 +1,9 @@
-import { Box, Button, Select, Center, Textarea, Input } from "@chakra-ui/react";
+import { Box, Select, Center, Textarea, Input } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { React, useContext, useEffect, useState } from "react";
-import { Link, useRoute, useLocation } from "wouter";
 import * as Yup from "yup";
 import { FormControl, FormLabel, FormErrorMessage } from "@chakra-ui/react";
-import Boton from "../pure/Boton";
-import { toast, Toaster } from "react-hot-toast";
+import { toast} from "react-hot-toast";
 import axiosApi from "../../utils/config/axios.config";
 import { useParams, useNavigate} from "react-router-dom";
 import { AppContext } from "../context/AppProvider";
@@ -20,7 +18,6 @@ export default function FormularioEditarCategoria() {
   const [loading2, setLoading2] = useState(true);
   const [competencias, setCompetencias] = useState();
   const [compeSeleccionada, setCompeSeleccionada] = useState();
-  const [location, setLocation] = useLocation();
 
   const validationSchema = Yup.object().shape({
     nombre: Yup.string().required("El nombre es requerido").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$","El nombre solamente debe contener letras"),

@@ -1,13 +1,9 @@
 import {
   Box,
-  Grid,
-  GridItem,
   Input,
   Textarea,
   Select,
-  Button,
   Flex,
-  Text,
   Stack,
   FormControl,
   FormErrorMessage,
@@ -76,12 +72,11 @@ export default function FormularioPreguntaImagen() {
       },
     }).catch((e) => {
       toast.error(e.response.data.error);
-    }).finally(()=>{
-      navigate("/preguntas");
-    });
+    })
 
     if (response.status === 200) {
       toast.success("¡Pregunta agregada correctamente!");
+      navigate("/preguntas");
     }
   }
 

@@ -1,17 +1,16 @@
-import { Box, Button, Center, Input, Textarea, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { Box, Center, Input, Textarea, FormControl, FormErrorMessage } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import {React, useContext} from "react";
 import { useNavigate } from "react-router-dom";
-import Boton from "../pure/Boton";
 import * as Yup from "yup"
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Btn from "../pure/Btn";
 export default function FormularioCompetencia() {
 
 
-  const {token,user} = useContext(AppContext)
+  const {token} = useContext(AppContext)
   const navigate = useNavigate()
   const AgregarCompetencia = async (nombre, descripcion) =>{
     let body={

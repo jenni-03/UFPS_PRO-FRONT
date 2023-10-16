@@ -1,9 +1,7 @@
 import {
   Box,
   Input,
-  Textarea,
   Select,
-  Button,
   Flex,
   FormControl,
   FormLabel,
@@ -73,14 +71,11 @@ export default function FormularioConvocatoria() {
       .catch((e) => {
         toast.error(e.response.data.error);
       })
-      .finally(() => {
- //       navigate("/convocatorias");
-      });
 
     if (response.status === 200) {
       toast.success("¡Convocatoria agregada correctamente!");
+      navigate("/convocatorias")
     }
-//    navigate("/convocatorias")
   };
 
   const validationSchema = Yup.object().shape({

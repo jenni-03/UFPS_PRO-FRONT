@@ -1,6 +1,5 @@
 import {
   Box,
-  Button,
   Select,
   Center,
   Textarea,
@@ -8,7 +7,6 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Flex,
   Image
 } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
@@ -16,13 +14,10 @@ import { React, useContext, useEffect, useRef, useState } from "react";
 
 import { useParams } from "react-router-dom";
 import * as Yup from "yup";
-import Boton from "../pure/Boton";
 import { toast } from "react-hot-toast";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
 import { useNavigate } from "react-router-dom";
-import { BiObjectsVerticalCenter } from "react-icons/bi";
-import axios from "axios";
 import Btn from "../pure/Btn";
 
 export default function FormEditarPregunta() {

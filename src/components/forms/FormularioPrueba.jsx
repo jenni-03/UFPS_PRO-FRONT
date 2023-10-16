@@ -2,24 +2,16 @@ import React, { useState, useEffect, useContext } from 'react';
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
 import axiosApi from "../../utils/config/axios.config"
-import {  toast, Toaster } from "react-hot-toast";
+import {  toast} from "react-hot-toast";
 import { AppContext } from '../context/AppProvider';
 import { useNavigate } from 'react-router-dom';
 import Btn from "../pure/Btn"
 import {
   Box,
   FormControl,
-  Button,
   FormErrorMessage,
   Input,
-  MenuOptionGroup,
-  Menu,
-  Select,
-  MenuButton,
-  MenuList,
-  MenuItem,
   FormLabel,
-  Stack,
   Checkbox,
   Flex,
 } from "@chakra-ui/react";
@@ -31,7 +23,6 @@ const initialValues = {
   duracion: '',
   competencias: [],
   totalPreguntas: "",
-  //categorias: [],
 };
 
 const validationSchema = Yup.object().shape({
@@ -41,11 +32,7 @@ const validationSchema = Yup.object().shape({
   duracion: Yup.number().required('La duración es obligatoria'),
   totalPreguntas: Yup.number().required("El total de preguntas de la prueba es obligatorio"),
   competencias: Yup.array().required('Selecciona al menos una competencia'),
-  //categorias:Yup.array().of(
-   //     Yup.array().of(
-    //        Yup.number().required('Este campo es obligatorio')
-     //   )
-    //), 
+
 
 });
 

@@ -10,18 +10,16 @@ import {
   Box,
   Button,
   Icon,
-  useEditable,
   FormLabel,
   Switch
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import Boton from "../pure/Boton";
 import { AppContext } from "../context/AppProvider";
 import axiosApi from "../../utils/config/axios.config";
 import Btn from "../pure/Btn"
 import { toast } from "react-hot-toast";
 import { AiOutlineEdit } from "react-icons/ai";
-import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { MdAdd} from "react-icons/md";
 import Paginacion from "./Paginacion";
 
 export default function TablaPregunta({ columns, items, path, msg, showButton }) {
@@ -88,14 +86,6 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
     <Box >
       {showButton && (
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={"space-between"}>
-          {/*<Boton
-            msg={msg}
-            leftIcon={<MdAdd />}
-            as={Link}
-            path={path}
-            w={["100%", "250px"]}
-            radius={"8px"}
-        />*/}
           <Btn
             leftIcon={<MdAdd/>}
             path={path}

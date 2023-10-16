@@ -1,24 +1,22 @@
 import { React, useEffect, useState, useContext } from "react";
 import {
   Input,
-  Flex,
   Box,
   Button,
   FormControl,
   FormErrorMessage,
 } from "@chakra-ui/react";
-import Boton from "../pure/Boton";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
-import { Toaster, toast } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
 export default function EditarInformacionAdmin() {
   const [isLoading, setIsLoading] = useState(true);
   const [data, setData] = useState({});
   const navigate = useNavigate();
-  const { token, setToken } = useContext(AppContext);
+  const { token } = useContext(AppContext);
 
   useEffect(() => {
     getUser();
@@ -68,10 +66,7 @@ export default function EditarInformacionAdmin() {
     }
   };
 
-  const initialValues = {
-    nombre: data.nombre,
-    apellido: data.apellido,
-  };
+
 
   const validationSchema = Yup.object().shape({
     nombre: Yup.string()

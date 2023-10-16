@@ -1,11 +1,9 @@
 import {
-  Button,
   FormControl,
   FormLabel,
   Input,
   FormErrorMessage,
   Box,
-  Toast,
 } from "@chakra-ui/react";
 import axiosApi from "../../utils/config/axios.config";
 import * as Yup from "yup";
@@ -14,7 +12,6 @@ import { useNavigate } from "react-router-dom";
 import { Toaster, toast} from "react-hot-toast";
 import {React, useContext }from "react";
 import { AppContext } from "../context/AppProvider";
-import Boton from "../pure/Boton";
 import Btn from "../pure/Btn";
 
 export default function FormularioPasswordEstudiante() {
@@ -40,7 +37,6 @@ export default function FormularioPasswordEstudiante() {
       toast.success(`¡${response.data.message}!`)
       navigate("/user")
     }
-    "" 
   }
 
   const initialValues = {

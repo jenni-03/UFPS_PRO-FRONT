@@ -1,14 +1,12 @@
 import React, { useState, useEffect, useContext } from "react";
 import {
   Box,
-  Button,
   Select,
   Center,
   Input,
-  Textarea,
   FormControl,
   FormErrorMessage,
-  FormLabel
+  FormLabel,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -16,77 +14,96 @@ import { useNavigate } from "react-router-dom";
 import { useParams } from "react-router-dom";
 import { AppContext } from "../context/AppProvider";
 import axiosApi from "../../utils/config/axios.config";
-import { toast, Toaster } from "react-hot-toast";
+import { toast } from "react-hot-toast";
 import Btn from "../pure/Btn";
 
 export default function FormEditarEstudiante() {
-  const {id} = useParams()
+  const { id } = useParams();
   const { token } = useContext(AppContext);
   const [datos, setDatos] = useState();
   const [loading, setLoading] = useState(true);
-  const navigate = useNavigate()
+  const navigate = useNavigate();
 
-  const actualizarEstudiante = async (nombre, apellido,codigo,email,semestre, estado, id) => {
+  const actualizarEstudiante = async (
+    nombre,
+    apellido,
+    codigo,
+    email,
+    semestre,
+    estado,
+    id
+  ) => {
     let body = {
       nombre: nombre,
       apellido: apellido,
       codigo: codigo,
-      email:email,
-      semestre:semestre,
-      estado:estado
+      email: email,
+      semestre: semestre,
+      estado: estado,
     };
 
-    let response = await axiosApi.put(`api/user/student/update/${id}`, body, {
-      headers: {
-        Authorization: "Bearer " + token
-      }
-    }).catch((e) => {
-      toast.error(e.response.data.error);
-    }).finally(()=>{
-      navigate("/estudiantes")
-    });
+    let response = await axiosApi
+      .put(`api/user/student/update/${id}`, body, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .catch((e) => {
+        toast.error(e.response.data.error);
+      });
 
     if (response.status === 200) {
       toast.success("¡Estudiante actualizado!");
+      navigate("/estudiantes");
     }
   };
 
-  const getEstudianteById = async (id) =>{
-    let response = await axiosApi.get(`/api/user/student/${id}`,{
-    headers: {
-        Authorization: "Bearer " + token
-      }
-    }).catch((e) => {
-      toast.error(e.response.data.error);
-    });
+  const getEstudianteById = async (id) => {
+    let response = await axiosApi
+      .get(`/api/user/student/${id}`, {
+        headers: {
+          Authorization: "Bearer " + token,
+        },
+      })
+      .catch((e) => {
+        toast.error(e.response.data.error);
+      });
 
     setDatos({
-        nombre: response.data.nombre,
-        apellido: response.data.apellido,
-        codigo: response.data.codigo,
-        email: response.data.email,
-        semestre: response.data.semestre,
-        estado:response.data.estado.toString()
-    })
-    setLoading(false)
-  }
-
-
+      nombre: response.data.nombre,
+      apellido: response.data.apellido,
+      codigo: response.data.codigo,
+      email: response.data.email,
+      semestre: response.data.semestre,
+      estado: response.data.estado.toString(),
+    });
+    setLoading(false);
+  };
 
   useEffect(() => {
-    getEstudianteById(id)
+    getEstudianteById(id);
   }, []);
 
-
   const validationSchema = Yup.object().shape({
-    nombre: Yup.string().required("El nombre es requerido").max(25, "Máximo 25 caracteres").min(5, "Mínimo 5 caracteres"),
-    apellido: Yup.string().required("El nombre es requerido").max(25, "Máximo 25 caracteres").min(5, "Mínimo 5 caracteres"),
-    semestre: Yup.string().required("El nombre es requerido").max(2, "Máximo 2 dígitos").min(1, "Mínimo 1 dígido"),
+    nombre: Yup.string()
+      .required("El nombre es requerido")
+      .max(25, "Máximo 25 caracteres")
+      .min(5, "Mínimo 5 caracteres"),
+    apellido: Yup.string()
+      .required("El nombre es requerido")
+      .max(25, "Máximo 25 caracteres")
+      .min(5, "Mínimo 5 caracteres"),
+    semestre: Yup.string()
+      .required("El nombre es requerido")
+      .max(2, "Máximo 2 dígitos")
+      .min(1, "Mínimo 1 dígido"),
     email: Yup.string().email().required("El email es requerido"),
     estado: Yup.string().required("El estado es requerido"),
-    codigo: Yup.string().required("El estado es requerido").max(7, "Máximo 7 caracters").min(7, "Mínimo 7 caracteres"),
+    codigo: Yup.string()
+      .required("El estado es requerido")
+      .max(7, "Máximo 7 caracters")
+      .min(7, "Mínimo 7 caracteres"),
   });
-
 
   if (loading) {
     return <div>Cargando...</div>;
@@ -95,18 +112,24 @@ export default function FormEditarEstudiante() {
   return (
     <Box>
       <Center h="100%">
-        <Box
-          p="20px"
-          borderRadius="8px"
-          bgColor="white"
-          overflow="hidden"
-        >
+        <Box p="20px" borderRadius="8px" bgColor="white" overflow="hidden">
           <Formik
             initialValues={datos}
             validationSchema={validationSchema}
-            onSubmit={({ nombre, apellido, codigo, email, semestre, estado }, { setFieldValue }) => {
+            onSubmit={(
+              { nombre, apellido, codigo, email, semestre, estado },
+              { setFieldValue }
+            ) => {
               const estadoValue = estado === "true";
-              actualizarEstudiante(nombre,apellido,codigo,email,semestre,estadoValue,id)
+              actualizarEstudiante(
+                nombre,
+                apellido,
+                codigo,
+                email,
+                semestre,
+                estadoValue,
+                id
+              );
             }}
           >
             {(props) => {
@@ -121,13 +144,18 @@ export default function FormEditarEstudiante() {
                     gap={"20px"}
                   >
                     <Box
-                        display={"flex"}
-                        flexDir={["column","column","row"]}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                        gap={"15px"}
+                      display={"flex"}
+                      flexDir={["column", "column", "row"]}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      gap={"15px"}
                     >
-                      <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.nombre && touched.nombre}>
+                      <FormControl
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        isInvalid={errors.nombre && touched.nombre}
+                      >
                         <FormLabel htmlFor="nombre">Nombre</FormLabel>
                         <Field
                           name="nombre"
@@ -139,7 +167,12 @@ export default function FormEditarEstudiante() {
                         />
                         <FormErrorMessage>{errors.nombre}</FormErrorMessage>
                       </FormControl>
-                      <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.apellido && touched.apellido}>
+                      <FormControl
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        isInvalid={errors.apellido && touched.apellido}
+                      >
                         <FormLabel htmlFor="apellido">Apellido</FormLabel>
                         <Field
                           name="apellido"
@@ -154,12 +187,17 @@ export default function FormEditarEstudiante() {
                     </Box>
                     <Box
                       display={"flex"}
-                        flexDir={["column","column","row"]}
-                        alignItems={"center"}
-                        justifyContent={"center"}
-                        gap={"15px"}
+                      flexDir={["column", "column", "row"]}
+                      alignItems={"center"}
+                      justifyContent={"center"}
+                      gap={"15px"}
                     >
-                      <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.estado && touched.estado}>
+                      <FormControl
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        isInvalid={errors.estado && touched.estado}
+                      >
                         <FormLabel htmlFor="estado">Estado</FormLabel>
                         <Field
                           name="estado"
@@ -174,7 +212,12 @@ export default function FormEditarEstudiante() {
                         </Field>
                         <FormErrorMessage>{errors.estado}</FormErrorMessage>
                       </FormControl>
-                      <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.codigo && touched.codigo}>
+                      <FormControl
+                        display="flex"
+                        flexDirection="column"
+                        justifyContent="center"
+                        isInvalid={errors.codigo && touched.codigo}
+                      >
                         <FormLabel htmlFor="codigo">Código</FormLabel>
                         <Field
                           name="codigo"
@@ -186,23 +229,24 @@ export default function FormEditarEstudiante() {
                         <FormErrorMessage>{errors.codigo}</FormErrorMessage>
                       </FormControl>
                     </Box>
-                      <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.email && touched.email}>
-                        <FormLabel htmlFor="email">Correo</FormLabel>
-                        <Field
-                          name="email"
-                          as={Input}
-                          id="email"
-                          type="text"
-                          maxW={["200px", "250px", "415px", "415px"]}
-                          w="415px"
-                        />
-                        <FormErrorMessage>{errors.email}</FormErrorMessage>
-                      </FormControl>
-                    <Btn
-                      isSubmit={true}
-                      msg={"Guardar"}
-                      w={"full"}
-                    />
+                    <FormControl
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                      isInvalid={errors.email && touched.email}
+                    >
+                      <FormLabel htmlFor="email">Correo</FormLabel>
+                      <Field
+                        name="email"
+                        as={Input}
+                        id="email"
+                        type="text"
+                        maxW={["200px", "250px", "415px", "415px"]}
+                        w="415px"
+                      />
+                      <FormErrorMessage>{errors.email}</FormErrorMessage>
+                    </FormControl>
+                    <Btn isSubmit={true} msg={"Guardar"} w={"full"} />
                   </Box>
                 </Form>
               );

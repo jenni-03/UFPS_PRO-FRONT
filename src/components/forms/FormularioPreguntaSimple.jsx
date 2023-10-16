@@ -1,40 +1,27 @@
 import {
   Box,
-  Grid,
-  GridItem,
   Input,
   Textarea,
   Select,
-  Button,
   Flex,
-  Text,
-  color,
   FormControl,
   FormLabel,
   FormErrorMessage,
   AbsoluteCenter,
   Divider,
 } from "@chakra-ui/react";
-import { Formik, Form, Field, ErrorMessage } from "formik";
-import Boton from "../pure/Boton";
+import { Formik, Form, Field} from "formik";
 import { useState, useRef, useContext, useEffect } from "react";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
 import { toast } from "react-hot-toast";
 import * as Yup from "yup";
 import { useNavigate } from "react-router-dom";
-const categorias = ["Inglés", "Español", "Análisis", "Matemáticas"];
 import Btn from "../pure/Btn";
 
 export default function FormularioSimple() {
-  const [archivo, setArchivo] = useState(null);
   const navigate = useNavigate()
-  const archivoInputRef = useRef(null);
   const inputRef = useRef();
-  const ARef = useRef();
-  const BRef = useRef();
-  const CRef = useRef();
-  const DRef = useRef();
   const [categorias, setCategorias] = useState();
 
   const { token } = useContext(AppContext);
@@ -370,22 +357,6 @@ export default function FormularioSimple() {
                     </Field>
                     <FormErrorMessage>{errors.archivo}</FormErrorMessage>
                   </FormControl>
-                  {/* <Button
-                    bgColor="principal.100"
-                    textColor="white"
-                    w={{
-                      sm: "100%",
-                      md: "200px",
-                      lg: "250px",
-                      tableBreakpoint: "340px",
-                    }}
-                    _hover={{ backgroundColor: "fondo.100" }}
-                    mb="10px"
-                    mt="10px"
-                    type="submit"
-                  >
-                    Guardar
-                  </Button> */}
                   <Btn
                     mt={"10px"}
                     isSubmit={true}

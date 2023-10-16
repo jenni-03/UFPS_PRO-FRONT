@@ -1,5 +1,4 @@
 import {
-    Button,
     FormControl,
     FormLabel,
     Input,
@@ -33,7 +32,6 @@ import axiosApi from "../../utils/config/axios.config";
     let response = await axiosApi.post("/api/auth/resetPassword",body)
     .catch((e)=>{
       toast.error(e.response.data.error)
-    }).finally(()=>{
     })
 
     if(response.status === 200 ){
