@@ -24,7 +24,7 @@ export function AppProvider({ children }) {
 
   useEffect(() => {
     console.log("Rol",role)
-    if (role) {
+    if (user) {
       const timeout = setTimeout(() => {
         localStorage.removeItem("token");
         setToken(localStorage.removeItem("token"));
@@ -41,7 +41,7 @@ export function AppProvider({ children }) {
             secondary: "#fff",
           },
         });
-      }, 3600000);
+      }, 3600);
     }
   }, [user]);
 
