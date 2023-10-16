@@ -206,7 +206,7 @@ export default function FormEditarPregunta() {
                     gap={"20px"}
                   >
                     <Box w={"100%"}>
-                      <FormLabel>Añadir Imagen</FormLabel>
+                      <FormLabel>{imagen ? "Cambiar Imagen" : "Añadir Imagen" }</FormLabel>
                       <Field
                         id="imagen"
                         name="imagen"
