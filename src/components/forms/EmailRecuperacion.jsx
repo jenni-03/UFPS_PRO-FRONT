@@ -1,5 +1,4 @@
 import {
-    Button,
     FormControl,
     FormLabel,
     Input,
@@ -46,11 +45,11 @@ import Btn from "../pure/Btn";
           validationSchema={validationSchema}
           enableReinitialize={true}
           onSubmit={({email}) => {
-            requestPassword(email, "http://localhost:5173/#/newPassword")
+            requestPassword(email, "https://cheerful-strudel-8a37c7.netlify.app/#/newPassword")
           }}
         >
           {(props) => {
-            const { values, errors, isSubmitting, touched } = props;
+            const {  errors, touched } = props;
   
             return (
               <Form>
