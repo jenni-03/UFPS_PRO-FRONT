@@ -133,6 +133,9 @@ export default function AppRouter() {
             />
             <Route path="/pruebasUser" element={<PruebasUser />} />
             <Route path="/convocatoriasUser" element={<ConvocatoriaUser />} />
+            <Route path="/presentarPrueba/1" element={<PresentarConvocatoria/>}></Route>
+            <Route path="/presentarPrueba/2" element={<PresentarConvocatoriaMates/>}></Route>
+            <Route path="/presentarPrueba/3" element={<PresentarConvocatoriaAdministracion/>}></Route>
           </Route>
 
           <Route path="/newPassword/:id/:token" element={<NewPassword />} />
