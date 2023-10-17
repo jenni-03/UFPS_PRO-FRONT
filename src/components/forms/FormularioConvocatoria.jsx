@@ -208,7 +208,7 @@ export default function FormularioConvocatoria() {
                         id="fecha_inicio"
                         name="fecha_inicio"
                         as={Input}
-                        type={"date"}
+                        type={"datetime-local"}
                         cursor="pointer"
                       />
                       <FormErrorMessage>{errors.fecha_inicio}</FormErrorMessage>
@@ -223,7 +223,7 @@ export default function FormularioConvocatoria() {
                         name="fecha_fin"
                         as={Input}
                         resize={"none"}
-                        type={"date"}
+                        type={"datetime-local"}
                         cursor="pointer"
                       />
                       <FormErrorMessage>{errors.fecha_fin}</FormErrorMessage>
