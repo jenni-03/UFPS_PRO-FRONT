@@ -50,7 +50,7 @@ export function AppProvider({ children }) {
     const id = decode.id;
     setId(id);
     setRole(rol);
-    setUser(email);
+    //setUser(email);
   };
 
   return (
