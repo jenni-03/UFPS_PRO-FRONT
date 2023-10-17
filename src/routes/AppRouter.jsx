@@ -135,20 +135,6 @@ export default function AppRouter() {
             <Route path="/convocatoriasUser" element={<ConvocatoriaUser />} />
           </Route>
 
-          <Route
-            element={
-              <ProtectedRoute
-                redirectTo={"/home"}
-                isValid={role && role === "Estudiante"}
-              >
-              </ProtectedRoute>
-            }
-          >
-            <Route path="/presentarPrueba/1" element={<PresentarConvocatoria/>}></Route>
-            <Route path="/presentarPrueba/2" element={<PresentarConvocatoriaMates/>}></Route>
-            <Route path="/presentarPrueba/3" element={<PresentarConvocatoriaAdministracion/>}></Route>
-          </Route>
-
           <Route path="/newPassword/:id/:token" element={<NewPassword />} />
           <Route path="/" element={<Login />}></Route>
           <Route path="/recuperarEmail" element={<EmailRecuperación />}></Route>
