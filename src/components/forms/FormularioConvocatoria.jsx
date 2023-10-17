@@ -54,8 +54,8 @@ export default function FormularioConvocatoria() {
     archivo
   ) => {
     const formData = new FormData();
-    formData.append("nombre", nombre);
-    formData.append("descripcion", descripcion);
+    formData.append("convocatoria_nombre", nombre);
+    formData.append("convocatoria_descripcion", descripcion);
     formData.append("fecha_inicio", fecha_inicio);
     formData.append("fecha_fin", fecha_fin);
     formData.append("prueba_id", prueba_id);
