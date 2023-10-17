@@ -120,8 +120,9 @@ export default function FormularioConvocatoria() {
           }}
           validationSchema={validationSchema}
           onSubmit={({nombre,descripcion,fecha_inicio,fecha_fin,prueba_id}) => {
-            console.log(nombre,descripcion,fecha_inicio,fecha_fin,prueba_id,inputRef.current.files[0])
-            agregarConvocatoria(nombre,descripcion,fecha_inicio,fecha_fin,prueba_id,inputRef.current.files[0])
+            fechaInicial = fecha_inicio.replace("T", " ")
+            fechaTerminal = fecha_fin.replace("T", " ")
+            agregarConvocatoria(nombre,descripcion,fechaInicial,fechaTerminal,prueba_id,inputRef.current.files[0])
           }}
         >
           {(props) => {
