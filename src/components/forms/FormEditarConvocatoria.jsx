@@ -58,7 +58,7 @@ export default function FormEditarConvocatoria() {
     })
 
     if(response.status === 200){
-        toast.success("¡La convocatoria se actualizón correctamente!")
+        toast.success("¡La convocatoria se actualizó correctamente!")
         navigate("/convocatorias")
     }
 
