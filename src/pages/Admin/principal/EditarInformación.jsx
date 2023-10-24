@@ -6,6 +6,6 @@ import FormEditarInfo from '../../../components/forms/FormEditarInformaciónAdmi
 export default function EditarInformacion() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormEditarInfo/>} msg={"Principal"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormEditarInfo/>} msg={"Editar Información"} />
     )
 }

@@ -5,6 +5,6 @@ import FormularioConvocatoria from '../../../components/forms/FormularioConvocat
 export default function AgregarConvocatoria() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormularioConvocatoria/>} msg={"Estudiantes"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormularioConvocatoria/>} msg={"Agregar Convocatoria"} />
     )
 }

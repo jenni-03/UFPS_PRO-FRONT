@@ -12,6 +12,7 @@ export default function ConvocatoriaBody() {
     "Estado",
     "Fecha de Inicio",
     "Fecha de Finalización",
+    "Prueba",
     "Editar",
   ];
 

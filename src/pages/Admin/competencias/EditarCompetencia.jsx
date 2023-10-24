@@ -6,6 +6,6 @@ import { AppContext } from '../../../components/context/AppProvider'
 export default function EditarCompetencia() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormularioEditarCompetencia/>} msg={"Competencias"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormularioEditarCompetencia/>} msg={"Editar Competencias"} />
     )
 }

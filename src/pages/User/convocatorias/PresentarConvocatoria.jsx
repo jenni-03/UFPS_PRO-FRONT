@@ -5,6 +5,6 @@ import QuizPre from '../../../components/pure/QuizPre'
 export default function PresentarConvocatoria() {
     const {change, open} = useContext(AppContext)
     return (
-        <Page changeOpen={change} isOpen={open} componente={<QuizPre/>} msg={"Presentación de Prueba"}/>
+        <Page changeOpen={change} isOpen={true} componente={<QuizPre/>} msg={"Presentación de Prueba"}/>
         )
 }

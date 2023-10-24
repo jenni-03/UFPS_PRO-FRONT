@@ -6,6 +6,6 @@ import FormularioCambiarContrasenia from '../../../components/forms/FormularioCa
 export default function CambiarContrasenia() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormularioCambiarContrasenia/>} msg={"Principal"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormularioCambiarContrasenia/>} msg={"Cambiar Contraseña"} />
     )
 }

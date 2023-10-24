@@ -39,8 +39,8 @@ export default function SideItem({icon, msg, active, index, tamanio, path}) {
         fontSize={"17px"}
         onClick={()=>{
             if(index===10000){
-                setToken(localStorage.removeItem("token"))
-                localStorage.removeItem("token")
+                setToken(sessionStorage.removeItem("token"))
+                sessionStorage.removeItem("token")
                 setUser(null)
                 setRole(null)
                 navigate("/")

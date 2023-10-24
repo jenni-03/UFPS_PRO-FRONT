@@ -15,7 +15,10 @@ export default function ConvocatoriaBodyUser(){
     <Text>Esta prueba evalúa tus habilidades en Programación.</Text>
   </CardBody>
   <CardFooter>
+    <>
     <Button as={Link} to={"/presentarPrueba/1"}>Iniciar Prueba</Button>
+    </>
+    
   </CardFooter>
 </Card>
 <Card>

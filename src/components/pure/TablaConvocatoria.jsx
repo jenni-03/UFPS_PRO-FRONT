@@ -18,7 +18,7 @@ import { useRef, useContext } from "react";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
 import { toast } from "react-hot-toast";
-import { RiEdit2Fill } from "react-icons/ri";
+import {AiOutlineEdit }from "react-icons/ai"
 import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
 import Btn from "./Btn";
 import Paginacion from "./Paginacion";
@@ -97,7 +97,6 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
         boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
       >
         <Flex
-          // w={["190px", "350px", "510px", "700px"]}
           w={{
             base: "240px",
             sm: "310px",
@@ -139,7 +138,9 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
                       </Box>
                       </Td>
                       <Td>
+                         <Box w={"100%"} textAlign={"center"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.nombre}
+                         </Box>
                       </Td>
                        <Td>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
@@ -147,16 +148,25 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
                       </Box>
                       </Td>
                        <Td>
+                         <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.fecha_inicio.toString().replace("T00:00:00.000Z","")}
+                         </Box>
                       </Td>
                       <Td>
+                         <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.fecha_fin.toString().replace("T00:00:00.000Z","")}
+                         </Box>
                       </Td>
-                         <Td>{
-                        <Button variant={"unstyled"} as={Link} to={`/editarConvocatoria/${item.id}`}>
-                        <Icon w={"20px"} h={"20px"} as={RiEdit2Fill}/>
-                        </Button>
-                        }</Td>
+                      <Td>
+                         <Box w={"100%"} textAlign={"center"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                        {item.prueba.nombre}
+                         </Box>
+                      </Td>
+                    <Td>{
+                      <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarConvocatoria/${item.id}`}>
+                        <Icon color={"primero.100"} as={AiOutlineEdit} />
+                      </Button>
+                      }</Td>
 
                   </Tr>
                 ))}

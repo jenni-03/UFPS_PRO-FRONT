@@ -7,6 +7,6 @@ import FormularioImagen from '../../../components/forms/FormularioImagen'
 export default function CambiarImagen() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormularioImagen/>} msg={"Principal"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormularioImagen/>} msg={"Editar Imagen"} />
     )
 }
