@@ -5,6 +5,6 @@ import { AppContext } from '../../../components/context/AppProvider'
 export default function EditarPregunta() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormEditarPregunta/>} msg={"Preguntas"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormEditarPregunta/>} msg={"Editar Pregunta"} />
     )
 }

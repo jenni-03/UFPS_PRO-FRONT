@@ -10,11 +10,11 @@ export function AppProvider({ children }) {
   const [user, setUser] = useState(null);
   const [role, setRole] = useState(null);
   const [id, setId] = useState(null);
-  const [token, setToken] = useState(() => localStorage.getItem("token"));
+  const [token, setToken] = useState(() => sessionStorage.getItem("token"));
   const [imagen, setImagen] = useState();
 
   useEffect(() => {
-    setImagen(localStorage.getItem("imagen"));
+    setImagen(sessionStorage.getItem("imagen"));
     if (token) {
       decodeToken("token");
     }
@@ -24,8 +24,8 @@ export function AppProvider({ children }) {
   useEffect(() => {
     if (user) {
       const timeout = setTimeout(() => {
-        localStorage.removeItem("token");
-        setToken(localStorage.removeItem("token"));
+        sessionStorage.removeItem("token");
+        setToken(sessionStorage.removeItem("token"));
         setRole(null);
         toast.success("Su sesión ha expirado, por favor ingrese nuevamente", {
           duration: 4000,
@@ -44,7 +44,7 @@ export function AppProvider({ children }) {
   }, [user]);
 
   const decodeToken = (a) => {
-    const decode = jwt_decode(localStorage.getItem(a));
+    const decode = jwt_decode(sessionStorage.getItem(a));
     const rol = decode.tipo;
     const email = decode.username;
     const id = decode.id;

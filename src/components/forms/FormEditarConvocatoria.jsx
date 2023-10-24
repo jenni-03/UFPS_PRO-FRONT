@@ -2,7 +2,9 @@ import React, { useState , useContext, useEffect} from 'react'
 import { AppContext } from "../context/AppProvider";
 import { Box, FormLabel, FormErrorMessage, FormControl, Button, Input, Select, useSafeLayoutEffect } from '@chakra-ui/react';
 import * as Yup from "yup"
+import moment from 'moment';
 import {Formik, Form, Field} from "formik"
+import Btn from "../../components/pure/Btn"
 import axiosApi from '../../utils/config/axios.config';
 import { toast } from 'react-hot-toast';
 import { useNavigate, useParams } from 'react-router-dom';
@@ -11,7 +13,7 @@ export default function FormEditarConvocatoria() {
   const [datos, setDatos] = useState()
   const [loading, setLoading] = useState(true)
   const navigate = useNavigate()
-  const [pruebas, setPruebas] = useState(true)
+  const [pruebas, setPruebas] = useState()
   const { token } = useContext(AppContext);
   const initialValues = {
     nombre:"",
@@ -30,7 +32,6 @@ export default function FormEditarConvocatoria() {
         toast.error(e.response.data.error)
      })
      setPruebas(response.data)
-    
   } 
 
   useEffect(()=>{
@@ -46,6 +47,7 @@ export default function FormEditarConvocatoria() {
         fecha_inicio:fecha_inicio,
         fecha_fin:fecha_fin
     }
+
 
     let response = await axiosApi.put(`api/convocatoria/update/${id}`,body,{
          headers:{
@@ -71,18 +73,12 @@ export default function FormEditarConvocatoria() {
         toast.error("Error al traer las convocatorias")
     })
      const convocatoria = response.data;
-    const fechaIni = convocatoria.fecha_inicio
-      ? convocatoria.fecha_inicio.toString().replace("T00:00:00.000Z", "")
-      : "";
-    const fechaFin = convocatoria.fecha_fin
-      ? convocatoria.fecha_fin.toString().replace("T00:00:00.000Z", "")
-      : "";
     setDatos({
-         nombre: convocatoria.nombre || "",
-      prueba_id: convocatoria.prueba_id || "",
-      descripcion: convocatoria.descripcion || "",
-      fecha_inicio: fechaIni ? fechaIni : null,
-      fecha_fin: fechaFin ? fechaFin : null,
+      nombre: convocatoria.nombre ? convocatoria.nombre : null,
+      prueba_id: convocatoria.prueba.id ? convocatoria.prueba.id : null,
+      descripcion: convocatoria.descripcion ? convocatoria.descripcion : "assa",
+      fecha_inicio: convocatoria.fecha_inicio? moment(convocatoria.fecha_inicio).local().format("YYYY-MM-DDTHH:mm"): null,
+      fecha_fin: convocatoria.fecha_fin? moment(convocatoria.fecha_fin).local().format("YYYY-MM-DDTHH:mm"): null,
     })
     setLoading(false)
   }
@@ -106,12 +102,18 @@ if(loading){
           borderRadius="8px"
           bgColor="white"
           overflow="hidden"
+          maxW={["200px","300px","530px"]}
+          minW={"200px"}
+          boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+
         >
           <Formik
             initialValues={datos}
             validationSchema={validationSchema}
             onSubmit={({ nombre,prueba_id, fecha_inicio, fecha_fin,descripcion, email, semestre, estado }, { setFieldValue }) => {
-              actualizarConvocatoria(nombre, prueba_id, descripcion, fecha_inicio, fecha_fin,id)
+              const fechaInicio = moment(fecha_inicio).format("YYYY-MM-DD HH:mm")
+              const fechaFinal = moment(fecha_fin).format("YYYY-MM-DD HH:mm")
+              actualizarConvocatoria(nombre, prueba_id.toString(), descripcion, fechaInicio, fechaFinal,id)
             }}
           >
             {(props) => {
@@ -124,6 +126,7 @@ if(loading){
                     alignItems="center"
                     textAlign="center"
                     gap={"20px"}
+                    w={"100%"}
                   >
                     <Box
                         display={"flex"}
@@ -131,6 +134,7 @@ if(loading){
                         alignItems={"center"}
                         justifyContent={"center"}
                         gap={"15px"}
+                        w={"100%"}
                     >
                       <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.nombre && touched.nombre}>
                         <FormLabel htmlFor="nombre">Nombre</FormLabel>
@@ -139,8 +143,6 @@ if(loading){
                           as={Input}
                           id="nombre"
                           type="text"
-                          maxW={["200px", "250px", "200px", "200px"]}
-                          w="400px"
                         />
                         <FormErrorMessage>{errors.nombre}</FormErrorMessage>
                       </FormControl>
@@ -151,8 +153,6 @@ if(loading){
                           as={Select}
                           id="prueba_id"
                           type="text"
-                          maxW={["200px", "250px", "200px", "200px"]}
-                          w="400px"
                         >
                         {pruebas &&
                           pruebas.map((prueba, index) => (
@@ -169,20 +169,19 @@ if(loading){
                       display={"flex"}
                         flexDir={["column","column","row"]}
                         alignItems={"center"}
-                        
                         justifyContent={"center"}
                         gap={"15px"}
+                        w={["100%","100%","48.5%"]}
                     >
                       
                       <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.fecha_inicio && touched.fecha_inicio}>
+
                         <FormLabel htmlFor="fecha_inicio">Fecha Inicial</FormLabel>
                         <Field
                           name="fecha_inicio"
                           as={Input}
                           id="fecha_inicio"
-                          type="date"
-                          maxW={["200px", "250px", "200px", "200px"]}
-                          w="400px"
+                          type="datetime-local"
                         />
                         <FormErrorMessage>{errors.fecha_inicio}</FormErrorMessage>
                       </FormControl>
@@ -192,13 +191,14 @@ if(loading){
                           name="fecha_fin"
                           as={Input}
                           id="fecha_fin"
-                          type="date"
-                          maxW={["200px", "250px", "200px", "200px"]}
+                          type="datetime-local"
                         />
                         <FormErrorMessage>{errors.fecha_fin}</FormErrorMessage>
                       </FormControl>
                     </Box>
-                    <Box w={"100%"}>
+                    <Box
+                        w={"100%"}
+                    >
                          <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.descripcion && touched.descripcion}>
                         <FormLabel htmlFor="descripcion">Descripcion</FormLabel>
                         <Field
@@ -206,19 +206,18 @@ if(loading){
                           as={Input}
                           id="descripcion"
                           type="text"
-                          w="100%"
                         />
                         <FormErrorMessage>{errors.descripcion}</FormErrorMessage>
                       </FormControl>
                     </Box>
-                    <Button
-                      w={["200px", "250px", "415px", "415px"]}
-                      mt={"30px"}
-                      type="submit"
-                      bgColor={"principal.100"}
-                      _hover={{ backgroundColor: "fondo.100" }}
-                      color={"white"}
-                    >Guardar</Button>
+                    <Btn
+                      isSubmit={true}
+                      msg={"Guardar"}
+                        w={"100%"}
+
+                    >
+                      
+                    </Btn>
                   </Box>
                 </Form>
               );

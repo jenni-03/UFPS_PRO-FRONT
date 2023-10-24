@@ -6,6 +6,6 @@ import { AppContext } from '../../../components/context/AppProvider'
 export default function AgregarCategoria() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormularioCategoria/>} msg={"Categorias"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormularioCategoria/>} msg={"Agregar Categoria"} />
     )
 }

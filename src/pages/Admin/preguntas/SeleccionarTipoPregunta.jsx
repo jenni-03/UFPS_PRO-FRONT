@@ -7,6 +7,6 @@ import { AppContext } from '../../../components/context/AppProvider'
 export default function AgregarCompetencias() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<TipoPregunta/>} msg={"Preguntas"} />
+    <Page changeOpen={change} isOpen={open} componente={<TipoPregunta/>} msg={"Seleccionar Pregunta"} />
     )
 }

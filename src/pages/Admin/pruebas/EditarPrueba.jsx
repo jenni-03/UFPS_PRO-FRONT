@@ -7,6 +7,6 @@ import FormEditarPrueba from '../../../components/forms/FormEditarPrueba'
 export default function EditarPrueba() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormEditarPrueba/>} msg={"Pruebas"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormEditarPrueba/>} msg={"Editar Prueba"} />
     )
 }

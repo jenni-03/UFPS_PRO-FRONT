@@ -55,12 +55,12 @@ export default function Login() {
 
   const ingresar = async (email, password) =>{
     const data = await login(email,password)
-    localStorage.setItem("token",data.accessToken)
+    sessionStorage.setItem("token",data.accessToken)
     //Cookies.set('token', data.accessToken, { expires: new Date().getTime() + 15000 })
-    setToken(localStorage.getItem("token"))
+    setToken(sessionStorage.getItem("token"))
     //setToken(Cookies.get("token"))
     //console.log("Token", localStorage.getItem("token"))
-    const decoded = jwt_decode(localStorage.getItem("token"))
+    const decoded = jwt_decode(sessionStorage.getItem("token"))
     //const decoded = jwt_decode(Cookies.get("token"))
     setUser(data)
     setRole(decoded.tipo)

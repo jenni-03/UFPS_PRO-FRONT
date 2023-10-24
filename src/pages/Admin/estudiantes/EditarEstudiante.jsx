@@ -5,6 +5,6 @@ import FormEditarEstudiante from '../../../components/forms/FormEditarEstudiante
 export default function EditarEstudiante() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormEditarEstudiante/>} msg={"Estudiantes"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormEditarEstudiante/>} msg={"Editar Estudiante"} />
     )
 }

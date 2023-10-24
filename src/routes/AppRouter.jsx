@@ -1,15 +1,12 @@
-import React, { useEffect, useContext } from "react";
+import React, { useContext } from "react";
 import {
   HashRouter as Router,
   Routes,
   Route,
-  useLocation,
-  Navigate,
 } from "react-router-dom";
 import PrincipalPage from "../pages/Admin/principal/PrincipalPage";
 import Competencias from "../pages/Admin/competencias/Competencias";
 import ErrorPage from "../pages/404/ErrorPage";
-import SideBar from "../components/SideBar";
 import Pruebas from "../pages/Admin/pruebas/Pruebas";
 import Categorias from "../pages/Admin/categorias/Categorias";
 import Preguntas from "../pages/Admin/preguntas/Preguntas";
@@ -136,7 +133,9 @@ export default function AppRouter() {
             <Route path="/presentarPrueba/1" element={<PresentarConvocatoria/>}></Route>
             <Route path="/presentarPrueba/2" element={<PresentarConvocatoriaMates/>}></Route>
             <Route path="/presentarPrueba/3" element={<PresentarConvocatoriaAdministracion/>}></Route>
+
           </Route>
+
 
           <Route path="/newPassword/:id/:token" element={<NewPassword />} />
           <Route path="/" element={<Login />}></Route>

@@ -7,6 +7,6 @@ import FormEditarConvocatoria from '../../../components/forms/FormEditarConvocat
 export default function EditarConvocatoria() {
   const {open, change} = useContext(AppContext)
   return (
-    <Page changeOpen={change} isOpen={open} componente={<FormEditarConvocatoria/>} msg={"Competencias"} />
+    <Page changeOpen={change} isOpen={open} componente={<FormEditarConvocatoria/>} msg={"Editar Convocatoria"} />
     )
 }
