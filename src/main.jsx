@@ -4,6 +4,7 @@ import App from './App'
 import './index.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
+import Background from './components/container/Background'
 
 
 const theme = extendTheme({
@@ -61,6 +62,7 @@ const theme = extendTheme({
 ReactDOM.createRoot(document.getElementById('root')).render(
   <React.StrictMode >
     <ChakraProvider theme={theme}>
+      <Background/>
       <App />
     </ChakraProvider> 
   </React.StrictMode>,

@@ -2,8 +2,10 @@ import { Box, Button, Center, Image } from "@chakra-ui/react";
 import React from "react";
 
 export default function CardLogo({ children, wd, hg, p }) {
+
+  //bgImage={"url(https://svgshare.com/i/yYp.svg)}"
   return (
-    <Center h="100vh" bgImage={"url(https://svgshare.com/i/yYp.svg)"}>
+    <Center h="100vh" >
       <Box
         bg="white"
         width={wd}
