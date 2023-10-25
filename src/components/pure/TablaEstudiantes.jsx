@@ -17,12 +17,11 @@ import {
 import { Link } from "react-router-dom";
 import Boton from "../pure/Boton";
 import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit,AiOutlineDelete } from "react-icons/ai";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
 import { toast } from 'react-hot-toast';
 import Paginacion from "./Paginacion";
-import { AiOutlineEye } from "react-icons/ai";
 export default function TablaEstudiantes({ columns, items, path, msg, showButton }) {
   const [currentPage, setCurrentPage] = useState(0);
   const [indexI, setIndexI] = useState(0);
@@ -158,7 +157,7 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
                         }</Td>
                     <Td display={"flex"} alignItems={"center"} justifyContent={"center"}>{
                         <Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} h={"30px"} w={"55px"}as={Link} to={`/estudiante/resultados`}>
-                        <Icon color={"primero.100"} as={AiOutlineEye}/>
+                        <Icon color={"primero.100"} as={AiOutlineDelete}/>
                         </Button>
                     }</Td>
                   </Tr>

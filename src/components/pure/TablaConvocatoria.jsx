@@ -18,8 +18,8 @@ import { useRef, useContext } from "react";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
 import { toast } from "react-hot-toast";
-import {AiOutlineEdit }from "react-icons/ai"
-import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import {AiOutlineEdit, AiOutlineUser, AiOutlineEye}from "react-icons/ai"
+import { MdAdd} from "react-icons/md";
 import Btn from "./Btn";
 import Paginacion from "./Paginacion";
 
@@ -102,7 +102,9 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
             sm: "310px",
             md: "450px",
             lg: "690px",
-            tableBreakpoint: "100%",
+            xl: "100%",
+            //'2xl': '100%', 
+            //tableBreakpoint: "1100px",
           }}
           gap={["8px", "0"]}
           direction={["column", "row"]}
@@ -131,12 +133,6 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
               <Tbody>
                 {convocatorias && currentItems.map((item, index) => (
                   <Tr key={index}>
-                    
-                      <Td>
-                      <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                        {item.id}
-                      </Box>
-                      </Td>
                       <Td>
                          <Box w={"100%"} textAlign={"center"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.nombre}
@@ -167,7 +163,16 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
                         <Icon color={"primero.100"} as={AiOutlineEdit} />
                       </Button>
                       }</Td>
-
+                    <Td>{
+                      <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarConvocatoria/${item.id}`}>
+                        <Icon color={"primero.100"} as={AiOutlineUser} />
+                      </Button>
+                      }</Td>
+<Td>{
+                      <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarConvocatoria/${item.id}`}>
+                        <Icon color={"primero.100"} as={AiOutlineEye} />
+                      </Button>
+                      }</Td>
                   </Tr>
                 ))}
               </Tbody>

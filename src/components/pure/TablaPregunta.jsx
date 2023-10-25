@@ -1,6 +1,7 @@
-import React, { useEffect, useState, useContext} from "react";
+import React, { useEffect, useRef, useState, useContext} from "react";
 import {
   Table,
+  Input,
   Thead,
   Tbody,
   Tr,
@@ -22,20 +23,27 @@ import { AiOutlineEdit } from "react-icons/ai";
 import { MdAdd} from "react-icons/md";
 import Paginacion from "./Paginacion";
 
+
 export default function TablaPregunta({ columns, items, path, msg, showButton }) {
+  const inputRef = useRef()
   const [currentPage, setCurrentPage] = useState(0);
   const [indexI, setIndexI] = useState(0);
   const [indexF, setIndexF] = useState(5);
-  const itemsPerPage = 5;
-  const { token } = useContext(AppContext);
-  const [preguntas, setPreguntas] = useState()
+  const [itemsPerPage, setItemsPerPage] = useState(5);
+  const [preguntas, setPreguntas] = useState([])
   const [showActive, setShowActive] = useState(false);
+  const [totalPages, setTotalPages] = useState(preguntas && Math.ceil(preguntas.length / itemsPerPage))
+  //const [preguntasBus, setPreguntasBus] = useState()
+  const [preguntasTabla, setPreguntasTabla] = useState([])
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
+  const { token } = useContext(AppContext);
+  const [currentItems, setCurrentItems] = useState([]);
 
-  const currentItems = preguntas && preguntas.slice(indexOfFirstItem, indexOfLastItem);
+  //const currentItems = preguntas && preguntas.slice(indexOfFirstItem, indexOfLastItem);
 
-  const totalPages = preguntas && Math.ceil(preguntas.length / itemsPerPage);
+  //const [currentPreguntas, setCurrentPreguntas] = useState(()=>preguntas ))
+  //const totalPages =  preguntas && Math.ceil(preguntas.length / itemsPerPage);
 
   const handlePageChange = (selected) => {
     if (selected >= indexF) {
@@ -56,6 +64,10 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
     setPreguntas(response.data)
   }
 
+  const buscarPregunta = (msg) =>{
+    const res = preguntas && preguntas.filter(pregunta => pregunta.texto_pregunta.startsWith(msg))
+    setPreguntasTabla(res)
+  }
 
   const atrasPage = () => {
     currentPage <= indexI && indexI != 0 ? paginacionAtras() : null;
@@ -82,6 +94,21 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
     obtenerActivos(1)
   }, [])
 
+  useEffect(() => {
+  const itemsToDisplay = inputRef.current && inputRef.current.value !== "" ? preguntasTabla : preguntas;
+  setCurrentItems(itemsToDisplay.slice(indexOfFirstItem, indexOfLastItem));
+}, [inputRef.current, preguntas, preguntasTabla, indexOfFirstItem, indexOfLastItem]);
+  
+  useEffect(()=>{
+    setTotalPages(preguntas && Math.ceil(preguntas.length / itemsPerPage))
+  },[preguntas])
+
+  useEffect(() => {
+  setTotalPages(preguntas && itemsPerPage && Math.ceil(preguntasTabla.length / itemsPerPage))
+    console.log(totalPages)
+    console.log("itemsxpagina",itemsPerPage)
+}, [preguntasTabla]);
+
   return (
     <Box >
       {showButton && (
@@ -92,7 +119,6 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
             msg={"Agregar Pregunta"}
             w={["100%", "250px"]}
           >
-
           </Btn>
           <Flex align={"center"} gap={"5px"}>
             <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel>
@@ -104,6 +130,7 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
           </Flex>
         </Flex>
       )}
+      <Input onChange={()=>buscarPregunta(inputRef.current.value)} mt={"15px"} ref={inputRef} w={"100%"} placeholder="Busca tu pregunta"></Input>
       <Box mb="15px" mt="20px" p="20px" borderRadius="8px" bgColor="white"
         boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
       >
@@ -140,7 +167,45 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
                 </Tr>
               </Thead>
               <Tbody>
-                {preguntas && currentItems.map((item, index) => (
+                {inputRef.current && inputRef.current.value === "" ? preguntas && currentItems.map((item, index) => (
+
+                  <Tr key={item.id}>
+                    <Td>
+                        <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
+                    {item.id}
+                        </Box>
+                        </Td>
+                    <Td
+                      maxW={"300px"}
+                      textOverflow={"ellipsis"}
+                      overflow={"hidden"}
+                      whiteSpace={"nowrap"}
+
+                    >
+                    {item.texto_pregunta}</Td>
+                    <Td>
+                      <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                        {item.semestre}
+                        </Box>
+                    </Td>
+                    <Td>
+                      <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                    {item.estado ? "Activo" : "Inactivo"}
+                      </Box>
+                      </Td>
+                    <Td>
+                      <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
+                    {item.categoria.nombre}
+                      </Box>
+                      </Td>
+                    <Td>{
+                      <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarPregunta/${item.id}`}>
+                        <Icon color={"primero.100"} as={AiOutlineEdit} />
+                      </Button>
+                      }</Td>
+                  </Tr>
+
+                )) : preguntasTabla && currentItems.map((item, index) => (
 
                   <Tr key={item.id}>
                     <Td>

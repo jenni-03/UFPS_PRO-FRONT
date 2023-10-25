@@ -7,13 +7,14 @@ import TablaConvocatoria from "./TablaConvocatoria";
 
 export default function ConvocatoriaBody() {
   const columns = [
-    "Id",
     "Nombre",
     "Estado",
     "Fecha de Inicio",
     "Fecha de Finalización",
     "Prueba",
     "Editar",
+    "Estudiantes",
+    "Resultados"
   ];
 
   return (

@@ -9,7 +9,7 @@ export default function EstudianteBody() {
     "Correo",
     "Estado",
     "Editar",
-    "Resultado",
+    "Eliminar",
   ];
 
 
