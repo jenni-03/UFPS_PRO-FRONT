@@ -246,7 +246,7 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
             {
               estudianteSelect ?
                 <Box display={"flex"} flexDir={"column"} gap={"15px"}>
-                  <Text>¿Deseas expulsar de esta convocatoria a {estudianteSelect.nombre} {estudianteSelect.apellido}?</Text> 
+                  <Text>¿Deseas eliminar permanentemente a {estudianteSelect.nombre} {estudianteSelect.apellido}?</Text> 
                   <Text display={"flex"} gap={"10px"}><Text fontSize={"16"} fontWeight={"bold"}>Email:</Text>  {estudianteSelect.email}</Text>
                 </Box>
                 :
