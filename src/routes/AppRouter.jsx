@@ -40,6 +40,8 @@ import ConvocatoriaUser from "../pages/User/convocatorias/ConvocatoriaUser";
 import PruebasUser from "../pages/User/pruebas/PruebasUser";
 import EditarPrueba from "../pages/Admin/pruebas/EditarPrueba";
 import CambiarContraseniaEstudiante from "../pages/User/principal/CambiarContraseniaEstudiante";
+import EstudianteXConvocatoria from "../pages/Admin/convocatorias/EstudiantesXConvocatoria";
+import AgregarEstudiante from "../pages/Admin/convocatorias/AgregarEstudiante";
 export default function AppRouter() {
   const { token, user, role } = useContext(AppContext);
 
@@ -64,6 +66,8 @@ export default function AppRouter() {
             <Route path="/preguntas" element={<Preguntas />}></Route>
             <Route path="/estudiantes" element={<Estudiantes />}></Route>
             <Route path="/convocatorias" element={<Convocatorias />}></Route>
+            <Route path="/convocatoria/:id/agregarEstudiante" element={<AgregarEstudiante/>}></Route>
+            <Route path="/convocatoria/:id/estudiantes" element={<EstudianteXConvocatoria/>}></Route>
             <Route
               path="/formularioCompetencia"
               element={<AgregarCompetencia />}

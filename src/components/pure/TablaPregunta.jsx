@@ -104,8 +104,6 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
 
   useEffect(() => {
   setTotalPages(preguntas && itemsPerPage && Math.ceil(preguntasTabla.length / itemsPerPage))
-    console.log(totalPages)
-    console.log("itemsxpagina",itemsPerPage)
 }, [preguntasTabla]);
 
   return (
@@ -275,7 +273,7 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
       </Box>
         <Paginacion
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={isLoading ? 1 :totalPages}
         indexI={indexI}
         indexF={indexF}
         handlePageChange={handlePageChange}

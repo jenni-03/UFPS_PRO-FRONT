@@ -31,9 +31,8 @@ export default function Paginacion({
         .map((_, index) => {
           index = index + indexI;
           return (
-            <Skeleton isLoaded={isLoaded}>
+            <Skeleton isLoaded={isLoaded} key={index}>
             <Button
-              key={index}
               onClick={() => {
                 handlePageChange(index);
               }}

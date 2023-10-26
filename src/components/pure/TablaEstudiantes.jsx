@@ -7,15 +7,24 @@ import {
   Th,
   Td,
   Flex,
+  Text,
   Box,
   Button,
   Icon,
   Switch,
   useEditable,
   FormLabel,
-  Skeleton
+  Skeleton,
+   AlertDialog,
+  AlertDialogBody,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogContent,
+  AlertDialogOverlay,
+  AlertDialogCloseButton,
+  useDisclosure
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import { Link} from "react-router-dom";
 import { AiOutlineEdit,AiOutlineDelete } from "react-icons/ai";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
@@ -31,6 +40,9 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const [showActive,setShowActive] = useState(false);
   const [isLoading, setIsLoading] = useState(true)
+  const [estudianteSelect, setEstudianteSelect] = useState()
+  const { isOpen, onOpen, onClose } = useDisclosure()
+  const cancelRef = React.useRef()
 
   const {token} = useContext(AppContext)
 
@@ -79,10 +91,29 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
     setIsLoading(false)
   }
 
+  const eliminarEstudiante = async (id_estudiante) =>{
+    const response = await axiosApi.delete(`/api/user/deleteStudent/${id_estudiante}`,{
+      headers:{
+        Authorization: "Bearer " + token
+      }
+    }).catch((e)=>{
+      toast.error("No se pudo eliminar el estudiante")
+    })
+
+    if(response.status===200){
+      onClose()
+      toast.success("¡Estudiante expulsado correctamente!")
+    }
+    console.log(response)
+  }
+
   useEffect(()=>{
     obtenerEstudiantes(1)
   },[]) 
 
+  useEffect(()=>{
+    obtenerEstudiantes(1)
+  },[estudiantes]) 
   return (
     <Box>
       <Flex align={"center"} gap={"5px"} justifyContent={"flex-end"}>
@@ -135,7 +166,7 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
                 </Tr>
               </Thead>
               <Tbody>
-                {estudiantes && estudiantes.map((item, index) => (
+                {estudiantes && currentItems.map((item, index) => (
                   <Tr key={index}>
                     <Td>
                       <Skeleton isLoaded={!isLoading}>
@@ -174,7 +205,10 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
                       }</Td>
                     <Td display={"flex"} alignItems={"center"} justifyContent={"center"}>{
                       <Skeleton isLoaded={!isLoading}>
-                        <Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} h={"30px"} w={"55px"}as={Link} to={`/estudiante/resultados`}>
+                        <Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} h={"30px"} w={"100%"} onClick={()=>{
+                          onOpen()
+                          setEstudianteSelect(estudiantes.find(e => e.id === item.id))
+                          }}>
                           <Icon color={"primero.100"} as={AiOutlineDelete}/>
                         </Button>
                       </Skeleton>
@@ -196,6 +230,42 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
         adelantePage={adelantePage}
         isLoaded={!isLoading}
       />
+      <AlertDialog
+        motionPreset='slideInBottom'
+        leastDestructiveRef={cancelRef}
+        onClose={onClose}
+        isOpen={isOpen}
+        isCentered
+      >
+        <AlertDialogOverlay />
+
+        <AlertDialogContent>
+          <AlertDialogHeader>¿Estas Seguro?</AlertDialogHeader>
+          <AlertDialogCloseButton />
+          <AlertDialogBody>
+            {
+              estudianteSelect ?
+                <Box display={"flex"} flexDir={"column"} gap={"15px"}>
+                  <Text>¿Deseas expulsar de esta convocatoria a {estudianteSelect.nombre} {estudianteSelect.apellido}?</Text> 
+                  <Text display={"flex"} gap={"10px"}><Text fontSize={"16"} fontWeight={"bold"}>Email:</Text>  {estudianteSelect.email}</Text>
+                </Box>
+                :
+                <Text>No se pudo traer los valores del estudiante</Text>
+                  }
+          </AlertDialogBody>
+          <AlertDialogFooter>
+            <Button ref={cancelRef} onClick={onClose}>
+              No
+            </Button>
+            <Button colorScheme='red' ml={3} onClick={()=>{
+                eliminarEstudiante(estudianteSelect.id)
+              }}>
+              Si
+            </Button>
+          </AlertDialogFooter>
+        </AlertDialogContent>
+      </AlertDialog>
+
     </Box>
   );
 }

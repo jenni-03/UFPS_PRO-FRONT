@@ -5,16 +5,17 @@ import { SimpleGrid,Text,  CardHeader, CardBody, Button, Card , Heading, CardFoo
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
-  AlertDialogCloseButton, useDisclosure, Box, Divider} from "@chakra-ui/react";
+  AlertDialogCloseButton, useDisclosure, Box, Divider, Skeleton} from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import axiosApi from "../../utils/config/axios.config"
 import {AppContext} from "../context/AppProvider"
 import {useState} from "react";
 import Convocatorias from "../../pages/Admin/convocatorias/Convocatorias";
+import toast from "react-hot-toast";
 
 export default function ConvocatoriaBodyUser(){
   const [convocatorias, setConvocatorias] = useState([])
-  const [loading, setLoading] = useState(true)
+  const [isLoading, setLoading] = useState(true)
   const [convSeleccionada, setConvSeleccionada] = useState(null)
   const cancelRef = React.useRef()
    const { isOpen, onOpen, onClose } = useDisclosure()
@@ -25,6 +26,8 @@ export default function ConvocatoriaBodyUser(){
       headers : {
         Authorization: "Bearer " + token
       }
+    }).catch((e)=>{
+      toast.error(e.response.data.error)
     })
     setConvocatorias(response.data)
     setLoading(false)
@@ -34,9 +37,6 @@ export default function ConvocatoriaBodyUser(){
   },[])
 
 
-  if(loading){
-    return <div>Cargando...</div>
-  }
 
   return(
     <SimpleGrid spacing={4} 
@@ -47,16 +47,25 @@ export default function ConvocatoriaBodyUser(){
           <>
           <Card key={index}>
             <CardHeader>
-              <Heading size='md'>{convocatoria.nombre}</Heading>
+              <Heading size='md'>
+                <Skeleton isLoaded={!isLoading}>
+              {convocatoria.nombre}
+              </Skeleton>
+              </Heading>
             </CardHeader>
             <CardBody>
+
+                <Skeleton isLoaded={!isLoading}>
               <Text>{convocatoria.descripcion}</Text>
+                </Skeleton>
             </CardBody>
             <CardFooter>
+                <Skeleton isLoaded={!isLoading}>
               <Button onClick={()=>{
                 onOpen()
                 setConvSeleccionada(convocatorias && convocatorias.find( c => c.id === convocatoria.id))
               }}>Iniciar Prueba</Button>
+                </Skeleton>
             </CardFooter>
           </Card>
              {

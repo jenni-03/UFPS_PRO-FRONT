@@ -209,7 +209,7 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
       </Box>
    <Paginacion
         currentPage={currentPage}
-     totalPages={totalPages}
+     totalPages={isLoading?1:totalPages}
         indexI={indexI}
         indexF={indexF}
         handlePageChange={handlePageChange}
