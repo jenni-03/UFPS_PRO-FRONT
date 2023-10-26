@@ -9,10 +9,12 @@ import {
   Flex,
   Box,
   Button,
+  Skeleton,
   Icon,
   useEditable,
   Switch,
   FormLabel,
+  Center,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import Boton from "./Boton";
@@ -33,6 +35,7 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
   const [categorias, setCategorias] = useState()
   const currentItems = categorias && categorias.slice(indexOfFirstItem, indexOfLastItem);
   const [showActive,setShowActive] = useState(false);
+  const [isLoading, setLoading] = useState(true)
 
   const totalPages = categorias && Math.ceil(categorias.length / itemsPerPage);
 
@@ -45,6 +48,7 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
       toast.error("No se pueden obtener las categorías!")
     })
     setCategorias(response.data)
+    setLoading(false)
   }
 
   const handlePageChange = (selected) => {
@@ -87,6 +91,7 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
 
 
         align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={"space-between"}>
+        <Skeleton isLoaded={!isLoading}>
         <Btn
           msg={"Agregar Competencia"}
           leftIcon={<MdAdd/>}
@@ -95,13 +100,18 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
           path={"/formularioCompetencia"}
         >
         </Btn>
+          </Skeleton>
         <Flex align={"center"} gap={"5px"}>
+          <Skeleton isLoaded={!isLoading}>
         <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel> 
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading}>
         <Switch id="switch" colorScheme="cyan"  onChange={(e)=>{
             setCurrentPage(0)
             setShowActive(!showActive)
             showActive===true ? obtenerActivos(1) : obtenerActivos(0)
         }}/>
+          </Skeleton>
         </Flex>
         </Flex>
       )}
@@ -136,31 +146,39 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
                         borderBottomColor: "primero.100",
                       }}
                     >
+                    <Skeleton isLoaded={!isLoading}>
                       {column}
+                      </Skeleton>
                     </Th>
                   ))}
                 </Tr>
               </Thead>
               <Tbody>
                 {categorias && currentItems.map((item, index) => (
-                  
                     <Tr key={item.id}>
                       <Td>
+                        <Skeleton isLoaded={!isLoading }>
                         <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
                           {item.id}
                         </Box>
+                        </Skeleton>
                       </Td>
                       <Td>
+                        <Skeleton isLoaded={!isLoading }>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
                           {item.nombre}
                         </Box>
+                        </Skeleton>
                       </Td>
                       <Td>
+                        <Skeleton isLoaded={!isLoading }>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
                       {item.estado ? "Activo" : "Inactivo"}
                         </Box>
+                        </Skeleton>
                       </Td>
                       <Td>
+                        <Skeleton isLoaded={!isLoading }>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} flexDir={"column"} w={"100%"}>
                     {
                        
@@ -172,12 +190,14 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
                       }
                           </Box>
                         
+                        </Skeleton>
                       </Td>
                       <Td>
-                         
+                        <Skeleton isLoaded={!isLoading }>
                         <Button display={"flex"} alignItems={"center"} h={"30px"} justifyContent={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarCompetencia/${item.id}`}>
                         <Icon color={"principal.100"} as={AiOutlineEdit}/>
                         </Button>
+                        </Skeleton>
                       </Td>
                      </Tr>
 
@@ -189,12 +209,13 @@ export default function TablaCompetencia({ columns, items, path, msg, showButton
       </Box>
    <Paginacion
         currentPage={currentPage}
-        totalPages={totalPages}
+     totalPages={totalPages}
         indexI={indexI}
         indexF={indexF}
         handlePageChange={handlePageChange}
         atrasPage={atrasPage}
         adelantePage={adelantePage}
+        isLoaded={!isLoading}
       />
     </Box>
   );

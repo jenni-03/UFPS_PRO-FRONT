@@ -12,7 +12,8 @@ import {
   Button,
   Icon,
   FormLabel,
-  Switch
+  Switch,
+  Skeleton
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { AppContext } from "../context/AppProvider";
@@ -32,18 +33,15 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
   const [itemsPerPage, setItemsPerPage] = useState(5);
   const [preguntas, setPreguntas] = useState([])
   const [showActive, setShowActive] = useState(false);
+  const [isLoading, setLoading] = useState(true)
   const [totalPages, setTotalPages] = useState(preguntas && Math.ceil(preguntas.length / itemsPerPage))
-  //const [preguntasBus, setPreguntasBus] = useState()
   const [preguntasTabla, setPreguntasTabla] = useState([])
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const { token } = useContext(AppContext);
   const [currentItems, setCurrentItems] = useState([]);
 
-  //const currentItems = preguntas && preguntas.slice(indexOfFirstItem, indexOfLastItem);
 
-  //const [currentPreguntas, setCurrentPreguntas] = useState(()=>preguntas ))
-  //const totalPages =  preguntas && Math.ceil(preguntas.length / itemsPerPage);
 
   const handlePageChange = (selected) => {
     if (selected >= indexF) {
@@ -62,6 +60,7 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
       toast.error("No se pueden obtener las preguntas!")
     })
     setPreguntas(response.data)
+    setLoading(false)
   }
 
   const buscarPregunta = (msg) =>{
@@ -113,6 +112,7 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
     <Box >
       {showButton && (
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={"space-between"}>
+          <Skeleton isLoaded={!isLoading}>
           <Btn
             leftIcon={<MdAdd/>}
             path={path}
@@ -120,17 +120,26 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
             w={["100%", "250px"]}
           >
           </Btn>
+          </Skeleton>
           <Flex align={"center"} gap={"5px"}>
+          <Skeleton isLoaded={!isLoading}>
             <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading}>
             <Switch id="switch" colorScheme="cyan" onChange={(e) => {
               setCurrentPage(0)
               setShowActive(!showActive)
               showActive === true ? obtenerActivos(1) : obtenerActivos(0)
             }} />
+            </Skeleton>
           </Flex>
         </Flex>
       )}
-      <Input onChange={()=>buscarPregunta(inputRef.current.value)} mt={"15px"} ref={inputRef} w={"100%"} placeholder="Busca tu pregunta"></Input>
+      <Skeleton h={"40px"} isLoaded={!isLoading}>
+      <Box m={"15px 0"}>
+      <Input onChange={()=>buscarPregunta(inputRef.current.value)} ref={inputRef} w={"100%"} placeholder="Busca tu pregunta"></Input>
+      </Box>
+      </Skeleton>
       <Box mb="15px" mt="20px" p="20px" borderRadius="8px" bgColor="white"
         boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
       >
@@ -161,7 +170,9 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
                         borderBottomColor: "primero.100",
                       }}
                     >
+      <Skeleton isLoaded={!isLoading}>
                       {column}
+        </Skeleton>
                     </Th>
                   ))}
                 </Tr>
@@ -171,9 +182,11 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
 
                   <Tr key={item.id}>
                     <Td>
+                      <Skeleton isLoaded={!isLoading}>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
                     {item.id}
                         </Box>
+                        </Skeleton>
                         </Td>
                     <Td
                       maxW={"300px"}
@@ -182,26 +195,37 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
                       whiteSpace={"nowrap"}
 
                     >
-                    {item.texto_pregunta}</Td>
+                      <Skeleton isLoaded={!isLoading}>
+                    {item.texto_pregunta}
+                      </Skeleton>
+                      </Td>
                     <Td>
+                      <Skeleton isLoaded={!isLoading}>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.semestre}
                         </Box>
+                        </Skeleton>
                     </Td>
                     <Td>
+                      <Skeleton isLoaded={!isLoading}>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                     {item.estado ? "Activo" : "Inactivo"}
                       </Box>
+                      </Skeleton>
                       </Td>
                     <Td>
+                      <Skeleton isLoaded={!isLoading}>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                     {item.categoria.nombre}
                       </Box>
+                      </Skeleton>
                       </Td>
                     <Td>{
+                      <Skeleton isLoaded={!isLoading}>
                       <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarPregunta/${item.id}`}>
                         <Icon color={"primero.100"} as={AiOutlineEdit} />
                       </Button>
+                        </Skeleton>
                       }</Td>
                   </Tr>
 
@@ -257,6 +281,7 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
         handlePageChange={handlePageChange}
         atrasPage={atrasPage}
         adelantePage={adelantePage}
+        isLoaded={!isLoading}
       />
     </Box>
   );

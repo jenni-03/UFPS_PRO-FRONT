@@ -12,11 +12,10 @@ import {
   Icon,
   Switch,
   useEditable,
-  FormLabel
+  FormLabel,
+  Skeleton
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import Boton from "../pure/Boton";
-import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
 import { AiOutlineEdit,AiOutlineDelete } from "react-icons/ai";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
@@ -31,6 +30,7 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const [showActive,setShowActive] = useState(false);
+  const [isLoading, setIsLoading] = useState(true)
 
   const {token} = useContext(AppContext)
 
@@ -73,25 +73,30 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
         Authorization:"Bearer " + token,
       }
     }).catch((e)=>{
-        toast.error(e.response.data.error)
-     })
-     setEstudiantes(response.data)
+      toast.error(e.response.data.error)
+    })
+    setEstudiantes(response.data)
+    setIsLoading(false)
   }
 
- useEffect(()=>{
-  obtenerEstudiantes(1)
- },[]) 
+  useEffect(()=>{
+    obtenerEstudiantes(1)
+  },[]) 
 
   return (
     <Box>
-       <Flex align={"center"} gap={"5px"}>
-        <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel> 
-        <Switch id="switch" colorScheme="cyan"  onChange={(e)=>{
+      <Flex align={"center"} gap={"5px"} justifyContent={"flex-end"}>
+        <Skeleton isLoaded={!isLoading}>
+          <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel> 
+        </Skeleton>
+        <Skeleton isLoaded={!isLoading}>
+          <Switch id="switch" colorScheme="cyan"  onChange={(e)=>{
             setCurrentPage(0)
             setShowActive(!showActive)
             showActive===true ? obtenerEstudiantes(1) : obtenerEstudiantes(0)
-        }}/>
-        </Flex>
+          }}/>
+        </Skeleton>
+      </Flex>
       <Box mb="15px" mt="20px" p="20px" borderRadius="8px" bgColor="white"
         boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
       >
@@ -122,7 +127,9 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
                         borderBottomColor: "primero.100",
                       }}
                     >
-                      {column}
+                      <Skeleton isLoaded={!isLoading}>
+                        {column}
+                      </Skeleton>
                     </Th>
                   ))}
                 </Tr>
@@ -130,36 +137,48 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
               <Tbody>
                 {estudiantes && estudiantes.map((item, index) => (
                   <Tr key={index}>
-                      <Td>
+                    <Td>
+                      <Skeleton isLoaded={!isLoading}>
                         <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                    {item.nombre}
+                          {item.nombre}
                         </Box>
-                        </Td>
-                      <Td>
+                      </Skeleton>
+                    </Td>
+                    <Td>
+                      <Skeleton isLoaded={!isLoading}>
                         <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                    {item.apellido}
+                          {item.apellido}
                         </Box>
-                        </Td>
-                      <Td>
+                      </Skeleton>
+                    </Td>
+                    <Td>
+                      <Skeleton isLoaded={!isLoading}>
                         <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                    {item.email}
-                          </Box>
-                        </Td>
-                      <Td>
-                        <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                    {item.estado ? "Activo" : "Inactivo"}
+                          {item.email}
                         </Box>
-                        </Td>
+                      </Skeleton>
+                    </Td>
+                    <Td>
+                      <Skeleton isLoaded={!isLoading}>
+                        <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
+                          {item.estado ? "Activo" : "Inactivo"}
+                        </Box>
+                      </Skeleton>
+                    </Td>
                     <Td>{
+                      <Skeleton isLoaded={!isLoading}>
                         <Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} h={"30px"} as={Link} to={`/editarEstudiante/${item.id}`}>
-                        <Icon color={"primero.100"} as={AiOutlineEdit}/>
+                          <Icon color={"primero.100"} as={AiOutlineEdit}/>
                         </Button>
-                        }</Td>
+                      </Skeleton>
+                      }</Td>
                     <Td display={"flex"} alignItems={"center"} justifyContent={"center"}>{
+                      <Skeleton isLoaded={!isLoading}>
                         <Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} h={"30px"} w={"55px"}as={Link} to={`/estudiante/resultados`}>
-                        <Icon color={"primero.100"} as={AiOutlineDelete}/>
+                          <Icon color={"primero.100"} as={AiOutlineDelete}/>
                         </Button>
-                    }</Td>
+                      </Skeleton>
+                      }</Td>
                   </Tr>
                 ))}
               </Tbody>
@@ -167,14 +186,15 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
           </Box>
         </Flex>
       </Box>
-    <Paginacion
+      <Paginacion
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={isLoading ? 1 :totalPages}
         indexI={indexI}
         indexF={indexF}
         handlePageChange={handlePageChange}
         atrasPage={atrasPage}
         adelantePage={adelantePage}
+        isLoaded={!isLoading}
       />
     </Box>
   );

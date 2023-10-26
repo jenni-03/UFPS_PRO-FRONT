@@ -7,6 +7,7 @@ import {
   Th,
   Td,
   Flex,
+  Skeleton,
   Box,
   Button,
   Icon,
@@ -31,6 +32,7 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const { token } = useContext(AppContext);
+  const [isLoading, setLoading] = useState(true)
   const [categorias, setCategorias] = useState()
   const currentItems = categorias && categorias.slice(indexOfFirstItem, indexOfLastItem);
 
@@ -45,7 +47,7 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
       toast.error("No se pueden obtener las categorías!")
     })
     setCategorias(response.data)
-    "" 
+    setLoading(false)
   }
 
 
@@ -86,15 +88,20 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
     <Box >
       {showButton && (
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={"space-between"}>
-
+          <Skeleton isLoaded={!isLoading}>
           <Btn path={path} w={["100%","250px"]} leftIcon={<MdAdd/>} msg={msg}></Btn>
-          <Flex align={"center"} gap={"5px"}>
+          </Skeleton>
+          <Flex align={"center"} gap={"5px"} >
+          <Skeleton isLoaded={!isLoading}>
             <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading}>
             <Switch id="switch" colorScheme="cyan" onChange={(e) => {
               setCurrentPage(0)
               setShowActive(!showActive)
               showActive === true ? obtenerActivos(1) : obtenerActivos(0)
             }} />
+          </Skeleton>
           </Flex>
         </Flex>
       )}
@@ -128,7 +135,9 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
                         borderBottomColor: "primero.100",
                       }}
                     >
+                      <Skeleton isLoaded={!isLoading}>
                       {column}
+                      </Skeleton>
                     </Th>
                   ))}
                 </Tr>
@@ -138,29 +147,39 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
 
                   <Tr key={item.id}>
                     <Td>
+                    <Skeleton isLoaded={!isLoading}>
                       <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
                     {item.id}
                       </Box>
+                    </Skeleton>
                       </Td>
                     <Td>
+                    <Skeleton isLoaded={!isLoading}>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
                     {item.nombre}
                         </Box>
+                    </Skeleton>
                         </Td>
                     <Td>
+                    <Skeleton isLoaded={!isLoading}>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
                     {item.estado ? "Activo" : "Inactivo"}
                         </Box>
+                    </Skeleton>
                         </Td>
                     <Td>
+                    <Skeleton isLoaded={!isLoading}>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
                     {item.competencia.nombre}
                         </Box>
+                    </Skeleton>
                         </Td>
                     <Td>{
+                    <Skeleton isLoaded={!isLoading}>
                       <Button display={"flex"} alignItems={"center"} h={"30px"} justifyContent={"center"} backgroundColor={"segundo.100"} as={Link} to={`/editarCategoria/${item.id}`}>
                        <Icon color={"principal.100"} as={AiOutlineEdit} />
                       </Button>
+                    </Skeleton>
                     }</Td>
                   </Tr>
 
@@ -170,6 +189,7 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
           </Box>
         </Flex>
       </Box>
+
          <Paginacion
         currentPage={currentPage}
         totalPages={totalPages}
@@ -178,6 +198,7 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
         handlePageChange={handlePageChange}
         atrasPage={atrasPage}
         adelantePage={adelantePage}
+        isLoaded={!isLoading}
       />
     </Box>
   );

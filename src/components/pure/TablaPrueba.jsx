@@ -13,10 +13,10 @@ import {
   useEditable,
   FormLabel,
   Switch,
-  Text
+  Text,
+  Skeleton
 } from "@chakra-ui/react";
-import Boton from "../pure/Boton";
-import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
+import { MdAdd } from "react-icons/md";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
 import { AiOutlineEdit } from "react-icons/ai";
@@ -29,6 +29,7 @@ export default function TablaPrueba({ columns, items, path, msg, showButton }) {
   const [indexI, setIndexI] = useState(0);
   const [indexF, setIndexF] = useState(5);
   const [showActive, setShowActive] = useState(false);
+  const [isLoading, setLoading] = useState(true)
   const [pruebas,setPruebas] = useState();
   const {token} = useContext(AppContext)
   const itemsPerPage = 5;
@@ -77,6 +78,7 @@ export default function TablaPrueba({ columns, items, path, msg, showButton }) {
       toast.error(e.response.data.error)
     })
     setPruebas(response.data)
+    setLoading(false)
 
   }
 
@@ -89,6 +91,7 @@ export default function TablaPrueba({ columns, items, path, msg, showButton }) {
       {showButton && (
 
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={"space-between"}>
+      <Skeleton isLoaded={!isLoading}>
         <Btn
           msg={msg}
           leftIcon={<MdAdd/>}
@@ -96,16 +99,20 @@ export default function TablaPrueba({ columns, items, path, msg, showButton }) {
           w={["100%", "250px"]}
 
         >
-
         </Btn>
+        </Skeleton>
 
         <Flex align={"center"} gap={"5px"}>
+      <Skeleton isLoaded={!isLoading}>
             <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel>
+        </Skeleton>
+      <Skeleton isLoaded={!isLoading}>
             <Switch id="switch" colorScheme="cyan" onChange={(e) => {
               setCurrentPage(0)
               setShowActive(!showActive)
               showActive === true ? obtenerActivos(1) : obtenerActivos(0)
             }} />
+        </Skeleton>
           </Flex>
 
 
@@ -142,7 +149,9 @@ export default function TablaPrueba({ columns, items, path, msg, showButton }) {
                         borderBottomColor: "principal.100",
                       }}
                     >
+      <Skeleton isLoaded={!isLoading}>
                       {column}
+        </Skeleton>
                     </Th>
                   ))}
                 </Tr>
@@ -151,33 +160,44 @@ export default function TablaPrueba({ columns, items, path, msg, showButton }) {
                 {pruebas && currentItems.map((item, index) => (
                   <Tr key={index}>
                     <Td>
+      <Skeleton isLoaded={!isLoading}>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                     {item.id}
                       </Box>
+        </Skeleton>
                       </Td>
                     <Td>
+      <Skeleton isLoaded={!isLoading}>
                         <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
                     {item.nombre}
                           </Box>
+        </Skeleton>
                         </Td>
                     <Td>
+      <Skeleton isLoaded={!isLoading}>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.semestre}
                       </Box>
+        </Skeleton>
                     </Td>
                     <Td>
+      <Skeleton isLoaded={!isLoading}>
                         <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"} flexDir={"column"}>
                     {
                       item.competencias.map((data,index)=>(
+
                         <Text>{data.nombre}</Text>
                       ))
                       }
                         </Box>
+        </Skeleton>
                     </Td>
                     <Td>
+      <Skeleton isLoaded={!isLoading}>
                       <Button as={Link} display={"flex"} h={"30px"} justifyItems={"center"} justifyContent={"center"} backgroundColor={"segundo.100"} to={`/editarPrueba/${item.id}`}>
                         <Icon color={"primero.100"} as={AiOutlineEdit}></Icon>
                       </Button>
+        </Skeleton>
                     </Td>
                   </Tr>
                 ))}
@@ -188,12 +208,13 @@ export default function TablaPrueba({ columns, items, path, msg, showButton }) {
       </Box>
       <Paginacion
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={isLoading ? 1 : totalPages}
         indexI={indexI}
         indexF={indexF}
         handlePageChange={handlePageChange}
         atrasPage={atrasPage}
         adelantePage={adelantePage}
+        isLoaded={!isLoading}
       />
     </div>
   );

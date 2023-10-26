@@ -1,6 +1,7 @@
 import React from 'react';
 import { Flex, Button, Icon } from '@chakra-ui/react';
 import { MdChevronLeft, MdChevronRight } from 'react-icons/md';
+import { Skeleton } from '@chakra-ui/react';
 import Boton from '../pure/Boton';
 
 export default function Paginacion({
@@ -11,9 +12,11 @@ export default function Paginacion({
   handlePageChange,
   atrasPage,
   adelantePage,
+  isLoaded
 }) {
   return (
     <Flex className="pagination" justifyContent="center">
+      <Skeleton isLoaded={isLoaded} borderRadius={"50px"}>
       <Button
         isDisabled={currentPage === 0}
         onClick={atrasPage}
@@ -22,11 +25,13 @@ export default function Paginacion({
       >
         <Icon as={MdChevronLeft} color={"primero.100"} boxSize={5} />
       </Button>
+      </Skeleton>
       {Array.from({ length: totalPages })
         .slice(indexI, indexF)
         .map((_, index) => {
           index = index + indexI;
           return (
+            <Skeleton isLoaded={isLoaded}>
             <Button
               key={index}
               onClick={() => {
@@ -42,8 +47,10 @@ export default function Paginacion({
             >
               {index + 1}
             </Button>
+              </Skeleton>
           );
         })}
+      <Skeleton isLoaded={isLoaded} borderRadius={"50px"}>
       <Button
         isDisabled={currentPage === totalPages - 1}
         onClick={adelantePage}
@@ -52,6 +59,7 @@ export default function Paginacion({
       >
         <Icon as={MdChevronRight} color={"primero.100"} boxSize={5} />
       </Button>
+      </Skeleton>
     </Flex>
   );
 }

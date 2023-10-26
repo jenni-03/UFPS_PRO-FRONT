@@ -11,10 +11,10 @@ import {
   Button,
   Icon,
   useEditable,
+  Skeleton
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import Boton from "../pure/Boton";
-import { useRef, useContext } from "react";
+import {  useContext } from "react";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
 import { toast } from "react-hot-toast";
@@ -30,6 +30,7 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
   const itemsPerPage = 5;
   const [convocatorias,setConvocatorias] = useState()
   const indexOfLastItem = (currentPage + 1) * itemsPerPage;
+  const [isLoading, setLoading] = useState(true)
   const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const { token } = useContext(AppContext);
 
@@ -47,6 +48,7 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
       toast.error("No se pueden obtener las convocatorias!")
     })
     setConvocatorias(response.data)
+    setLoading(false)
   }
 
   useEffect(()=>{
@@ -86,12 +88,14 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
   return (
     <Box>
       {showButton && (
+        <Skeleton isLoaded={!isLoading}>
         <Btn
           msg={msg}
           leftIcon={<MdAdd />}
           path={path}
-          w={["100%", "250px"]}
+          w={["100%","100%", "250px"]}
         />
+        </Skeleton>
       )}
       <Box mb="15px" mt="20px" p="20px" borderRadius="8px" bgColor="white"
         boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
@@ -103,8 +107,6 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
             md: "450px",
             lg: "690px",
             xl: "100%",
-            //'2xl': '100%', 
-            //tableBreakpoint: "1100px",
           }}
           gap={["8px", "0"]}
           direction={["column", "row"]}
@@ -125,53 +127,71 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
                         borderBottomColor: "principal.100",
                       }}
                     >
+        <Skeleton isLoaded={!isLoading}>
                       {column}
+          </Skeleton>
                     </Th>
                   ))}
                 </Tr>
               </Thead>
               <Tbody>
-                {convocatorias && currentItems.map((item, index) => (
+               {convocatorias && currentItems.map((item, index) => (
                   <Tr key={index}>
                       <Td>
+        <Skeleton isLoaded={!isLoading}>
                          <Box w={"100%"} textAlign={"center"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.nombre}
                          </Box>
+          </Skeleton>
                       </Td>
                        <Td>
+        <Skeleton isLoaded={!isLoading}>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.estado ? "Activo" : "Inactivo"}
                       </Box>
+          </Skeleton>
                       </Td>
                        <Td>
+        <Skeleton isLoaded={!isLoading}>
                          <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.fecha_inicio.toString().replace("T00:00:00.000Z","")}
                          </Box>
+          </Skeleton>
                       </Td>
                       <Td>
+        <Skeleton isLoaded={!isLoading}>
                          <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.fecha_fin.toString().replace("T00:00:00.000Z","")}
                          </Box>
+          </Skeleton>
                       </Td>
                       <Td>
+        <Skeleton isLoaded={!isLoading}>
                          <Box w={"100%"} textAlign={"center"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
                         {item.prueba.nombre}
                          </Box>
+          </Skeleton>
                       </Td>
                     <Td>{
+        <Skeleton isLoaded={!isLoading}>
                       <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarConvocatoria/${item.id}`}>
                         <Icon color={"primero.100"} as={AiOutlineEdit} />
                       </Button>
+          </Skeleton>
                       }</Td>
                     <Td>{
+        <Skeleton isLoaded={!isLoading}>
                       <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarConvocatoria/${item.id}`}>
                         <Icon color={"primero.100"} as={AiOutlineUser} />
                       </Button>
+          </Skeleton>
                       }</Td>
 <Td>{
+        <Skeleton isLoaded={!isLoading}>
                       <Button display={"flex"} justifyContent={"center"} h={"30px"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} as={Link} to={`/editarConvocatoria/${item.id}`}>
                         <Icon color={"primero.100"} as={AiOutlineEye} />
                       </Button>
+          </Skeleton>
                       }</Td>
                   </Tr>
                 ))}
@@ -182,12 +202,13 @@ export default function TablaConvocatoria({ columns, items, path, msg, showButto
       </Box>
       <Paginacion
         currentPage={currentPage}
-        totalPages={totalPages}
+        totalPages={isLoading ? 1 :totalPages}
         indexI={indexI}
         indexF={indexF}
         handlePageChange={handlePageChange}
         atrasPage={atrasPage}
         adelantePage={adelantePage}
+        isLoaded={!isLoading}
       />
     </Box>
   );

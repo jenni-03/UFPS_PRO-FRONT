@@ -1,11 +1,13 @@
 import { Box, Button, Center, Image } from "@chakra-ui/react";
 import React from "react";
 import LogoPrincipal from "../../assets/images/LogoPrincipal.jpg"
+import Background from "../container/Background";
 
 export default function CardLogo({ children, wd, hg, p }) {
 
-  //bgImage={"url(https://svgshare.com/i/yYp.svg)}"
   return (
+    <>
+    <Background/>
     <Center h="100vh" >
       <Box
         bg="white"
@@ -20,9 +22,7 @@ export default function CardLogo({ children, wd, hg, p }) {
         borderColor={"gray.300"}
       >
         <Image
-          //src="https://i.ibb.co/Cwg7p4d/Logo1.jpg"
           src={LogoPrincipal}
-          //borderRadius="full"
           boxSize="150px"
           width={"170px"}
           mx="auto"
@@ -32,5 +32,6 @@ export default function CardLogo({ children, wd, hg, p }) {
         {children}
       </Box>
     </Center>
+    </>
   );
 }
