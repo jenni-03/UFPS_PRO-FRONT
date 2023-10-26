@@ -24,8 +24,8 @@ export default function SideBar({isOpen}) {
     {icon:AiOutlineAppstore,msg:"Categorías",active:false,path:["/categorias","/formularioCategoria","/editarCategoria"]},
     {icon:AiOutlineCalendar,msg:"Preguntas",active:false,path:["/preguntas","/tipoPregunta","/formularioPreguntaSimple","/formularioPreguntaImagen","/editarPregunta"]},
     {icon:AiOutlineTeam,msg:"Estudiantes",active:false,path:["/estudiantes","/editarEstudiante"]},
-    {icon:AiOutlineFileAdd,msg:"Pruebas",active:false,path:["/pruebas","/crearPrueba"]},
-    {icon:AiOutlineBook,msg:"Convocatorias",active:false, path:["/convocatorias","/formularioConvocatoria"]},
+    {icon:AiOutlineFileAdd,msg:"Pruebas",active:false,path:["/pruebas","/crearPrueba","/editarPrueba"]},
+    {icon:AiOutlineBook,msg:"Convocatorias",active:false, path:["/convocatorias","/formularioConvocatoria","/editarConvocatoria","/convocatoria"]},
   ]
 
   const userNavItems = [
