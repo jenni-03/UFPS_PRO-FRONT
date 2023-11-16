@@ -10,8 +10,9 @@
   },
   "dependencies": {
     "@chakra-ui/react": "^2.6.1",
-    "@emotion/react": "^11.11.0",
+    "@emotion/react": "^11.11.1",
     "@emotion/styled": "^11.11.0",
+    "@table-library/react-table-library": "^4.1.7",
     "axios": "^1.4.0",
     "crypto-js": "^4.1.1",
     "formik": "^2.2.9",

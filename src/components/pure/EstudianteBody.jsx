@@ -13,6 +13,38 @@ export default function EstudianteBody() {
   ];
 
 
+  const columns2 = [
+    {
+      label: "Nombre",
+      renderCell: (item)=>item.nombre,
+      sort: {sorkKey:"NOMBRE"}
+    },,
+    {
+      label: "Apellido",
+      renderCell: (item)=>item.apellido,
+      sort: {sortkey: "APELLIDO"}
+    },
+    {
+      label: "Correo",
+      renderCell: (item)=>item.email,
+      sort: {sortKey: "CORREO"}
+    },
+    {
+      label: "Estado",
+      renderCell: (item)=>item.estado ? "Activo":"Inactivo",
+      sort: {sortKey: "ESTADO"}
+    },
+    {
+      label: "Editar",
+      renderCell: (item)=><Button
+    as={Link} to={`/editarCompetencia/${item.id}`}
+  >
+    <Icon as={AiOutlineEdit}></Icon>
+  </Button>,
+    },
+  ]
+
+
   return (
       <TablaEstudiantes columns={columns} path={""} />
     )

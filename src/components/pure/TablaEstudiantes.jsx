@@ -87,6 +87,7 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
     }).catch((e)=>{
       toast.error(e.response.data.error)
     })
+    console.log(response.data)
     setEstudiantes(response.data)
     setIsLoading(false)
   }

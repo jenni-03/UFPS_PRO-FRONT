@@ -13,7 +13,7 @@ import {
   useEditable,
   Skeleton
 } from "@chakra-ui/react";
-import { Link } from "react-router-dom";
+import{ Link } from "react-router-dom";
 import {  useContext } from "react";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
