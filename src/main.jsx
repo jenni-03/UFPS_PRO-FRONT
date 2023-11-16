@@ -4,7 +4,6 @@ import App from './App'
 import './index.css'
 import { ChakraProvider } from '@chakra-ui/react'
 import { extendTheme } from '@chakra-ui/react'
-import Background from './components/container/Background'
 
 
 const theme = extendTheme({
