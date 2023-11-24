@@ -15,7 +15,6 @@ import {
   FormLabel,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import Boton from "../pure/Boton";
 import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
 import {AiOutlineEdit} from "react-icons/ai"
 import { AppContext } from "../context/AppProvider";
@@ -170,7 +169,7 @@ export default function TablaCategoria({ columns, items, path, msg, showButton }
                     <Td>
                     <Skeleton isLoaded={!isLoading}>
                         <Box display={"flex"} alignItems={"center"} justifyContent={"center"} w={"100%"}>
-                    {item.competencia.nombre}
+                    {item.Competencia.nombre}
                         </Box>
                     </Skeleton>
                         </Td>

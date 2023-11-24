@@ -214,7 +214,7 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
                     <Td>
                       <Skeleton isLoaded={!isLoading}>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                    {item.categoria.nombre}
+                    {item.Categoria.nombre}
                       </Box>
                       </Skeleton>
                       </Td>
@@ -255,7 +255,7 @@ export default function TablaPregunta({ columns, items, path, msg, showButton })
                       </Td>
                     <Td>
                       <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                    {item.categoria.nombre}
+                    {item.Categoria.nombre}
                       </Box>
                       </Td>
                     <Td>{

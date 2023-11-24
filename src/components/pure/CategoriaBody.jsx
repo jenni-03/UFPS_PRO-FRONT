@@ -24,7 +24,8 @@ export default function CategoriaBody() {
   const sortFns = {
     ID: (array) => array.sort((a, b) => a.id-b.id),
     NOMBRE: (array) => array.sort((a, b) => a.nombre.localeCompare(b.nombre)),
-    COMPETENCIA: (array) => array.sort((a, b) => a.competencia.nombre.localeCompare(b.competencia.nombre)),
+    COMPETENCIA: (array) => array.sort((a, b) => a.Competencia.nombre.localeCompare(b.Competencia.nombre)),
+    PREGUNTAS: (array) => array.sort((a, b) => a.total_preguntas-b.total_preguntas),
 }
 
 
@@ -49,7 +50,8 @@ const columns = [
   },
   {
     label: "Preguntas",
-    renderCell: (item)=> item.total_preguntas
+    renderCell: (item)=> item.total_preguntas,
+    sort: { sortKey: 'PREGUNTAS' },
   },
   { label: 'Editar', renderCell: (item) =><Button
     as={Link} to={`/editarCategoria/${item.id}`}

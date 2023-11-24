@@ -68,7 +68,7 @@ export default function PreguntaBody() {
     ID: (array)=>array.sort((a,b)=>a.id-b.id),
     ENUNCIADO: (array)=>array.sort((a,b)=>a.texto_pregunta.localeCompare(b.texto_pregunta)), 
     SEMESTRE: (array)=>array.sort((a,b)=>a.semestre-b.semestre),
-    CATEGORIA: (array)=>array.sort((a,b)=>a.categoria.nombre.localeCompare(b.categoria.nombre))
+    CATEGORIA: (array)=>array.sort((a,b)=>a.Categoria.nombre.localeCompare(b.Categoria.nombre))
   }
   
   return (

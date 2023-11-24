@@ -15,7 +15,6 @@ import {
   Switch,
   Text
 } from "@chakra-ui/react";
-import Boton from "../pure/Boton";
 import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";

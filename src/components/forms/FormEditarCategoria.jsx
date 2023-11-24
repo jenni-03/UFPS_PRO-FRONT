@@ -87,7 +87,7 @@ export default function FormularioEditarCategoria() {
 
     const categoria = response.data;
     const competenciaEncontrada = competencias.find(
-      (comp) => comp.nombre === categoria.competencia.nombre
+      (comp) => comp.nombre === categoria.Competencia.nombre
     );
 
     setDatos({

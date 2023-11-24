@@ -17,7 +17,6 @@ import {
   Center,
 } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
-import Boton from "./Boton";
 import { MdAdd, MdChevronLeft, MdChevronRight } from "react-icons/md";
 import {AiOutlineEdit} from "react-icons/ai"
 import { AppContext } from "../context/AppProvider";
