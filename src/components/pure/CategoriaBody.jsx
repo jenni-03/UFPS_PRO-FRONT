@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { AppContext } from "../context/AppProvider";
 import {AiOutlineEdit} from "react-icons/ai"
 import {Link} from "react-router-dom"
-import {Button, Icon} from "@chakra-ui/react";
+import {Button, Icon, Tooltip, Text, Select} from "@chakra-ui/react";
 
 export default function CategoriaBody() {
 
@@ -24,8 +24,7 @@ export default function CategoriaBody() {
   const sortFns = {
     ID: (array) => array.sort((a, b) => a.id-b.id),
     NOMBRE: (array) => array.sort((a, b) => a.nombre.localeCompare(b.nombre)),
-    COMPETENCIA: (array) =>
-    array.sort((a, b) => a.competencia.nombre.localeCompare(b.competencia.nombre)),
+    COMPETENCIA: (array) => array.sort((a, b) => a.competencia.nombre.localeCompare(b.competencia.nombre)),
 }
 
 
@@ -37,7 +36,7 @@ const columns = [
     sort: { sortKey: 'ID' },
   },,
   { label: 'Nombre',
-    renderCell: (item) => item.nombre,
+    renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text  maxW={"auto"}>{item.nombre}</Text></Tooltip>,
     sort: { sortKey: 'NOMBRE' },
   },
   {
@@ -45,12 +44,12 @@ const columns = [
     renderCell: (item) => item.estado===true? "Activo":"Inactivo",
   },
   { label: 'Competencia',
-    renderCell: (item) => item.competencia.nombre,
+    renderCell: (item) => item.Competencia.nombre,
     sort: { sortKey: 'COMPETENCIA' },
   },
   {
     label: "Preguntas",
-    renderCell: (item)=> 15,
+    renderCell: (item)=> item.total_preguntas
   },
   { label: 'Editar', renderCell: (item) =><Button
     as={Link} to={`/editarCategoria/${item.id}`}
@@ -60,6 +59,8 @@ const columns = [
   }
 
 ];
+
+
 
 
 return (
@@ -72,6 +73,8 @@ return (
     sortFns={sortFns}
     cols={columns}
     aBuscar={"nombre"}
+    ancho={"1040px"}
+    ancho2={"1250px"}
   >
   </TablaComponent>
 );

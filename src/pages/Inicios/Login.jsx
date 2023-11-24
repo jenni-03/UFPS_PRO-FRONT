@@ -129,6 +129,9 @@ export default function Login() {
                 mt={4}
                 width="full"
                 type="submit"
+                _hover={{
+                  backgroundColor:"#2E3140"
+                }}
               >
                 Ingresar
               </Button>

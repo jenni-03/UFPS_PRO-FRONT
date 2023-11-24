@@ -56,10 +56,17 @@ const actualizaravatar = async (file) =>{
 
 
   if(response.status === 200){
-    toast.success("Imagen actualizada correctamente")
+    //toast.success("Imagen actualizada correctamente")
     getAdmin()
   }
 }
+
+
+toast.promise(fetchData(), {
+  loading: 'Cargando datos...',
+  success: 'Imagen actualizada correctamente',
+  error: 'La imagen no ha sido actualizada',
+});
 
 
 
@@ -93,8 +100,8 @@ const validationSchema = Yup.object().shape({
     >
       <Flex w="100%" alignItems="center" justifyContent="center" mb="15px">
         <Image
-              src={data && data.imagen}
-              key={data && data.imagen}
+          src={data && data.imagen ? data.imagen : "https://res.cloudinary.com/dojljgscf/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1700790025/ufps_pro/perfil_vyserv.jpg?_s=public-apps"}
+          key={data && data.imagen}
           width={["100px", "130px"]}
           height={["100px", "130px"]}
           borderRadius="50%"

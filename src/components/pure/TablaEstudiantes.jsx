@@ -112,9 +112,6 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
     obtenerEstudiantes(1)
   },[]) 
 
-  useEffect(()=>{
-    obtenerEstudiantes(1)
-  },[estudiantes]) 
   return (
     <Box>
       <Flex align={"center"} gap={"5px"} justifyContent={"flex-end"}>

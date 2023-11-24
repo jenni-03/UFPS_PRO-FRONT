@@ -48,7 +48,7 @@ export default function CompetenciaBody() {
     },
     {
       label: "Categorías",
-      renderCell: (item) => item.categorias.map(c => <Box>{c.nombre}</Box>)
+      renderCell: (item) => item.categorias ? item.categorias.map(c => <Box>{c.nombre}</Box>) : null 
     },
     {
       label: "Editar",
@@ -68,6 +68,7 @@ export default function CompetenciaBody() {
       sortFns={sortFns}
       cols={columns}
       aBuscar={"nombre"}
+      ancho={"1040px"}
 
     />
     

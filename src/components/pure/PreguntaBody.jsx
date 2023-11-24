@@ -2,7 +2,7 @@ import React,{useContext} from "react";
 import axiosApi from "../../utils/config/axios.config"
 import { AppContext } from "../context/AppProvider";
 import TablaComponent from "./TablaComponent";
-import { Button, Icon } from "@chakra-ui/react";
+import { Button, Icon, Text, Tooltip } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
 export default function PreguntaBody() {
@@ -36,7 +36,7 @@ export default function PreguntaBody() {
     },,
     {
       label: "Enunciado",
-      renderCell: (item)=>item.texto_pregunta,
+      renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.texto_pregunta}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.texto_pregunta}</Text></Tooltip>, 
       sort: { sortKey: "ENUNCIADO" }
     },
     {
@@ -50,7 +50,7 @@ export default function PreguntaBody() {
     },
     {
       label: "Categoría",
-      renderCell: (item)=>item.categoria.nombre,
+      renderCell: (item)=>item.Categoria.nombre,
       sort: { sortKey: "CATEGORIA" }
     },
     {
@@ -80,6 +80,8 @@ export default function PreguntaBody() {
         sortFns={sortFns}
         cols={columns}
         aBuscar={"texto_pregunta"}
+        ancho={"1040px"}
+        ancho2={"1250px"}
       />
 
   );
