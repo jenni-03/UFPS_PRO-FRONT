@@ -51,8 +51,6 @@ export default function AdminProfileForm() {
     let response = await axiosApi.get("/api/user/profile",{
       headers:{ Authorization:"Bearer " + token }
     })
-    console.log(response.data)
-
     return response.data
   }
 

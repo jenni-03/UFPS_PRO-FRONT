@@ -5,7 +5,7 @@ import { Spinner, Flex} from "@chakra-ui/react";
 import jwt_decode from "jwt-decode"
 
 export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) {
-  const { user, role, token } = useContext(AppContext);
+  const { token } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {

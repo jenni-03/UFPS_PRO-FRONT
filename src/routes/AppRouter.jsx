@@ -43,7 +43,7 @@ import CambiarContraseniaEstudiante from "../pages/User/principal/CambiarContras
 import EstudianteXConvocatoria from "../pages/Admin/convocatorias/EstudiantesXConvocatoria";
 import AgregarEstudiante from "../pages/Admin/convocatorias/AgregarEstudiante";
 export default function AppRouter() {
-  const { token, user, role } = useContext(AppContext);
+  const { role } = useContext(AppContext);
 
   return (
     <>

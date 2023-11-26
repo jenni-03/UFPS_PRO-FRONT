@@ -54,21 +54,10 @@ const actualizaravatar = async (file) =>{
         },
   }).catch((e)=>toast.error(e.response.data.error))
 
-
   if(response.status === 200){
-    //toast.success("Imagen actualizada correctamente")
     getAdmin()
   }
 }
-
-
-toast.promise(fetchData(), {
-  loading: 'Cargando datos...',
-  success: 'Imagen actualizada correctamente',
-  error: 'La imagen no ha sido actualizada',
-});
-
-
 
 
  
@@ -113,7 +102,13 @@ const validationSchema = Yup.object().shape({
       </Flex>
 
       <Formik initialValues={initialValues} validationSchema={validationSchema} onSubmit={(values) => {
-        actualizaravatar(inputRef.current.files[0])
+        toast.promise(actualizaravatar(inputRef.current.files[0]), {
+        loading: 'Actualizando Imagen...',
+        success: 'Imagen actualizada correctamente',
+        error: 'La imagen no ha sido actualizada correctamente',
+        });
+
+
       }}>
         {(props) => {
           const { errors, touched, setFieldValue } = props;
