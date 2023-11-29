@@ -1,51 +1,20 @@
-import React,{useContext, useEffect, useState} from 'react'
-import TablaEstudiantes from './TablaEstudiantes';
-import { Center } from '@chakra-ui/react';
-import { RiEdit2Fill, RiDeleteBin2Fill} from "react-icons/ri";
+import React,{useContext, useEffect, useState, useRef} from 'react'
+import { AppContext } from '../context/AppProvider';
+import TablaComponent from './TablaComponent';
+import axiosApi from '../../utils/config/axios.config'
+import { Button, Icon , AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter, Text, Box} from '@chakra-ui/react';
+import { Link } from 'react-router-dom';
+import TablaEstudiantes from "./TablaEstudiantes"
+import { toast } from 'react-hot-toast';
+import { AiOutlineEdit , AiOutlineDelete} from 'react-icons/ai';
 
 export default function EstudianteBody() {
-  const columns = [ "Nombres",
-    "Apellidos",
-    "Correo",
-    "Estado",
-    "Editar",
-    "Eliminar",
-  ];
-
-
-  const columns2 = [
-    {
-      label: "Nombre",
-      renderCell: (item)=>item.nombre,
-      sort: {sorkKey:"NOMBRE"}
-    },,
-    {
-      label: "Apellido",
-      renderCell: (item)=>item.apellido,
-      sort: {sortkey: "APELLIDO"}
-    },
-    {
-      label: "Correo",
-      renderCell: (item)=>item.email,
-      sort: {sortKey: "CORREO"}
-    },
-    {
-      label: "Estado",
-      renderCell: (item)=>item.estado ? "Activo":"Inactivo",
-      sort: {sortKey: "ESTADO"}
-    },
-    {
-      label: "Editar",
-      renderCell: (item)=><Button
-    as={Link} to={`/editarCompetencia/${item.id}`}
-  >
-    <Icon as={AiOutlineEdit}></Icon>
-  </Button>,
-    },
-  ]
 
 
   return (
-      <TablaEstudiantes columns={columns} path={""} />
-    )
+    <TablaEstudiantes
+      wCampo="150px"
+      ancho={"1090px"}
+    />
+  )
 }

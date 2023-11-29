@@ -5,7 +5,7 @@ import { toast, Toaster } from "react-hot-toast";
 import TablaComponent from "./TablaComponent";
 import { Link } from "react-router-dom";
 import { AiOutlineEdit } from "react-icons/ai";
-import { Button, Icon, Box } from "@chakra-ui/react";
+import { Button, Icon, Tooltip, Text } from "@chakra-ui/react";
 
 export default function CompetenciaBody() {
   const {token} = useContext(AppContext)
@@ -39,7 +39,7 @@ export default function CompetenciaBody() {
     },,
     {
       label:"Nombre",
-      renderCell: (item) => item.nombre,
+      renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
       sort: { sortKey: "NOMBRE" }
     },
     {
@@ -48,7 +48,7 @@ export default function CompetenciaBody() {
     },
     {
       label: "Categorías",
-      renderCell: (item) => item.categorias ? item.categorias.map(c => <Box>{c.nombre}</Box>) : null 
+      renderCell: (item) => item.Categorias ? item.Categorias.map(c => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={c.nombre}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{c.nombre}</Text></Tooltip>) : null 
     },
     {
       label: "Editar",
@@ -68,7 +68,7 @@ export default function CompetenciaBody() {
       sortFns={sortFns}
       cols={columns}
       aBuscar={"nombre"}
-      ancho={"1040px"}
+      ancho={"790px"}
 
     />
     

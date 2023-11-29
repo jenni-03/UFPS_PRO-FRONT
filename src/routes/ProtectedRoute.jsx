@@ -5,7 +5,8 @@ import { Spinner, Flex} from "@chakra-ui/react";
 import jwt_decode from "jwt-decode"
 
 export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) {
-  const { token } = useContext(AppContext);
+
+  const { token, isInPrueba } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -14,6 +15,7 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
       // Realizar la verificación del rol (por ejemplo, decodificar el token) y establecer isLoading en false cuando esté listo
       const decode = jwt_decode(token);
       const rol = decode.tipo;
+      console.log(rol, isValid)
 
       if (rol === "Director" && isValid) {
         setIsLoading(false);
@@ -28,6 +30,7 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
 
   if (isLoading) {
     // Mientras se carga el rol, puedes mostrar un mensaje de carga o lo que desees
+    //
     return (<Flex justify={"center"} align={"center"} h="100vh">
       <Spinner size='xl' color="red.500" />
     </Flex>)
@@ -37,7 +40,8 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
     if (!isValid) {
       return <Navigate to={redirectTo} replace />;
     }
-  } else {
+  } 
+    else {
     return <Navigate to={"/"} />;
   }
 

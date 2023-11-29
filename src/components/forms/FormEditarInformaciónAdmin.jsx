@@ -347,7 +347,7 @@ export default function EditarInformacionAdmin() {
                     gap={["8px", "8px", "0"]}
                     justifyContent={"center"}
                   >
-                    <Btn isSubmit={true} w={"100%"} msg={"Enviar"}></Btn>
+                    <Btn isSubmit={true} w={"100%"} msg={"Guardar"}></Btn>
                   </Flex>
                 </Box>
               </Box>

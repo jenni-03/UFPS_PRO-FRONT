@@ -94,7 +94,7 @@ export default function FormularioPreguntaImagen() {
     imagen: Yup.mixed()
       .test("file-type", "El tipo de archivo es PNG/JPEG", (value) => {
         if (value) {
-          return value.endsWith(".jfif") || value.endsWith(".png");
+          return value.endsWith(".jpg") || value.endsWith(".png") || value.endsWith(".jpeg");
         }
         return true;
       })

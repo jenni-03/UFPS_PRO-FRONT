@@ -31,6 +31,7 @@ export default function FormEditarConvocatoria() {
     }).catch((e)=>{
         toast.error(e.response.data.error)
      })
+     console.log(response.data)
      setPruebas(response.data)
   } 
 
@@ -76,14 +77,17 @@ export default function FormEditarConvocatoria() {
     setDatos({
       nombre: convocatoria.nombre ? convocatoria.nombre : null,
       prueba_id: convocatoria.prueba.id ? convocatoria.prueba.id : null,
-      descripcion: convocatoria.descripcion ? convocatoria.descripcion : "assa",
-      fecha_inicio: convocatoria.fecha_inicio? moment(convocatoria.fecha_inicio).local().format("YYYY-MM-DDTHH:mm"): null,
-      fecha_fin: convocatoria.fecha_fin? moment(convocatoria.fecha_fin).local().format("YYYY-MM-DDTHH:mm"): null,
+      descripcion: convocatoria.descripcion ? convocatoria.descripcion : null,
+      fecha_inicio: convocatoria.fecha_inicio? moment(convocatoria.fecha_inicio, "DD-MM-YYYY HH:mm").format("YYYY-MM-DDTHH:mm"): null,
+      fecha_fin: convocatoria.fecha_fin? moment(convocatoria.fecha_fin, "DD-MM-YYYY HH:mm").format("YYYY-MM-DDTHH:mm"): null,
     })
+    console.log("Objeto",response.data)
     setLoading(false)
   }
 
- 
+  if(datos){
+    console.log("datos",datos)
+  } 
 
   const validationSchema = Yup.object().shape({
   nombre: Yup.string().required("El nombre es requerido"),

@@ -42,8 +42,10 @@ import EditarPrueba from "../pages/Admin/pruebas/EditarPrueba";
 import CambiarContraseniaEstudiante from "../pages/User/principal/CambiarContraseniaEstudiante";
 import EstudianteXConvocatoria from "../pages/Admin/convocatorias/EstudiantesXConvocatoria";
 import AgregarEstudiante from "../pages/Admin/convocatorias/AgregarEstudiante";
+import ResultadoConvocatoria from "../components/pure/admin/convocatoria/ResultadoConvocatoria";
+import PruebaPresentacion from "../components/pure/user/PruebaPresentacion";
 export default function AppRouter() {
-  const { role } = useContext(AppContext);
+  const { role, isInPrueba } = useContext(AppContext);
 
   return (
     <>
@@ -108,6 +110,10 @@ export default function AppRouter() {
               path="/editarConvocatoria/:id"
               element={<EditarConvocatoria />}
             />
+            <Route
+              path="/resultadoConvocatoria/:id"
+              element={<ResultadoConvocatoria/>}
+            />
           </Route>
 
           <Route
@@ -132,6 +138,19 @@ export default function AppRouter() {
             <Route path="/pruebasUser" element={<PruebasUser />} />
             <Route path="/convocatoriasUser" element={<ConvocatoriaUser />} />
           </Route>
+
+
+           <Route
+            element={
+              <ProtectedRoute
+                redirectTo={"/home"}
+                isValid={role && isInPrueba && role === "Estudiante" && isInPrueba==="true"}
+              >
+              </ProtectedRoute>
+            }
+          >
+             <Route path="/presentacionPrueba/:id" element={<PruebaPresentacion/>}/>
+           </Route>
 
 
           <Route path="/newPassword/:id/:token" element={<NewPassword />} />

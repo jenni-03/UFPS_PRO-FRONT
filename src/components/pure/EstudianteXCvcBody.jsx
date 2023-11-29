@@ -10,8 +10,13 @@ export default function EstudianteXCvcBody() {
     "Expulsar",
   ];
 
+  
+
 
   return (
-      <TablaEstudianteXCvc columns={columns} />
-    )
+    <TablaEstudianteXCvc 
+      wCampo="150px"
+      ancho={"1090px"}
+    />
+  )
 }

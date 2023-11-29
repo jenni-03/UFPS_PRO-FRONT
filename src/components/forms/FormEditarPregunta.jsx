@@ -117,7 +117,13 @@ export default function FormEditarPregunta() {
     semestre: Yup.string().required("El semestre es requerido"),
     estado: Yup.string().required("El estado es requerido"),
     categoria: Yup.string().nullable(),
-    imagen: Yup.string().nullable(),
+    imagen: Yup.mixed()
+    .test("file-type", "El tipo de archivo es PNG/JPEG/JPG", (value) => {
+      if (value) {
+        return  value.endsWith(".png") || value.endsWith(".jpeg") || value.endsWith(".jpg")
+      }
+      return true;
+    }),
     opciones: Yup.array(),
     respuesta: Yup.string()
     .required("La respuesta es requerida")

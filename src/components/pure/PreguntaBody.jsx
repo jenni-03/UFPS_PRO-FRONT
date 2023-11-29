@@ -50,7 +50,7 @@ export default function PreguntaBody() {
     },
     {
       label: "Categoría",
-      renderCell: (item)=>item.Categoria.nombre,
+      renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.Categoria.nombre}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.Categoria.nombre}</Text></Tooltip>,
       sort: { sortKey: "CATEGORIA" }
     },
     {
@@ -80,8 +80,7 @@ export default function PreguntaBody() {
         sortFns={sortFns}
         cols={columns}
         aBuscar={"texto_pregunta"}
-        ancho={"1040px"}
-        ancho2={"1250px"}
+        ancho={"940px"}
       />
 
   );

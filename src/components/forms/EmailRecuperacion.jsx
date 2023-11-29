@@ -25,12 +25,9 @@ import Btn from "../pure/Btn";
     let response = await axiosApi.post("/api/auth/requestPasswordReset",body,{
 
     }).catch((e)=>{
-      toast.error(e.response.data.error)
+      Promise.reject(e.response.data.error)
     })
 
-    if(response.status === 200){
-      toast.success("¡Mensaje enviado correctamente!")
-    }
   }
   
     const validationSchema = Yup.object().shape({
@@ -45,7 +42,13 @@ import Btn from "../pure/Btn";
           validationSchema={validationSchema}
           enableReinitialize={true}
           onSubmit={({email}) => {
-            requestPassword(email, "https://cheerful-strudel-8a37c7.netlify.app/#/newPassword")
+          //  requestPassword(email, "https://cheerful-strudel-8a37c7.netlify.app/#/newPassword")
+            toast.promise(requestPassword(email, "http://localhost:5173/#/newPassword")
+, {
+             loading: 'Buscando Correo...',
+             success: '¡Mensaje enviado correctamente!',
+             error: (e)=>e,
+            });
           }}
         >
           {(props) => {

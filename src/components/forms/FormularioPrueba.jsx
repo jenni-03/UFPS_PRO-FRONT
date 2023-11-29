@@ -79,14 +79,13 @@ const FormularioPrueba = () => {
     const arregloPreguntasPorCategorias = []
 
     const {categorias,descripcion,duracion,nombre, semestre,totalPreguntas} = values
-
     try{
     values && values.competencias.forEach((competenciaId) => {
       const competencia = competencias.find((c) => c.id === competenciaId);
       if (competencia) {
         // Agrega el valor de `categoria.nombre` a `categoriaId`
         values.categorias[competencia.id].forEach((categoria, index) => {
-          const categoriaObj = competencia.categorias[index];
+          const categoriaObj = competencia.Categorias[index];
           if (categoriaObj) {
             const categoriaFinal = categoriasObtenidas.find((c) => c.nombre === categoriaObj.nombre)
             categoria.categoriaId= categoriaFinal.id;
@@ -126,9 +125,10 @@ const FormularioPrueba = () => {
       total_preguntas: totalPreguntas,
       competencias: values.competencias,
       valorCategorias: arregloCategorias,
-      categorias: arregloCategoriasID,
-      preguntas: arregloPreguntasPorCategorias,
+      //categorias: arregloCategoriasID,
+      //preguntas: arregloPreguntasPorCategorias,
     }
+
     const response = await axiosApi.post("/api/prueba/create",body,{
       headers: {
         Authorization: "Bearer " + token,
@@ -260,7 +260,7 @@ const FormularioPrueba = () => {
 
             <FormLabel>Competencias:</FormLabel>
             {competencias
-                .filter((competencia) => competencia.categorias.length > 0) // Filtrar competencias con categorías
+                .filter((competencia) => competencia.Categorias.length > 0) // Filtrar competencias con categorías
                 .map((competencia) => (
                   <Box key={competencia.id} m={"10px 0 10px 0"}>
                     <Box display={"flex"} alignItems={"center"}>
@@ -301,7 +301,7 @@ const FormularioPrueba = () => {
                     {values.competencias.includes(competencia.id) && (
                       <FieldArray name="categorias">
                         {(arrayHelpers) =>
-                            competencia.categorias.map((categoria, index) => (
+                            competencia.Categorias.map((categoria, index) => (
                               <Box
                                 w={"90%"}
                                 display={"flex"}
@@ -316,7 +316,6 @@ const FormularioPrueba = () => {
                                   display={"flex"}
                                   flexDir={"row"}
                                   gap={"15px"}
-                                  alignItems={"center"}
                                   justifyContent={"center"}
                                 >
                                   <Field

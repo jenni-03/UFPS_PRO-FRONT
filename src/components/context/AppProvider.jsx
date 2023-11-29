@@ -12,6 +12,9 @@ export function AppProvider({ children }) {
   const [id, setId] = useState(null);
   const [token, setToken] = useState(() => sessionStorage.getItem("token"));
   const [imagen, setImagen] = useState();
+  const [isInPrueba, setIsInPrueba] = useState(()=> sessionStorage.getItem("isInPrueba"))
+  const [tiempoInicial,setTiempoInicial] = useState(()=>sessionStorage.getItem("time"))
+  //const [tiempoRestante, setTiempoRestante] = useState(0);
 
   useEffect(() => {
     setImagen(sessionStorage.getItem("imagen"));
@@ -19,9 +22,24 @@ export function AppProvider({ children }) {
       decodeToken("token");
     }
   }, []);
+  
 
 
   useEffect(() => {
+    const intervalo = setInterval(() => {
+      if (tiempoInicial > 0 && isInPrueba==="true") {
+        setTiempoInicial(tiempoInicial- 1);
+        sessionStorage.setItem("time", tiempoInicial-1)
+      } else {
+        clearInterval(intervalo);
+        // Aquí podrías ejecutar alguna lógica adicional cuando el cronómetro llegue a cero
+      }
+    }, 1000);
+      return () => clearInterval(intervalo);
+  }, [tiempoInicial, setTiempoInicial]);
+
+
+  {/* useEffect(() => {
     if (user) {
       const timeout = setTimeout(() => {
         sessionStorage.removeItem("token");
@@ -41,7 +59,7 @@ export function AppProvider({ children }) {
         });
       }, 3600000);
     }
-  }, [user]);
+  }, [user]);*/}
 
   const decodeToken = (a) => {
     const decode = jwt_decode(sessionStorage.getItem(a));
@@ -65,9 +83,13 @@ export function AppProvider({ children }) {
         token,
         role,
         setRole,
+        tiempoInicial,
         setToken,
         id,
         setId,
+        isInPrueba,
+        setTiempoInicial,
+        setIsInPrueba
       }}
     >
       {children}

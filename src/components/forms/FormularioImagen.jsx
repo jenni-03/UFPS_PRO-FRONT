@@ -52,7 +52,7 @@ const actualizaravatar = async (file) =>{
             "Content-Type": "multipart/form-data",
             Authorization:"Bearer " + token
         },
-  }).catch((e)=>toast.error(e.response.data.error))
+  })
 
   if(response.status === 200){
     getAdmin()
@@ -63,9 +63,9 @@ const actualizaravatar = async (file) =>{
  
 const validationSchema = Yup.object().shape({
   avatar: Yup.mixed()
-    .test("file-type", "El tipo de archivo es PNG/JPEG", (value) => {
+    .test("file-type", "El tipo de archivo es PNG/JPEG/JPG", (value) => {
       if (value) {
-        return value.endsWith(".jfif") || value.endsWith(".png")
+        return  value.endsWith(".png") || value.endsWith(".jpeg") || value.endsWith(".jpg")
       }
       return true;
     }).required("El avatar es requerido"),
@@ -73,7 +73,6 @@ const validationSchema = Yup.object().shape({
 
 
   const handleFileChange = (event, setFieldValue) => {
-    const file = event.target.files[0];
     setFieldValue("avatar", inputRef.current.files[0]);
 
     };

@@ -5,7 +5,7 @@ import { toast } from "react-hot-toast";
 import { AppContext } from "../context/AppProvider";
 import {AiOutlineEdit} from "react-icons/ai"
 import {Link} from "react-router-dom"
-import {Button, Icon, Tooltip, Text, Select} from "@chakra-ui/react";
+import {Button, Icon, Tooltip, Text} from "@chakra-ui/react";
 
 export default function CategoriaBody() {
 
@@ -37,7 +37,7 @@ const columns = [
     sort: { sortKey: 'ID' },
   },,
   { label: 'Nombre',
-    renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text  maxW={"auto"}>{item.nombre}</Text></Tooltip>,
+    renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
     sort: { sortKey: 'NOMBRE' },
   },
   {
@@ -45,7 +45,7 @@ const columns = [
     renderCell: (item) => item.estado===true? "Activo":"Inactivo",
   },
   { label: 'Competencia',
-    renderCell: (item) => item.Competencia.nombre,
+    renderCell: (item) =>  <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.Competencia.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.Competencia.nombre}</Text></Tooltip>,
     sort: { sortKey: 'COMPETENCIA' },
   },
   {
@@ -75,8 +75,7 @@ return (
     sortFns={sortFns}
     cols={columns}
     aBuscar={"nombre"}
-    ancho={"1040px"}
-    ancho2={"1250px"}
+    ancho={"940px"}
   >
   </TablaComponent>
 );

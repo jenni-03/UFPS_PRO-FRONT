@@ -1,74 +1,35 @@
 import React,{useState, useContext, useEffect} from "react";
 import { AppContext } from "../context/AppProvider";
-import Paginacion from "./Paginacion";
 import { toast } from "react-hot-toast";
+import { CompactTable } from "@table-library/react-table-library/compact";
 import axiosApi from "../../utils/config/axios.config"
+import { usePagination } from '@table-library/react-table-library/pagination';
+import { useCustom } from '@table-library/react-table-library/table';
 import Btn from "../pure/Btn"
+import { DEFAULT_OPTIONS, getTheme } from '@table-library/react-table-library/chakra-ui';
+import { useSort } from '@table-library/react-table-library/sort';
 import { MdAdd } from "react-icons/md";
-import { Box,Flex,Table,Thead,Tr,Th,Skeleton,Tbody,Td,Button,Link,Icon,Text,AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-  AlertDialogCloseButton, useDisclosure} from "@chakra-ui/react";
+import { useTheme } from "@table-library/react-table-library/theme";
+import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, FaChevronCircleLeft, FaChevronCircleRight } from 'react-icons/fa';
+import { PiWarningFill } from "react-icons/pi";
+import {AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter,Icon, Box,Tooltip, Stack, InputGroup, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
 import { AiOutlineDelete } from "react-icons/ai";
-import {useParams, useNavigate} from "react-router-dom";
+import {useParams} from "react-router-dom";
 import {useRef} from "react";
-const TablaEstudianteXCvc = ({columns,showButton=true, path}) =>{
-  const [currentPage, setCurrentPage] = useState(0);
-  const [indexI, setIndexI] = useState(0);
-  const [indexF, setIndexF] = useState(5);
-  const navigate= useNavigate()
-  const itemsPerPage = 5;
-  const [estudiantes,setEstudiantes] = useState()
-  const indexOfLastItem = (currentPage + 1) * itemsPerPage;
-  const [isLoading, setLoading] = useState(true)
+const TablaEstudianteXCvc = ({wCampo,ancho, showButton=false, showSwitch=false}) =>{
+  const [estudiantes,setEstudiantes] = useState([])
   const [estudianteSelect, setEstudianteSelect] = useState()
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
   const { token } = useContext(AppContext);
+  const [isLoading, setLoading] = useState(false)
+  const inputPageRef = useRef(null)
+  const [reloadData, setReloadData] = useState(false);
   const {id} = useParams()
-  const currentItems = estudiantes && estudiantes.slice(indexOfFirstItem, indexOfLastItem);
   const cancelRef = useRef()
-  const totalPages = estudiantes && Math.ceil(estudiantes.length / itemsPerPage);
   const { isOpen, onOpen, onClose } = useDisclosure()
 
-  const handlePageChange = (selected) => {
-    if (selected >= indexF) {
-      setIndexI(selected);
-      setIndexF(selected + 5);
-    }
-    setCurrentPage(selected);
-  };
 
-  const atrasPage = () => {
-    currentPage <= indexI && indexI != 0 ? paginacionAtras() : null;
 
-    currentPage > 0 ? handlePageChange(currentPage - 1) : null;
-  };
 
-  const adelantePage = () => {
-    currentPage >= indexF - 1 ? paginacionAdelante() : null;
-    currentPage < totalPages - 1 ? handlePageChange(currentPage + 1) : null;
-  };
-
-  const paginacionAdelante = () => {
-    setIndexI(indexI + 5);
-    setIndexF(indexF + 5);
-  };
-
-  const paginacionAtras = () => {
-    setIndexI(indexI - 5);
-    setIndexF(indexF - 5);
-  };
-
-  useEffect(()=>{
-    obtenerEstudiantes()
-  },[])
-
-  useEffect(()=>{
-    obtenerEstudiantes()
-  },[estudiantes])
   const obtenerEstudiantes = async () =>{
     const response = await axiosApi.get(`/api/convocatoria/${id}/getEstudiantes`,{
       headers:{
@@ -76,9 +37,21 @@ const TablaEstudianteXCvc = ({columns,showButton=true, path}) =>{
       }
     }).catch((e)=>{
       toast.error(e.response.data.error)
+      setLoading(false)
     })
-    setEstudiantes(response.data)
-    setLoading(false)
+
+    console.log(response)
+    if(response.status===200){
+      setEstudiantes(response.data)
+      setLoading(false)
+      pagination.fns.onSetPage(0)
+      response.data.length===0 && toast("Esta convocatoria no cuenta con estudiantes inscritos", {
+        duration: 4000,
+        icon:<PiWarningFill size={"40"}/>,
+        position: "top-center"
+      });
+    }
+   
   }
 
   const expulsarEstudiante = async (id_estudiante) =>{
@@ -93,110 +66,256 @@ const TablaEstudianteXCvc = ({columns,showButton=true, path}) =>{
     if(response.status===200){
       onClose()
       toast.success("¡Estudiante expulsado correctamente!")
+      setReloadData(true);
     }
   }
+
+
+  useEffect(()=>{
+    obtenerEstudiantes()
+    setReloadData(false); 
+  },[reloadData])
+
+  let data
+  const nodes = estudiantes
+
+  data = { nodes }
+  
+ 
+
+ const chakraTheme = getTheme(DEFAULT_OPTIONS);
+  const customTheme = {
+    Table: `
+      --data-table-library_grid-template-columns: ${wCampo};
+      font-family: Open Sans;
+    `,
+  };
+  
+  const theme = useTheme([chakraTheme, customTheme]);
+
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  useCustom('search', data, {
+    state: { search },
+    onChange: onSearchChange,
+  });
+
+  function onSearchChange(action, state) {
+    pagination.fns.onSetPage(0);
+  }
+
+  data = {
+    nodes: data.nodes && data.nodes.filter((item) =>
+      item["codigo"].toLowerCase().includes(search.toLowerCase())
+    ),
+  };
+
+
+  // SORT 
+  const sort = useSort(
+    data,
+    {
+    },
+    {
+      sortIcon: {
+        iconDefault: null,
+        iconUp: <FaChevronUp />,
+        iconDown: <FaChevronDown />,
+      },
+      sortFns: {
+    CODIGO: (array) => array.sort((a,b) => parseInt(a.codigo)-parseInt(b.codigo)),
+    NOMBRE: (array) => array.sort((a,b) => a.nombre.localeCompare(b.nombre)),
+    APELLIDO: (array) => array.sort((a, b) => a.apellido.localeCompare(b.apellido)),
+    CORREO: (array) => array.sort((a, b) => a.correo.localeCompare(b.correo)),
+  }
+
+
+    },
+  );
+
+
+  // PAGINATION 
+
+  const pagination = usePagination(data, {
+    state: {
+      page: 0,
+      size: 5,
+    },
+  });
+
+
+  const nextPage = () =>{
+    pagination.fns.onSetPage(pagination.state.page + 1)
+  }
+
+  const prevPage = () =>{
+    pagination.fns.onSetPage(pagination.state.page - 1)
+  }
+  
+  console.log(estudiantes)
+  const getTotalPages = () => pagination.state.getTotalPages(data.nodes && data.nodes)
+
+  const isEmpty = () => getTotalPages()===0
+
+  const isDisabledRight = () => isEmpty() ? true : pagination.state.page+1 === getTotalPages()
+  const isDisabledLeft = () => pagination.state.page === 0
+
+  const pageIndicator = () => <Text>{isEmpty() ? pagination.state.page : pagination.state.page+1} de {getTotalPages()}</Text>
+
+
+
+
+const COLUMNS = [
+    {
+      label: "Código",
+      renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.codigo} >{item.codigo}</Tooltip>,
+      sort: {sortKey:"CODIGO"}
+    },,
+    {
+      label: "Nombre",
+      renderCell: (item)=>item.nombre,
+      sort: {sortKey:"NOMBRE"}
+    },
+    {
+      label: "Apellido",
+      renderCell: (item)=>item.apellido,
+      sort: {sortKey:"APELLIDO"}
+    },
+    {
+      label: "Correo",
+      renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.correo} ><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">{item.correo}</Text></Tooltip>,
+      sort: {sortKey: "CORREO"}
+    },
+    {
+      label: "Eliminar",
+      renderCell: (item)=><Button display={"flex"} justifyContent={"center"}  alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} onClick={()=>{
+        onOpen()
+        setEstudianteSelect(estudiantes.find(e => e.id === item.id))
+      }}>
+        <Icon color={"primero.100"} as={AiOutlineDelete} />
+      </Button>,
+    }
+  ]
 
 
 
 
   return(
-<Box>
-      {showButton && (
-        <Skeleton isLoaded={!isLoading}>
-        <Btn
-          msg={"Agregar Estudiante"}
-          leftIcon={<MdAdd />}
-          path={`/convocatoria/${id}/agregarEstudiante`}
-          w={["100%","100%", "250px"]}
-        />
-        </Skeleton>
-      )}
-      <Box mb="15px" mt="20px" p="20px" borderRadius="8px" bgColor="white"
-        boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+  <>
+      <Box 
+      w={{
+            base: "265px",
+            sm: "310px",
+            md: "450px",
+            lg: "690px",
+            xl: "790px",
+            '2xl':ancho
+          }}
       >
-        <Flex
+        <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={showButton ? "space-between" : "flex-end"} mb={"20px"}>
+        {showButton && (
+            <Skeleton isLoaded={!isLoading}>
+              <Btn
+                leftIcon={<MdAdd/>}
+                path={"/"}
+                msg={"Agregar Estudiante"}
+                w={["100%", "250px"]}
+              >
+              </Btn>
+            </Skeleton>
+            )}
+            { showSwitch && 
+            <Flex align={"center"} gap={"5px"}>
+              <Skeleton isLoaded={!isLoading}>
+                <Text id="switch" m={"0"}>Mostrar Inactivos</Text>
+              </Skeleton>
+              <Skeleton isLoaded={!isLoading}>
+                <Switch id="switch" colorScheme="cyan" onChange={(e) => {
+                  setActive(!active)
+                  active === true ? obtenerEstudiantesByEstado(1) : obtenerEstudiantesByEstado(0)
+                }} />
+              </Skeleton>
+            </Flex>}
+          </Flex>
+
+        <Stack spacing={10}>
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FaSearch style={{ color: '#4a5568' }} />}
+            />
+            <Input w={"100%"} placeholder={"Busca por código"} value={search} onChange={handleSearch} />
+          </InputGroup>
+        </Stack>
+
+        <Box   
+          mb="15px"
+          mt="20px"
+          p="20px"
           w={{
-            base: "240px",
+            base: "265px",
             sm: "310px",
             md: "450px",
             lg: "690px",
             xl: "100%",
           }}
-          gap={["8px", "0"]}
-          direction={["column", "row"]}
-          justifyContent={["flex-start", "space-between"]}
-          alignItems="center"
-          overflowX="auto"
+          borderRadius="8px"
+          bgColor="white"
+          boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
         >
-          <Box w="100%" overflowX="auto" mb={4}>
-            <Table w="100%">
-              <Thead>
-                <Tr>
-                  {columns && columns.map((column, index) => (
-                    <Th
-                      textAlign="center"
-                      key={index}
-                      style={{
-                        borderBottom: "2px solid",
-                        borderBottomColor: "principal.100",
-                      }}
-                    >
-        <Skeleton isLoaded={!isLoading}>
-                      {column}
-          </Skeleton>
-                    </Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody>
-               {estudiantes && currentItems.map((item, index) => (
-                  <Tr key={index}>
-                      <Td>
-        <Skeleton isLoaded={!isLoading}>
-                         <Box w={"100%"} textAlign={"center"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                        {item.nombre}
-                         </Box>
-          </Skeleton>
-                      </Td>
-                       <Td>
-        <Skeleton isLoaded={!isLoading}>
-                      <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                        {item.apellido}
-                      </Box>
-          </Skeleton>
-                      </Td>
-                       <Td>
-        <Skeleton isLoaded={!isLoading}>
-                         <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                        {item.correo}
-                         </Box>
-          </Skeleton>
-                      </Td>
-                      <Td>
-        <Skeleton isLoaded={!isLoading}>
-                         <Box w={"100%"} display={"flex"} justifyContent={"center"} alignItems={"center"}>
-                        {item.codigo}
-                         </Box>
-          </Skeleton>
-                      </Td>
-                     <Td>{
-        <Skeleton isLoaded={!isLoading}>
-          <Button display={"flex"} justifyContent={"center"} h={"30px"} w={"100%"} alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} onClick={()=>{
-            onOpen()
-            setEstudianteSelect(estudiantes.find(e => e.id === item.id))
-
-            }}>
-                        <Icon color={"primero.100"} as={AiOutlineDelete} />
-                      </Button>
-          </Skeleton>
-                      }</Td>
-                  </Tr>
-                    
-                ))}
-              </Tbody>
-            </Table>
-          </Box>
+          <CompactTable  columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
+        </Box>
+        <HStack justify="center">
+          <IconButton
+            aria-label="previous page"
+            icon={<FaChevronCircleLeft/>}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledLeft()}
+            onClick={() => pagination.fns.onSetPage(0)}
+          />
+          <IconButton
+            aria-label="previous page"
+            icon={<FaChevronLeft />}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledLeft()}
+            onClick={() => prevPage()}
+          />
+          {/*<Text>{pagination.state.page+1} de {getTotalPages()}</Text>*/}
+          {pageIndicator()}
+          <IconButton
+            aria-label="next page"
+            icon={<FaChevronRight />}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledRight()}
+            onClick={() => nextPage()}
+          />
+          <IconButton
+            aria-label="previous page"
+            icon={<FaChevronCircleRight/>}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledRight()}
+            onClick={() => pagination.fns.onSetPage(getTotalPages()-1)}
+          />
+        </HStack>
+        <Flex width={"100%"} justifyContent={"center"} gap={"15px"}>
+          <Input type="number" ref={inputPageRef} placeholder="Página" variant={"outline"} w={"100px"}/>
+          <Button color={"primero.100"} variant={"solid"} onClick={()=>{
+            const valor = parseInt(inputPageRef.current.value-1)
+            const esMenor = getTotalPages()+1 > inputPageRef.current.value
+            const esPositivo = inputPageRef.current.value > 0
+            esMenor && esPositivo ? pagination.fns.onSetPage(valor) : null
+            inputPageRef.current.value=""
+          }}>Ir</Button>
         </Flex>
+
  <AlertDialog
         motionPreset='slideInBottom'
         leastDestructiveRef={cancelRef}
@@ -222,30 +341,18 @@ const TablaEstudianteXCvc = ({columns,showButton=true, path}) =>{
           </AlertDialogBody>
           <AlertDialogFooter>
             <Button ref={cancelRef} onClick={onClose}>
-              No
+              No, cancelar
             </Button>
             <Button colorScheme='red' ml={3} onClick={()=>{
                 expulsarEstudiante(estudianteSelect.id)
               }}>
-              Si
+              Si, expulsar
             </Button>
           </AlertDialogFooter>
         </AlertDialogContent>
       </AlertDialog>
-
       </Box>
-           <Paginacion
-        currentPage={currentPage}
-        totalPages={isLoading ? 1 :totalPages}
-        indexI={indexI}
-        indexF={indexF}
-        handlePageChange={handlePageChange}
-        atrasPage={atrasPage}
-        adelantePage={adelantePage}
-        isLoaded={!isLoading}
-      />
-    </Box>
-
+    </>
    ) 
 }
 

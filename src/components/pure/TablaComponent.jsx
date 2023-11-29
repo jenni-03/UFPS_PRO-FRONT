@@ -2,6 +2,7 @@ import React, {useState, useEffect, useRef} from "react";
 import { CompactTable } from "@table-library/react-table-library/compact";
 import { useSort } from '@table-library/react-table-library/sort';
 import { usePagination } from '@table-library/react-table-library/pagination';
+import { useCustom } from '@table-library/react-table-library/table';
 import { useTheme } from "@table-library/react-table-library/theme";
 import Btn from "./Btn";
 import { DEFAULT_OPTIONS, getTheme } from '@table-library/react-table-library/chakra-ui';
@@ -9,27 +10,33 @@ import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, Fa
 import { MdAdd } from "react-icons/md";
 import { Box, Stack, InputGroup, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
 
-const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho, ancho2}) => {
+const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho, wCampo="150px", hasKey=false}) => {
 
 
   const inputPageRef = useRef(null)
   const [isLoading, setLoading] = useState(false)
   const [active, setActive] = useState(false)
-  const [categorias, setCategorias] = useState([])
+  const [datos, setDatos] = useState([])
 
   let data = {};
-  const dataFetch = async (state) =>{
+  const dataFetchState = async (state) =>{
     const nodes = await funcionSwitch(state)
     pagination.fns.onSetPage(0)
-    setCategorias(nodes)
+    setDatos(nodes)
+  }
+
+ const dataFetch= async () =>{
+    const nodes = await funcionSwitch()
+    pagination.fns.onSetPage(0)
+    setDatos(nodes)
   }
 
   useEffect(()=>{
-    dataFetch(1)
+    showSwitch ? dataFetchState(1) : dataFetch()
   },[])
+  
 
-
-  const nodes = categorias
+  const nodes = datos
 
   data = { nodes }
 
@@ -38,20 +45,13 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
   }
 
 
-
   const chakraTheme = getTheme(DEFAULT_OPTIONS);
   //--data-table-library_grid-template-columns:  200px;
   const customTheme = {
     Table: `
-      --data-table-library_grid-template-columns: 200px;
+      --data-table-library_grid-template-columns: ${wCampo};
       font-family: Open Sans;
     `,
-    HeaderRow: `
-        .th {
-          border-bottom: 5px solid #a0a8ae;
-        }
-    `,
-    
   };
   
   const theme = useTheme([chakraTheme, customTheme]);
@@ -61,6 +61,15 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
   const handleSearch = (event) => {
     setSearch(event.target.value);
   };
+
+  useCustom('search', data, {
+    state: { search },
+    onChange: onSearchChange,
+  });
+
+  function onSearchChange(action, state) {
+    pagination.fns.onSetPage(0);
+  }
 
   data = {
     nodes: data.nodes && data.nodes.filter((item) =>
@@ -73,7 +82,6 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
   const sort = useSort(
     data,
     {
-      onChange: onSortChange,
     },
     {
       sortIcon: {
@@ -85,9 +93,6 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
     },
   );
 
-  function onSortChange(action, state) {
-    console.log(action, state);
-  }
 
   // PAGINATION 
 
@@ -96,12 +101,8 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
       page: 0,
       size: 5,
     },
-    onChange: onPaginationChange,
   });
 
-  function onPaginationChange(action, state) {
-    console.log(action, state);
-  }
 
   const nextPage = () =>{
     pagination.fns.onSetPage(pagination.state.page + 1)
@@ -125,18 +126,17 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
   return (
     <>
       <Box 
-    w={{
+      w={{
             base: "265px",
             sm: "310px",
             md: "450px",
             lg: "690px",
-            xl: ancho,
-            "2xl":ancho2,
+            xl: "790px",
+            '2xl':ancho
           }}
-
       >
+        <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={showButton ? "space-between" : "flex-end"} mb={"20px"}>
         {showButton && (
-          <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={"space-between"} mb={"20px"}>
             <Skeleton isLoaded={!isLoading}>
               <Btn
                 leftIcon={<MdAdd/>}
@@ -146,6 +146,8 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
               >
               </Btn>
             </Skeleton>
+            )}
+            { showSwitch && 
             <Flex align={"center"} gap={"5px"}>
               <Skeleton isLoaded={!isLoading}>
                 <Text id="switch" m={"0"}>Mostrar Inactivos</Text>
@@ -153,12 +155,11 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
               <Skeleton isLoaded={!isLoading}>
                 <Switch id="switch" colorScheme="cyan" onChange={(e) => {
                   setActive(!active)
-                  active === true ? dataFetch(1) : dataFetch(0)
+                  active === true ? dataFetchState(1) : dataFetchState(0)
                 }} />
               </Skeleton>
-            </Flex>
+            </Flex>}
           </Flex>
-        )}
 
         <Stack spacing={10}>
           <InputGroup>
@@ -185,7 +186,7 @@ const TablaComponent = ({showButton=true, buttonPath="/",buttonMsg, inputPlaceHo
           bgColor="white"
           boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
         >
-          <CompactTable columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
+          <CompactTable key={hasKey?hasKey:null} columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
         </Box>
         <HStack justify="center">
           <IconButton

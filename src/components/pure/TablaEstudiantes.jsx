@@ -1,98 +1,48 @@
-import React, { useEffect, useState,useContext } from "react";
-import {
-  Table,
-  Thead,
-  Tbody,
-  Tr,
-  Th,
-  Td,
-  Flex,
-  Text,
-  Box,
-  Button,
-  Icon,
-  Switch,
-  useEditable,
-  FormLabel,
-  Skeleton,
-   AlertDialog,
-  AlertDialogBody,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogContent,
-  AlertDialogOverlay,
-  AlertDialogCloseButton,
-  useDisclosure
-} from "@chakra-ui/react";
-import { Link} from "react-router-dom";
-import { AiOutlineEdit,AiOutlineDelete } from "react-icons/ai";
-import axiosApi from "../../utils/config/axios.config";
-import { AppContext } from "../context/AppProvider";
+import React, {useState, useEffect, useRef, useContext} from "react";
+import { CompactTable } from "@table-library/react-table-library/compact";
+import { useSort } from '@table-library/react-table-library/sort';
+import { usePagination } from '@table-library/react-table-library/pagination';
+import { useCustom } from '@table-library/react-table-library/table';
+import axiosApi from '../../utils/config/axios.config'
+import { AppContext } from '../context/AppProvider';
 import { toast } from 'react-hot-toast';
-import Paginacion from "./Paginacion";
-export default function TablaEstudiantes({ columns, items, path, msg, showButton }) {
-  const [currentPage, setCurrentPage] = useState(0);
-  const [indexI, setIndexI] = useState(0);
-  const [indexF, setIndexF] = useState(5);
-  const [estudiantes, setEstudiantes] = useState()
-  const itemsPerPage = 5;
-  const indexOfLastItem = (currentPage + 1) * itemsPerPage;
-  const indexOfFirstItem = indexOfLastItem - itemsPerPage;
-  const [showActive,setShowActive] = useState(false);
-  const [isLoading, setIsLoading] = useState(true)
-  const [estudianteSelect, setEstudianteSelect] = useState()
+import { useTheme } from "@table-library/react-table-library/theme";
+import Btn from "./Btn";
+import { DEFAULT_OPTIONS, getTheme } from '@table-library/react-table-library/chakra-ui';
+import { Link } from 'react-router-dom';
+import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, FaChevronCircleLeft, FaChevronCircleRight } from 'react-icons/fa';
+import {AiOutlineEdit, AiOutlineDelete} from "react-icons/ai"
+import { MdAdd } from "react-icons/md";
+import {AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter,Icon, Box, Stack, InputGroup,Tooltip, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
+
+const TablaEstudiantes = ({wCampo,ancho, showButton=false, showSwitch=true}) => {
+
+  const inputPageRef = useRef(null)
+  const {token}= useContext(AppContext)
+  const [isLoading, setLoading] = useState(false)
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const cancelRef = React.useRef()
+  const [estudianteSelect, setEstudianteSelect] = useState()
+  const [reloadData, setReloadData] = useState(false);
+  const [active, setActive] = useState(false)
+  const [estudiantes, setEstudiantes] = useState([])
+  const cancelRef = useRef()
 
-  const {token} = useContext(AppContext)
-
-  const currentItems = estudiantes && estudiantes.slice(indexOfFirstItem, indexOfLastItem);
-
-  const totalPages = estudiantes && Math.ceil(estudiantes.length / itemsPerPage);
-
-  const handlePageChange = (selected) => {
-    if (selected >= indexF) {
-      setIndexI(selected);
-      setIndexF(selected + 5);
-    }
-    setCurrentPage(selected);
-  };
-
-  const atrasPage = () => {
-    currentPage <= indexI && indexI != 0 ? paginacionAtras() : null;
-
-    currentPage > 0 ? handlePageChange(currentPage - 1) : null;
-  };
-
-  const adelantePage = () => {
-    currentPage >= indexF - 1 ? paginacionAdelante() : null;
-    currentPage < totalPages - 1 ? handlePageChange(currentPage + 1) : null;
-  };
-
-  const paginacionAdelante = () => {
-    setIndexI(indexI + 5);
-    setIndexF(indexF + 5);
-  };
-
-  const paginacionAtras = () => {
-    setIndexI(indexI - 5);
-    setIndexF(indexF - 5);
-  };
-
-  const obtenerEstudiantes = async ( id ) =>{
-    let response = await axiosApi.get(`/api/user/student?estado=${id}`,{
+ const obtenerEstudiantesByEstado = async ( estado ) =>{
+    let response = await axiosApi.get(`/api/user/student?estado=${estado}`,{
       headers:{
         Authorization:"Bearer " + token,
       }
     }).catch((e)=>{
       toast.error(e.response.data.error)
     })
-    console.log(response.data)
+   if(response.status===200){
     setEstudiantes(response.data)
-    setIsLoading(false)
+    pagination.fns.onSetPage(0)
+
+   }
   }
 
-  const eliminarEstudiante = async (id_estudiante) =>{
+const eliminarEstudiante = async (id_estudiante) =>{
     const response = await axiosApi.delete(`/api/user/deleteStudent/${id_estudiante}`,{
       headers:{
         Authorization: "Bearer " + token
@@ -103,167 +53,309 @@ export default function TablaEstudiantes({ columns, items, path, msg, showButton
 
     if(response.status===200){
       onClose()
-      toast.success("¡Estudiante expulsado correctamente!")
+      toast.success("¡Estudiante eliminado correctamente!")
+      setReloadData(true);
     }
-    console.log(response)
   }
 
-  useEffect(()=>{
-    obtenerEstudiantes(1)
-  },[]) 
+
+
+
+  useEffect(() => {
+  obtenerEstudiantesByEstado(1);
+  setReloadData(false); // Resetear el estado después de recargar datos
+}, [reloadData]);
+ 
+
+  
+ 
+  let data
+  const nodes = estudiantes
+
+  data = { nodes }
+
+ 
+
+
+  const chakraTheme = getTheme(DEFAULT_OPTIONS);
+  //--data-table-library_grid-template-columns:  200px;
+  const customTheme = {
+    Table: `
+      --data-table-library_grid-template-columns: ${wCampo};
+      font-family: Open Sans;
+    `,
+  };
+  
+  const theme = useTheme([chakraTheme, customTheme]);
+
+  const [search, setSearch] = useState("");
+
+  const handleSearch = (event) => {
+    setSearch(event.target.value);
+  };
+
+  useCustom('search', data, {
+    state: { search },
+    onChange: onSearchChange,
+  });
+
+  function onSearchChange(action, state) {
+    pagination.fns.onSetPage(0);
+  }
+
+  data = {
+    nodes: data.nodes && data.nodes.filter((item) =>
+      item["codigo"].toLowerCase().includes(search.toLowerCase())
+    ),
+  };
+
+
+  // SORT 
+  const sort = useSort(
+    data,
+    {
+    },
+    {
+      sortIcon: {
+        iconDefault: null,
+        iconUp: <FaChevronUp />,
+        iconDown: <FaChevronDown />,
+      },
+      sortFns: {
+    CODIGO: (array) => array.sort((a,b) => parseInt(a.codigo)-parseInt(b.codigo)),
+    NOMBRE: (array) => array.sort((a,b) => a.nombre.localeCompare(b.nombre)),
+    APELLIDO: (array) => array.sort((a, b) => a.apellido.localeCompare(b.apellido)),
+    CORREO: (array) => array.sort((a, b) => a.email.localeCompare(b.email)),
+  }
+
+
+    },
+  );
+
+
+  // PAGINATION 
+
+  const pagination = usePagination(data, {
+    state: {
+      page: 0,
+      size: 5,
+    },
+  });
+
+
+  const nextPage = () =>{
+    pagination.fns.onSetPage(pagination.state.page + 1)
+  }
+
+  const prevPage = () =>{
+    pagination.fns.onSetPage(pagination.state.page - 1)
+  }
+
+  const getTotalPages = () => pagination.state.getTotalPages(data.nodes && data.nodes)
+
+  const isEmpty = () => getTotalPages()===0
+
+  const isDisabledRight = () => isEmpty() ? true : pagination.state.page+1 === getTotalPages()
+  const isDisabledLeft = () => pagination.state.page === 0
+
+  const pageIndicator = () => <Text>{isEmpty() ? pagination.state.page : pagination.state.page+1} de {getTotalPages()}</Text>
+
+ const COLUMNS = [
+    {
+      label: "Código",
+      renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.codigo} >{item.codigo}</Tooltip>,
+      sort: {sortKey:"CODIGO"}
+    },,
+    {
+      label: "Nombre",
+      renderCell: (item)=>item.nombre,
+      sort: {sortKey:"NOMBRE"}
+    },
+    {
+      label: "Apellido",
+      renderCell: (item)=>item.apellido,
+      sort: {sortKey:"APELLIDO"}
+    },
+    {
+      label: "Correo",
+      renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.email} ><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap">{item.email}</Text></Tooltip>,
+      sort: {sortKey: "CORREO"}
+    },
+    {
+      label: "Estado",
+      renderCell: (item)=>item.estado ? "Activo":"Inactivo",
+    },
+    {
+      label: "Editar",
+      renderCell: (item)=><Button
+        as={Link} to={`/editarEstudiante/${item.id}`}
+      >
+        <Icon as={AiOutlineEdit}></Icon>
+      </Button>,
+    },
+    {
+      label: "Eliminar",
+      renderCell: (item)=><Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} onClick={()=>{
+        onOpen()
+        setEstudianteSelect(estudiantes.find(e => e.id === item.id))
+      }}>
+        <Icon color={"primero.100"} as={AiOutlineDelete}/>
+      </Button>,
+    },
+  ]
 
   return (
-    <Box>
-      <Flex align={"center"} gap={"5px"} justifyContent={"flex-end"}>
-        <Skeleton isLoaded={!isLoading}>
-          <FormLabel id="switch" m={"0"}>Mostrar Inactivos</FormLabel> 
-        </Skeleton>
-        <Skeleton isLoaded={!isLoading}>
-          <Switch id="switch" colorScheme="cyan"  onChange={(e)=>{
-            setCurrentPage(0)
-            setShowActive(!showActive)
-            showActive===true ? obtenerEstudiantes(1) : obtenerEstudiantes(0)
-          }}/>
-        </Skeleton>
-      </Flex>
-      <Box mb="15px" mt="20px" p="20px" borderRadius="8px" bgColor="white"
-        boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
-      >
-        <Flex
-          w={{
-            base: "240px",
+    <>
+      <Box 
+      w={{
+            base: "265px",
             sm: "310px",
             md: "450px",
             lg: "690px",
-            tableBreakpoint: "100%",
+            xl: "790px",
+            '2xl':ancho
           }}
-          gap={["8px", "0"]}
-          direction={["column", "row"]}
-          justifyContent={["flex-start", "space-between"]}
-          alignItems="center"
-          overflowX="auto"
-        >
-          <Box w="100%" overflowX="auto" mb={4}>
-            <Table w="100%">
-              <Thead>
-                <Tr>
-                  {columns.map((column, index) => (
-                    <Th
-                      textAlign="center"
-                      key={index}
-                      style={{
-                        borderBottom: "2px solid",
-                        borderBottomColor: "primero.100",
-                      }}
-                    >
-                      <Skeleton isLoaded={!isLoading}>
-                        {column}
-                      </Skeleton>
-                    </Th>
-                  ))}
-                </Tr>
-              </Thead>
-              <Tbody>
-                {estudiantes && currentItems.map((item, index) => (
-                  <Tr key={index}>
-                    <Td>
-                      <Skeleton isLoaded={!isLoading}>
-                        <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                          {item.nombre}
-                        </Box>
-                      </Skeleton>
-                    </Td>
-                    <Td>
-                      <Skeleton isLoaded={!isLoading}>
-                        <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                          {item.apellido}
-                        </Box>
-                      </Skeleton>
-                    </Td>
-                    <Td>
-                      <Skeleton isLoaded={!isLoading}>
-                        <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                          {item.email}
-                        </Box>
-                      </Skeleton>
-                    </Td>
-                    <Td>
-                      <Skeleton isLoaded={!isLoading}>
-                        <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"}>
-                          {item.estado ? "Activo" : "Inactivo"}
-                        </Box>
-                      </Skeleton>
-                    </Td>
-                    <Td>{
-                      <Skeleton isLoaded={!isLoading}>
-                        <Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} h={"30px"} as={Link} to={`/editarEstudiante/${item.id}`}>
-                          <Icon color={"primero.100"} as={AiOutlineEdit}/>
-                        </Button>
-                      </Skeleton>
-                      }</Td>
-                    <Td display={"flex"} alignItems={"center"} justifyContent={"center"}>{
-                      <Skeleton isLoaded={!isLoading}>
-                        <Button display={"flex"} justifyContent={"center"} alignItems={"center"} backgroundColor={"segundo.100"} h={"30px"} w={"100%"} onClick={()=>{
-                          onOpen()
-                          setEstudianteSelect(estudiantes.find(e => e.id === item.id))
-                          }}>
-                          <Icon color={"primero.100"} as={AiOutlineDelete}/>
-                        </Button>
-                      </Skeleton>
-                      }</Td>
-                  </Tr>
-                ))}
-              </Tbody>
-            </Table>
-          </Box>
-        </Flex>
-      </Box>
-      <Paginacion
-        currentPage={currentPage}
-        totalPages={isLoading ? 1 :totalPages}
-        indexI={indexI}
-        indexF={indexF}
-        handlePageChange={handlePageChange}
-        atrasPage={atrasPage}
-        adelantePage={adelantePage}
-        isLoaded={!isLoading}
-      />
-      <AlertDialog
-        motionPreset='slideInBottom'
-        leastDestructiveRef={cancelRef}
-        onClose={onClose}
-        isOpen={isOpen}
-        isCentered
       >
-        <AlertDialogOverlay />
+        <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={showButton ? "space-between" : "flex-end"} mb={"20px"}>
+        {showButton && (
+            <Skeleton isLoaded={!isLoading}>
+              <Btn
+                leftIcon={<MdAdd/>}
+                path={buttonPath}
+                msg={buttonMsg}
+                w={["100%", "250px"]}
+              >
+              </Btn>
+            </Skeleton>
+            )}
+            { showSwitch && 
+            <Flex align={"center"} gap={"5px"}>
+              <Skeleton isLoaded={!isLoading}>
+                <Text id="switch" m={"0"}>Mostrar Inactivos</Text>
+              </Skeleton>
+              <Skeleton isLoaded={!isLoading}>
+                <Switch id="switch" colorScheme="cyan" onChange={(e) => {
+                  setActive(!active)
+                  active === true ? obtenerEstudiantesByEstado(1) : obtenerEstudiantesByEstado(0)
+                }} />
+              </Skeleton>
+            </Flex>}
+          </Flex>
 
-        <AlertDialogContent>
-          <AlertDialogHeader>¿Estas Seguro?</AlertDialogHeader>
-          <AlertDialogCloseButton />
-          <AlertDialogBody>
-            {
-              estudianteSelect ?
-                <Box display={"flex"} flexDir={"column"} gap={"15px"}>
-                  <Text>¿Deseas eliminar permanentemente a {estudianteSelect.nombre} {estudianteSelect.apellido}?</Text> 
-                  <Text display={"flex"} gap={"10px"}><Text fontSize={"16"} fontWeight={"bold"}>Email:</Text>  {estudianteSelect.email}</Text>
-                </Box>
-                :
-                <Text>No se pudo traer los valores del estudiante</Text>
-                  }
-          </AlertDialogBody>
-          <AlertDialogFooter>
-            <Button ref={cancelRef} onClick={onClose}>
-              No
-            </Button>
-            <Button colorScheme='red' ml={3} onClick={()=>{
+        <Stack spacing={10}>
+          <InputGroup>
+            <InputLeftElement
+              pointerEvents="none"
+              children={<FaSearch style={{ color: '#4a5568' }} />}
+            />
+            <Input w={"100%"} placeholder={"Busca por código"} value={search} onChange={handleSearch} />
+          </InputGroup>
+        </Stack>
+
+        <Box   
+          mb="15px"
+          mt="20px"
+          p="20px"
+          w={{
+            base: "265px",
+            sm: "310px",
+            md: "450px",
+            lg: "690px",
+            xl: "100%",
+          }}
+          borderRadius="8px"
+          bgColor="white"
+          boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+        >
+          <CompactTable  columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
+        </Box>
+        <HStack justify="center">
+          <IconButton
+            aria-label="previous page"
+            icon={<FaChevronCircleLeft/>}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledLeft()}
+            onClick={() => pagination.fns.onSetPage(0)}
+          />
+          <IconButton
+            aria-label="previous page"
+            icon={<FaChevronLeft />}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledLeft()}
+            onClick={() => prevPage()}
+          />
+          {/*<Text>{pagination.state.page+1} de {getTotalPages()}</Text>*/}
+          {pageIndicator()}
+          <IconButton
+            aria-label="next page"
+            icon={<FaChevronRight />}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledRight()}
+            onClick={() => nextPage()}
+          />
+          <IconButton
+            aria-label="previous page"
+            icon={<FaChevronCircleRight/>}
+            color={"primero.100"}
+            variant="ghost"
+            isDisabled={isDisabledRight()}
+            onClick={() => pagination.fns.onSetPage(getTotalPages()-1)}
+          />
+        </HStack>
+        <Flex width={"100%"} justifyContent={"center"} gap={"15px"}>
+          <Input type="number" ref={inputPageRef} placeholder="Página" variant={"outline"} w={"100px"}/>
+          <Button color={"primero.100"} variant={"solid"} onClick={()=>{
+            const valor = parseInt(inputPageRef.current.value-1)
+            const esMenor = getTotalPages()+1 > inputPageRef.current.value
+            const esPositivo = inputPageRef.current.value > 0
+            esMenor && esPositivo ? pagination.fns.onSetPage(valor) : null
+            inputPageRef.current.value=""
+          }}>Ir</Button>
+        </Flex>
+
+
+ <AlertDialog
+          motionPreset='slideInBottom'
+          leastDestructiveRef={cancelRef}
+          onClose={onClose}
+          isOpen={isOpen}
+          isCentered
+        >
+          <AlertDialogOverlay />
+
+          <AlertDialogContent>
+            <AlertDialogHeader>¿Estas Seguro?</AlertDialogHeader>
+            <AlertDialogCloseButton />
+            <AlertDialogBody>
+              {
+                estudianteSelect ?
+                  <Box display={"flex"} flexDir={"column"} gap={"15px"}>
+                    <Text>¿Deseas eliminar permanentemente a {estudianteSelect.nombre} {estudianteSelect.apellido}?</Text> 
+                    <Text display={"flex"} gap={"10px"}><Text fontSize={"16"} fontWeight={"bold"}>Email:</Text>  {estudianteSelect.email}</Text>
+                  </Box>
+                  :
+                  <Text>No se pudo traer los valores del estudiante</Text>
+              }
+            </AlertDialogBody>
+            <AlertDialogFooter>
+              <Button ref={cancelRef} onClick={onClose}>
+                No, cancelar
+              </Button>
+              <Button colorScheme='red' ml={3} onClick={()=>{
                 eliminarEstudiante(estudianteSelect.id)
               }}>
-              Si
-            </Button>
-          </AlertDialogFooter>
-        </AlertDialogContent>
-      </AlertDialog>
+                Si, eliminar
+              </Button>
+            </AlertDialogFooter>
+          </AlertDialogContent>
+        </AlertDialog>
 
-    </Box>
+      </Box>
+    </>
   );
-}
+};
+
+export default TablaEstudiantes;

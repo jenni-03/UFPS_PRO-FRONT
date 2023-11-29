@@ -69,11 +69,10 @@ export default function FormularioConvocatoria() {
         },
       })
       .catch((e) => {
-        toast.error(e.response.data.error);
+       return Promise.reject(e.response.data.error);
       })
 
     if (response.status === 200) {
-      toast.success("¡Convocatoria agregada correctamente!");
       navigate("/convocatorias")
     }
   };
@@ -124,7 +123,12 @@ export default function FormularioConvocatoria() {
             const fechaInicial = fecha_inicio.replace("T", " ")
             const fechaTerminal = fecha_fin.replace("T", " ")
             console.log(nombre,descripcion,fechaInicial,fechaTerminal,prueba_id,inputRef.current.files[0])
-            agregarConvocatoria(nombre,descripcion,fechaInicial,fechaTerminal,prueba_id,inputRef.current.files[0])
+            toast.promise(agregarConvocatoria(nombre,descripcion,fechaInicial,fechaTerminal,prueba_id,inputRef.current.files[0])
+, {
+            loading: 'Creando convocatoria...',
+            success: 'Convocatoria creada correctamente',
+            error: (e) => e,
+            });
           }}
         >
           {(props) => {

@@ -25,12 +25,12 @@ export default function FormEditarPrueba(){
       toast.error("Error al traer los datos de la Prueba");
     });
    
-    const nuevoArreglo = response.data.configuracion_categoria.map(item => [item.categoria_id,item.valor_categoria]);
+    const nuevoArreglo = response.data.Configuraciones_categorias.map(item => [item.categoria_id,item.valor_categoria]);
     setDatos({
       nombre: response.data.nombre,
       descripcion: response.data.descripcion,
       duracion: response.data.duracion,
-      valoresCategorias: response.data.configuracion_categoria,
+      valoresCategorias: response.data.Configuraciones_categorias,
       estado: response.data.estado.toString(),
       nuevo:nuevoArreglo,
       puntajeTotal:response.data.puntaje_total,
@@ -210,7 +210,7 @@ export default function FormEditarPrueba(){
               (arrayHelpers)=>(
                 datos && datos.valoresCategorias.map((categoria,index)=>(
                   <Box>
-                    <FormLabel>{categoria.categoria.nombre}</FormLabel> 
+                    <FormLabel>{categoria.Categoria.nombre}</FormLabel> 
 
                     <Field
                       as={Input}
