@@ -6,7 +6,7 @@ import jwt_decode from "jwt-decode"
 
 export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) {
 
-  const { token, isInPrueba } = useContext(AppContext);
+  const { token, idConvocatoria, isInPrueba } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
@@ -15,7 +15,6 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
       // Realizar la verificación del rol (por ejemplo, decodificar el token) y establecer isLoading en false cuando esté listo
       const decode = jwt_decode(token);
       const rol = decode.tipo;
-      console.log(rol, isValid)
 
       if (rol === "Director" && isValid) {
         setIsLoading(false);
@@ -35,6 +34,7 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
       <Spinner size='xl' color="red.500" />
     </Flex>)
   }
+
 
   if (token) {
     if (!isValid) {

@@ -14,7 +14,7 @@ export function AppProvider({ children }) {
   const [imagen, setImagen] = useState();
   const [isInPrueba, setIsInPrueba] = useState(()=> sessionStorage.getItem("isInPrueba"))
   const [tiempoInicial,setTiempoInicial] = useState(()=>sessionStorage.getItem("time"))
-  //const [tiempoRestante, setTiempoRestante] = useState(0);
+  const [idConvocatoria,setIdConvocatoria] = useState(()=>sessionStorage.getItem("idConvocatoria"))
 
   useEffect(() => {
     setImagen(sessionStorage.getItem("imagen"));
@@ -22,7 +22,7 @@ export function AppProvider({ children }) {
       decodeToken("token");
     }
   }, []);
-  
+
 
 
   useEffect(() => {
@@ -89,6 +89,8 @@ export function AppProvider({ children }) {
         setId,
         isInPrueba,
         setTiempoInicial,
+        setIdConvocatoria,
+        idConvocatoria,
         setIsInPrueba
       }}
     >

@@ -12,7 +12,7 @@ export default function Paginacion({
   handlePageChange,
   atrasPage,
   adelantePage,
-  isLoaded
+  isLoaded=true
 }) {
   return (
     <Flex className="pagination" justifyContent="center">

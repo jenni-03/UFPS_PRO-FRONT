@@ -30,7 +30,7 @@ export default function ConvocatoriaBody() {
     FECHAINI: (array) => array.sort((a, b) => compareDates(a.fecha_inicio,b.fecha_inicio)),
     FECHAFIN: (array) => array.sort((a, b) => compareDates(a.fecha_fin,b.fecha_fin)),
     PREGUNTAS: (array) => array.sort((a,b)=> a.total_preguntas-b.total_preguntas),
-    PRUEBA: (array) => array.sort((a,b) => a.prueba.localeCompare(b.prueba)),
+    PRUEBA: (array) => array.sort((a,b) => a.prueba.nombre.localeCompare(b.prueba.nombre)),
   }
 
 

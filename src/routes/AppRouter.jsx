@@ -45,7 +45,7 @@ import AgregarEstudiante from "../pages/Admin/convocatorias/AgregarEstudiante";
 import ResultadoConvocatoria from "../components/pure/admin/convocatoria/ResultadoConvocatoria";
 import PruebaPresentacion from "../components/pure/user/PruebaPresentacion";
 export default function AppRouter() {
-  const { role, isInPrueba } = useContext(AppContext);
+  const { role, isInPrueba, idConvocatoria } = useContext(AppContext);
 
   return (
     <>
@@ -143,7 +143,7 @@ export default function AppRouter() {
            <Route
             element={
               <ProtectedRoute
-                redirectTo={"/home"}
+                redirectTo={``}
                 isValid={role && isInPrueba && role === "Estudiante" && isInPrueba==="true"}
               >
               </ProtectedRoute>

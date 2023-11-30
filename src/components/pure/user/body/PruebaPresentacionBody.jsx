@@ -8,7 +8,7 @@ import {Image, Box, Text, Button, Divider, Flex } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 
 const PruebaPresentacionBody = ({}) =>{
-    const {isInPrueba,setIsInPrueba,  role, token} = useContext(AppContext)
+    const {isInPrueba,setIsInPrueba, tiempoInicial, role, token} = useContext(AppContext)
     const {id} = useParams()
     const [preguntas, setPreguntas] = useState([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -21,7 +21,6 @@ const PruebaPresentacionBody = ({}) =>{
 
     const showQuestion = (index) => {
         //resetState();
-        console.log("preg",preguntas)
         let currentQuestion =  preguntas[index];
         let questionNumber = index + 1;
         setQuestionImage(currentQuestion.imagen)
@@ -29,13 +28,39 @@ const PruebaPresentacionBody = ({}) =>{
         setOpciones(currentQuestion.opciones)
     };  
 
-    const selectChoice = (id_pregunta,id_convocatoria, index, tiempo ) =>{
-
-    }
    
+    useEffect(() => {
+    const handleBeforeUnload = (event) => {
+      // Personaliza el mensaje que se mostrará al intentar salir de la página
+      const message = '¿Estás seguro de que quieres abandonar la página? Los cambios no se guardarán.';
+      event.returnValue = message; // Para navegadores más antiguos
+      return message; // Para navegadores modernos
+    };
+
+    window.addEventListener('beforeunload', handleBeforeUnload);
+
+    return () => {
+      window.removeEventListener('beforeunload', handleBeforeUnload);
+    };
+  }, []); // Solo se ejecutará una vez al montar el componente
+
 
     const nextQuestion = () => selectedAnswer+1 < preguntas.length && setSelectedAnswer(selectedAnswer+1)
     const prevQuestion = () => selectedAnswer>0 && setSelectedAnswer(selectedAnswer-1)
+
+    const terminarPrueba = async (id, mensaje) =>{
+        const response = await axiosApi.post(`/api/convocatoria/${id}/terminarPrueba`,{},{
+            headers:{
+                Authorization: "Bearer " + token
+            }
+        }).catch(e=>{
+            toast.error(e)
+        })
+        if(response.status===200){
+            toast.success(mensaje)
+        }
+    }
+
 
     const obtenerPreguntasPrueba = async (id) =>{
         const response = await axiosApi.get(`/api/convocatoria/${id}/getPreguntas`,{
@@ -47,9 +72,14 @@ const PruebaPresentacionBody = ({}) =>{
         })
         setPreguntas(response.data)
         setIsLoading(false)
-        console.log(response.data)
     }
 
+    if(tiempoInicial===0){
+            terminarPrueba(id,"El tiempo se ha agotado, prueba finalizada con exito")
+            console.log("prueba use")
+            setIsInPrueba(prev => "false")
+            sessionStorage.setItem("isInPrueba", false)
+    }
 
     useEffect(()=>{
         obtenerPreguntasPrueba(id)
@@ -59,8 +89,6 @@ const PruebaPresentacionBody = ({}) =>{
         !isLoading && showQuestion(selectedAnswer)
     },[isLoading, selectedAnswer])
 
-        console.log(Cookies.get("tiempo"))
-    console.log(isInPrueba)
     return(
         <>
             <Box p={"20px"} backgroundColor={"white"} borderRadius={"8px"}>
@@ -154,6 +182,7 @@ const PruebaPresentacionBody = ({}) =>{
                                 color: "black",
                                 boxShadow: "4px 4px 0px 0px #571530",
                          }} backgroundColor={"tomato"} onClick={()=>{
+                             terminarPrueba(id,"Prueba finalzada correctamente") 
                              setIsInPrueba(prev => "false")
                              sessionStorage.setItem("isInPrueba", false)
 

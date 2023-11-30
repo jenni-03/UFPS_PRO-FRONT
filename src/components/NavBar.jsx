@@ -1,13 +1,29 @@
 import { Button, Flex, Icon, Text } from "@chakra-ui/react";
-import React,{useContext, useEffect} from "react";
+import React,{useContext, useEffect, useState} from "react";
 import { AppContext } from "./context/AppProvider";
 import { AiOutlineMenuFold, AiOutlineMenuUnfold } from "react-icons/ai";
 
 export default function NavBar({ changeOpen, msg, isOpen }) {
 
   const { isInPrueba, tiempoInicial }=useContext(AppContext)
+ const [formattedTime, setFormattedTime] = useState("");
    
-  console.log(isInPrueba)
+  
+  function formatTime(totalMinutes) {
+
+    const hours = Math.floor(totalMinutes/ 3600);
+    const minutes = Math.floor((totalMinutes% 3600) / 60);
+    const seconds = totalMinutes% 60;
+     return `${String(hours).padStart(2, "0")}:${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    // Puedes agregar segundos si los tienes disponibles
+
+}
+
+
+  useEffect(() => {
+    setFormattedTime(formatTime(tiempoInicial));
+  }, [tiempoInicial]);
+
 
   return (
     <Flex
@@ -18,7 +34,7 @@ export default function NavBar({ changeOpen, msg, isOpen }) {
       p={"10px"}
       alignItems={"center"}
       gap={"20px"}
-    >{ true? 
+    >{ isInPrueba === "false" ? 
       <Icon
         cursor={"pointer"}
         onClick={() => {
@@ -27,7 +43,7 @@ export default function NavBar({ changeOpen, msg, isOpen }) {
         as={isOpen ? AiOutlineMenuUnfold : AiOutlineMenuFold}
         fontSize={"20px"}
       ></Icon>: null}
-      { true? <Text>{msg}</Text> : <Flex justifyContent={"space-between"}><Text>Tiempo Restante: {tiempoInicial} </Text><Button>Finalizar</Button></Flex>  }
+      {  isInPrueba === "false" ? <Text>{msg}</Text> : <Flex w={"100%"} alignItems={"center"} justifyContent={"center"}><Text fontWeight={"bold"}>{formattedTime}</Text></Flex>  }
     </Flex>
   );
 }

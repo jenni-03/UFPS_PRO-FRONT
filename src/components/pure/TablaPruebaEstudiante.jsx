@@ -22,6 +22,7 @@ import { AiOutlineEye} from "react-icons/ai";
 import { Link } from "react-router-dom";
 import Paginacion from "./Paginacion";
 import Btn from "./Btn";
+import toast from "react-hot-toast";
 
 export default function TablaPruebaEstudiante({ columns,pr, items, path, msg, showButton }) {
   const [currentPage, setCurrentPage] = useState(0);
@@ -147,7 +148,7 @@ export default function TablaPruebaEstudiante({ columns,pr, items, path, msg, sh
                       <Box w={"100%"} display={"flex"} alignItems={"center"} justifyContent={"center"} flexDir={"column"}>
                         {
                           item.categorias.map((data,index)=>(
-                            <Box>{data}</Box>
+                            <Box key={index}>{data}</Box>
                           ))
                         }
                       </Box>
@@ -158,7 +159,9 @@ export default function TablaPruebaEstudiante({ columns,pr, items, path, msg, sh
                       </Box>
                     </Td>
                     <Td>
-                      <Button as={Link} display={"flex"} h={"30px"} justifyItems={"center"} justifyContent={"center"} backgroundColor={"segundo.100"} to={`#`}>
+                      <Button as={Link} display={"flex"} h={"30px"} onClick={(()=>{
+                        toast.error("Este apartado se encuentra en mantenimiento")
+                        })} justifyItems={"center"} justifyContent={"center"} backgroundColor={"segundo.100"} to={`#`}>
                         <Icon color={"primero.100"}  as={AiOutlineEye}></Icon>
                       </Button>
                     </Td>

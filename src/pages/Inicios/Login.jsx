@@ -32,7 +32,7 @@ export default function Login() {
 
 
 
-  const { setToken, setRole,role,token,user, setUser} = useContext(AppContext)
+  const { setToken, setRole,role,token,user, setUser, setIsInPrueba} = useContext(AppContext)
 
   const navigate = useNavigate()
 
@@ -56,15 +56,12 @@ export default function Login() {
   const ingresar = async (email, password) =>{
     const data = await login(email,password)
     sessionStorage.setItem("token",data.accessToken)
-    //Cookies.set('token', data.accessToken, { expires: new Date().getTime() + 15000 })
+    sessionStorage.setItem("isInPrueba",false)
+    setIsInPrueba(sessionStorage.getItem("isInPrueba"))
     setToken(sessionStorage.getItem("token"))
-    //setToken(Cookies.get("token"))
-    //console.log("Token", localStorage.getItem("token"))
     const decoded = jwt_decode(sessionStorage.getItem("token"))
-    //const decoded = jwt_decode(Cookies.get("token"))
     setUser(data)
     setRole(decoded.tipo)
-    //console.log(decoded)
     redireccion(decoded.tipo)
   } 
 

@@ -22,7 +22,7 @@ export default function ConvocatoriaBodyUser(){
   const navigate = useNavigate()
   const cancelRef = React.useRef()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const {token, setIsInPrueba,setTiempoInicial, isInPrueba} = useContext(AppContext)
+  const {token, setIsInPrueba,setTiempoInicial,setIdConvocatoria, isInPrueba} = useContext(AppContext)
 
   const obtenerConvocatorias = async() =>{
     const response = await axiosApi.get("api/convocatoria/obtenerConvocatorias/estudiante",{
@@ -34,14 +34,12 @@ export default function ConvocatoriaBodyUser(){
     })
     if(response.status===200){
     setConvocatorias(response.data)
-    console.log(response.data)
     setLoading(false)
 
     }
       }
 
   const presentarPrueba = async (id) =>{
-    console.log(id)
     const response = await axiosApi.post(`/api/convocatoria/${id}/presentarPrueba`,{},{
       headers:{
         Authorization: "Bearer " + token
@@ -49,19 +47,13 @@ export default function ConvocatoriaBodyUser(){
     }).catch((e)=>{
       toast.error(e.response.data.error)
     })
-    console.log("LALALLALALALA",response.data)
     if(response.status===200){
       setIsInPrueba(prev => "true")
       sessionStorage.setItem("isInPrueba", true)
-      setTiempoInicial(prev =>response.data.tiempo_prueba)
-      Cookies.set('tiempo', "asdfawdf", {
-      expires: 5, // Expira en 365 días
-      secure: true, // Solo se envía a través de conexiones seguras (HTTPS)
-      sameSite: 'Strict', // Restringe cómo se envía la cookie en las solicitudes cruzadas (CSRF)
-    });
-      sessionStorage.setItem("time", response.data.tiempo_prueba)
-      console.log(response.data.tiempo_prueba)
-      navigate(`/presentacionPrueba/${id}`)
+      sessionStorage.setItem("idConvocatoria", id)
+      setTiempoInicial(prev =>response.data.tiempo_prueba*60)
+      sessionStorage.setItem("time", response.data.tiempo_prueba*60)
+      //navigate(`/presentacionPrueba/${id}`)
 
     }
   }
@@ -155,7 +147,6 @@ export default function ConvocatoriaBodyUser(){
                       <Button   backgroundColor={"#d8e7f5"} color={"#1285f1"} onClick={()=>{
                         presentarPrueba(convSeleccionada.id)
                         onClose()
-                        console.log("hola")
                       }}  _hover={{"backgroundColor":"none"}} _active={{"backgroundColor":"#96bef3"}} ml={3}>
                         Comenzar
                       </Button>
