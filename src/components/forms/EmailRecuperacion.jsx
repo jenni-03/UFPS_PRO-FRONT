@@ -43,7 +43,7 @@ import Btn from "../pure/Btn";
           enableReinitialize={true}
           onSubmit={({email}) => {
           //  requestPassword(email, "https://cheerful-strudel-8a37c7.netlify.app/#/newPassword")
-            toast.promise(requestPassword(email, "https://ufpspro-production-e52c.up.railway.app/#/newPassword")
+            toast.promise(requestPassword(email, "https://cheerful-strudel-8a37c7.netlify.app/#/newPassword")
 , {
              loading: 'Buscando Correo...',
              success: '¡Mensaje enviado correctamente!',
