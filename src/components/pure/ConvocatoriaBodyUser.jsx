@@ -53,7 +53,7 @@ export default function ConvocatoriaBodyUser(){
       sessionStorage.setItem("idConvocatoria", id)
       setTiempoInicial(prev =>response.data.tiempo_prueba*60)
       sessionStorage.setItem("time", response.data.tiempo_prueba*60)
-      //navigate(`/presentacionPrueba/${id}`)
+      navigate(`/presentacionPrueba/${id}`)
 
     }
   }

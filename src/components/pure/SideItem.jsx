@@ -7,7 +7,7 @@ export default function SideItem({icon, msg, active, index, tamanio, path}) {
      const [ruta, setRuta] = useState(path&&path[0])
      const navigate = useNavigate()
      const loc = useLocation()
-    const { setToken, setRole, setUser} = useContext(AppContext)
+    const { setToken, setRole, setUser, setIsInPrueba, setTiempoInicial} = useContext(AppContext)
 
 
   const isCurrentPath = () => {
@@ -41,6 +41,10 @@ export default function SideItem({icon, msg, active, index, tamanio, path}) {
             if(index===10000){
                 setToken(sessionStorage.removeItem("token"))
                 sessionStorage.removeItem("token")
+                setTiempoInicial(sessionStorage.removeItem("time"))
+                sessionStorage.removeItem("time")
+                setIsInPrueba(sessionStorage.removeItem(("isInPrueba")))
+                sessionStorage.removeItem("isInPrueba")
                 setUser(null)
                 setRole(null)
                 navigate("/")
