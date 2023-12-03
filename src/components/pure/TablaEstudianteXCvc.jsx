@@ -16,7 +16,7 @@ import {AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, Aler
 import { AiOutlineDelete } from "react-icons/ai";
 import {useParams} from "react-router-dom";
 import {useRef} from "react";
-const TablaEstudianteXCvc = ({wCampo,ancho, showButton=false, showSwitch=false}) =>{
+const TablaEstudianteXCvc = ({colsR,wCampo,ancho, showButton=false, showSwitch=false}) =>{
   const [estudiantes,setEstudiantes] = useState([])
   const [estudianteSelect, setEstudianteSelect] = useState()
   const { token } = useContext(AppContext);
@@ -86,7 +86,7 @@ const TablaEstudianteXCvc = ({wCampo,ancho, showButton=false, showSwitch=false})
  const chakraTheme = getTheme(DEFAULT_OPTIONS);
   const customTheme = {
     Table: `
-      --data-table-library_grid-template-columns: ${wCampo};
+      --data-table-library_grid-template-columns:  repeat(${colsR},${wCampo});
       font-family: Open Sans;
     `,
   };
@@ -174,7 +174,7 @@ const COLUMNS = [
       label: "Código",
       renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.codigo} >{item.codigo}</Tooltip>,
       sort: {sortKey:"CODIGO"}
-    },,
+    },
     {
       label: "Nombre",
       renderCell: (item)=>item.nombre,
@@ -212,7 +212,7 @@ const COLUMNS = [
             sm: "310px",
             md: "450px",
             lg: "690px",
-            xl: "790px",
+            xl: "900px",
             '2xl':ancho
           }}
       >

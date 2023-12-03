@@ -33,7 +33,7 @@ export default function PreguntaBody() {
       label:"Id",
       renderCell: (item)=>item.id,
       sort: { sortKey: "ID" }
-    },,
+    },
     {
       label: "Enunciado",
       renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.texto_pregunta}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.texto_pregunta}</Text></Tooltip>, 
@@ -81,6 +81,8 @@ export default function PreguntaBody() {
         cols={columns}
         aBuscar={"texto_pregunta"}
         ancho={"940px"}
+        colsR={6}
+        wCampo={"200px"}
       />
 
   );

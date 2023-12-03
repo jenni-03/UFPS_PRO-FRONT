@@ -15,7 +15,7 @@ import {AiOutlineEdit, AiOutlineDelete} from "react-icons/ai"
 import { MdAdd } from "react-icons/md";
 import {AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter,Icon, Box, Stack, InputGroup,Tooltip, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
 
-const TablaEstudiantes = ({wCampo,ancho, showButton=false, showSwitch=true}) => {
+const TablaEstudiantes = ({colsR,wCampo,ancho, showButton=false, showSwitch=true}) => {
 
   const inputPageRef = useRef(null)
   const {token}= useContext(AppContext)
@@ -81,7 +81,7 @@ const eliminarEstudiante = async (id_estudiante) =>{
   //--data-table-library_grid-template-columns:  200px;
   const customTheme = {
     Table: `
-      --data-table-library_grid-template-columns: ${wCampo};
+        --data-table-library_grid-template-columns:  repeat(${colsR},${wCampo});
       font-family: Open Sans;
     `,
   };
@@ -165,7 +165,7 @@ const eliminarEstudiante = async (id_estudiante) =>{
       label: "Código",
       renderCell: (item)=><Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.codigo} >{item.codigo}</Tooltip>,
       sort: {sortKey:"CODIGO"}
-    },,
+    },
     {
       label: "Nombre",
       renderCell: (item)=>item.nombre,

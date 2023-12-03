@@ -35,8 +35,7 @@ export default function CompetenciaBody() {
       label:"Id",
       renderCell: (item) => item.id,
       sort: { sortKey: "ID" }
-
-    },,
+    },
     {
       label:"Nombre",
       renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
@@ -69,6 +68,7 @@ export default function CompetenciaBody() {
       cols={columns}
       aBuscar={"nombre"}
       ancho={"790px"}
+      colsR={5}
 
     />
     

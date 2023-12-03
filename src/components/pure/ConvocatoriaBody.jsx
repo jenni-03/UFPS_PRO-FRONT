@@ -48,7 +48,7 @@ export default function ConvocatoriaBody() {
       renderCell: (item) => item.id,
       sort: { sortKey: "ID" }
 
-    },,
+    },
     {
       label:"Nombre",
       renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
@@ -113,6 +113,7 @@ export default function ConvocatoriaBody() {
       cols={columns}
       wCampo={"200px"}
       ancho={"1400px"}
+      colsR={9}
       aBuscar={"nombre"}
     />
   );

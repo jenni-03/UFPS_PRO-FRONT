@@ -34,7 +34,7 @@ export default function PruebaBody() {
       renderCell: (item) => item.id,
       sort: { sortKey: "ID" }
 
-    },,
+    },
     {
       label:"Nombre",
       renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
@@ -76,6 +76,8 @@ export default function PruebaBody() {
       cols={columns}
       aBuscar={"nombre"}
       ancho={"940px"}
+      colsR={6}
+      wCampo={"200px"}
 
     />
   );

@@ -10,7 +10,7 @@ import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, Fa
 import { MdAdd } from "react-icons/md";
 import { Box, Stack, InputGroup, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
 
-const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho, wCampo="150px"}) => {
+const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho, wCampo="150px", colsR}) => {
 
 
   const inputPageRef = useRef(null)
@@ -49,7 +49,7 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
   const customTheme = {
     Table: `
       
-        --data-table-library_grid-template-columns:  repeat(5,200px);
+        --data-table-library_grid-template-columns:  repeat(${colsR},${wCampo});
       font-family: Open Sans;
     `,
   };
