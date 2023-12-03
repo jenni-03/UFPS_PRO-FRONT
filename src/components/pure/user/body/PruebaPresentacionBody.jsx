@@ -4,7 +4,7 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import axiosApi from "../../../../utils/config/axios.config"
 import { AppContext } from "../../../context/AppProvider";
-import {Image, Box, Text, Button, Divider, Flex } from "@chakra-ui/react";
+import {Image, Box, Text, Button, Divider, Flex, Spinner } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 
 const PruebaPresentacionBody = ({}) =>{
@@ -16,11 +16,11 @@ const PruebaPresentacionBody = ({}) =>{
     const [questionImage, setQuestionImage] = useState(null);
     const [isLoading, setIsLoading] = useState(true)
     const [opciones, setOpciones] = useState([]);
-    const [selectedAnswer, setSelectedAnswer] = useState(0);
+    const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [showNextButton, setShowNextButton] = useState(false);
 
     const showQuestion = (index) => {
-        //resetState();
+        resetState();
         let currentQuestion =  preguntas[index];
         let questionNumber = index + 1;
         setQuestionImage(currentQuestion.imagen)
@@ -28,25 +28,19 @@ const PruebaPresentacionBody = ({}) =>{
         setOpciones(currentQuestion.opciones)
     };  
 
+    const selectChoice = (index) =>{
+        setSelectedAnswer(index)
+    }
+
    
-    useEffect(() => {
-    const handleBeforeUnload = (event) => {
-      // Personaliza el mensaje que se mostrará al intentar salir de la página
-      const message = '¿Estás seguro de que quieres abandonar la página? Los cambios no se guardarán.';
-      event.returnValue = message; // Para navegadores más antiguos
-      return message; // Para navegadores modernos
-    };
+     const resetState = () => {
+    setOpciones([]);
+    //setCorrectAnswer(null);
+    setSelectedAnswer(null);
+  };
 
-    window.addEventListener('beforeunload', handleBeforeUnload);
-
-    return () => {
-      window.removeEventListener('beforeunload', handleBeforeUnload);
-    };
-  }, []); // Solo se ejecutará una vez al montar el componente
-
-
-    const nextQuestion = () => selectedAnswer+1 < preguntas.length && setSelectedAnswer(selectedAnswer+1)
-    const prevQuestion = () => selectedAnswer>0 && setSelectedAnswer(selectedAnswer-1)
+    const nextQuestion = () => currentQuestionIndex+1 < preguntas.length && setCurrentQuestionIndex(currentQuestionIndex+1)
+    const prevQuestion = () => currentQuestionIndex>0 && setCurrentQuestionIndex(currentQuestionIndex-1)
 
     const terminarPrueba = async (id, mensaje) =>{
         const response = await axiosApi.post(`/api/convocatoria/${id}/terminarPrueba`,{},{
@@ -76,7 +70,6 @@ const PruebaPresentacionBody = ({}) =>{
 
     if(tiempoInicial===0){
             terminarPrueba(id,"El tiempo se ha agotado, prueba finalizada con exito")
-            console.log("prueba use")
             setIsInPrueba(prev => "false")
             sessionStorage.setItem("isInPrueba", false)
     }
@@ -86,105 +79,48 @@ const PruebaPresentacionBody = ({}) =>{
     },[])
 
     useEffect(()=>{
-        !isLoading && showQuestion(selectedAnswer)
-    },[isLoading, selectedAnswer])
+        !isLoading && showQuestion(currentQuestionIndex)
+    },[isLoading, currentQuestionIndex])
+
+    if(isLoading){
+        return(
+                <Spinner mt={"300px"}/>
+        )
+    }
 
     return(
         <>
-            <Box p={"20px"} backgroundColor={"white"} borderRadius={"8px"}>
+            <Box w={"400px"} p={"20px"} backgroundColor={"white"} borderRadius={"8px"}>
                 <Text fontSize={"20px"}>{questionText}</Text>
-                { questionImage && <Image w={"50%"} m={"10px auto"} objectFit={"cover"}
-              objectPosition={"center"} src={questionImage.url} />}
+                { questionImage && <Image w={"100%"} m={"10px auto"} objectFit={"cover"}
+              src={questionImage.url} />}
                 <Divider m={"10px"}/>
                 <Flex flexDir={"column"} gap={"10px"}>
                     {opciones&&opciones.map((o, index) => (
                         <Box
                             key={index}
                             textAlign={"left"} 
-                            //className={`btn ${selectedAnswer === index ? (choice.answer ? "correct" : "incorrect") : ""}`}
-                            onClick={() => selectChoice()}
-                            style={{display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: '16px',
-                                padding: '0px 93px',
-                                borderRadius: '4px',
-                                width: '100%',
-                                height: '60px',
-                                fontSize: '20px',
-                                fontWeight: '700',
-                                transform: 'translateX(-4px) translateY(-4px)',
-                                transition: 'all 0.2s',
-                                border: "4px solid #571530",
-                                backgroundColor: "gray",
-                                color: "#3D0F22",
-                                boxShadow: "4px 4px 0px 0px #571530",
-                            }}
-                            _hover={{
-                            
-                            }}
+                            onClick={() => {
+                            selectChoice(index)}}
+                            backgroundColor={selectedAnswer===index?"#e4fcbc":"cuarto.100"}
+                            fontSize={"17px"}
+                            borderRadius={"10px"}
+                            p={"10px"}
                         >
                             {o}
                         </Box>
                     ))}
                     <Flex justifyContent={"space-between"}>
-                        <Button style={{
-                                 justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: '16px',
-                                padding: '0px 93px',
-                                borderRadius: '4px',
-                                width: '100%',
-                                height: '60px',
-                                fontSize: '20px',
-                                fontWeight: '700',
-                                transform: 'translateX(-4px) translateY(-4px)',
-                                transition: 'all 0.2s',
-                                border: "4px solid #571530",
-                                backgroundColor: "tomato",
-                                color: "black",
-                                boxShadow: "4px 4px 0px 0px #571530",
-                        }} backgroundColor={"tomato"} onClick={()=>prevQuestion()}>Anterior</Button>
+                        <Button colorScheme={"red"}   onClick={()=>prevQuestion()}>Anterior</Button>
                         {
-                            selectedAnswer+1!==preguntas.length ?
-                        <Button style={{
-                                 justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: '16px',
-                                padding: '0px 93px',
-                                borderRadius: '4px',
-                                width: '100%',
-                                height: '60px',
-                                fontSize: '20px',
-                                fontWeight: '700',
-                                transform: 'translateX(-4px) translateY(-4px)',
-                                transition: 'all 0.2s',
-                                border: "4px solid #571530",
-                                backgroundColor: "dodgerblue",
-                                color: "black",
-                                boxShadow: "4px 4px 0px 0px #571530",
-                        }} backgroundColor={"tomato"} onClick={()=>nextQuestion()}>Siguiente</Button>
+                            currentQuestionIndex+1!==preguntas.length ?
+                        <Button colorScheme={"blue"}  onClick={()=>nextQuestion()}>Siguiente</Button>
                         :
-                         <Button style={{
-                                 justifyContent: 'center',
-                                alignItems: 'center',
-                                marginBottom: '16px',
-                                padding: '0px 93px',
-                                borderRadius: '4px',
-                                width: '100%',
-                                height: '60px',
-                                fontSize: '20px',
-                                fontWeight: '700',
-                                transform: 'translateX(-4px) translateY(-4px)',
-                                transition: 'all 0.2s',
-                                border: "4px solid #571530",
-                                backgroundColor: "aquamarine",
-                                color: "black",
-                                boxShadow: "4px 4px 0px 0px #571530",
-                         }} backgroundColor={"tomato"} onClick={()=>{
+                         <Button colorScheme={"green"} onClick={()=>{
                              terminarPrueba(id,"Prueba finalzada correctamente") 
                              setIsInPrueba(prev => "false")
                              sessionStorage.setItem("isInPrueba", false)
+                             sessionStorage.removeItem("idConvocatoria")
 
                         }}>Finalizar</Button>
                         }

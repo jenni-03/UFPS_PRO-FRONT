@@ -71,6 +71,7 @@ export default function ConvocatoriaBodyUser(){
       width={"100%"}
       columns={{ base: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
     >
+  { Array.from({length:12}, (_, index) =>(
          <Card  width={"auto"}>
               <CardHeader padding={"20px 20px 0 20px"} overflow={"hidden"}>
                 <Heading size='md' >
@@ -91,6 +92,7 @@ export default function ConvocatoriaBodyUser(){
                 <Skeleton borderRadius={"10px"} width={"100%"} height={"30px"}/>
               </CardFooter>
             </Card>
+  ))}
     </SimpleGrid>
       )
        
@@ -137,7 +139,9 @@ export default function ConvocatoriaBodyUser(){
               <CardFooter>
                 <Button width={"100%"} onClick={()=>{
                   onOpen()
-                  setConvSeleccionada(convocatorias && convocatorias.find( c => c.id === convocatoria.id))
+                  const cs =  convocatorias && convocatorias.find( c => c.id === convocatoria.id)
+                 
+                  setConvSeleccionada(cs)
                 }}>Iniciar Prueba</Button>
               </CardFooter>
             </Card>
@@ -180,6 +184,8 @@ export default function ConvocatoriaBodyUser(){
                       </Button>
                       <Button   backgroundColor={"#d8e7f5"} color={"#1285f1"} onClick={()=>{
                         presentarPrueba(convSeleccionada.id)
+                        setIdConvocatoria(convSeleccionada.id)
+                        sessionStorage.setItem("idConvocatoria", convSeleccionada.id)
                         onClose()
                       }}  _hover={{"backgroundColor":"none"}} _active={{"backgroundColor":"#96bef3"}} ml={3}>
                         Comenzar

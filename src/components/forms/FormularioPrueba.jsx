@@ -79,6 +79,8 @@ const FormularioPrueba = () => {
   },[])
 
 
+
+
   const crearPrueba = async (values) =>{
     const arregloCategorias = []
     const arregloCategoriasID = []
@@ -267,7 +269,7 @@ const FormularioPrueba = () => {
 
             <FormLabel>Competencias:</FormLabel>
             {isLoading || isLoading2 ? <Center m={"20px 0"}><Spinner/></Center> :competencias
-                .filter((competencia) => competencia.Categorias.length > 0) // Filtrar competencias con categorías
+                .filter((competencia) => competencia.Categorias.length > 0 && categoriasObtenidas.length!=0) // Filtrar competencias con categorías
                 .map((competencia) => (
                   <Box key={competencia.id} m={"10px 0 10px 0"}>
                     <Box display={"flex"} alignItems={"center"}>
@@ -308,7 +310,7 @@ const FormularioPrueba = () => {
                     {values.competencias.includes(competencia.id) && (
                       <FieldArray name="categorias">
                         {(arrayHelpers) =>
-                            competencia.Categorias.map((categoria, index) => (
+                            categoriasObtenidas.map((categoria, index) => (
                               <Box
                                 w={"90%"}
                                 display={"flex"}

@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useState } from "react";
-import { Navigate, Outlet } from "react-router-dom";
+import { Navigate, Outlet, useLocation } from "react-router-dom";
 import { AppContext } from "../components/context/AppProvider";
 import { Spinner, Flex} from "@chakra-ui/react";
 import jwt_decode from "jwt-decode"
@@ -8,6 +8,7 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
 
   const { token, idConvocatoria, isInPrueba } = useContext(AppContext);
   const [isLoading, setIsLoading] = useState(true);
+  const location = useLocation()
 
   useEffect(() => {
     // Verificar si el rol es válido aquí (puedes usar un efecto si es asíncrono)
@@ -35,6 +36,9 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
     </Flex>)
   }
 
+  if(isInPrueba==="true"&&!location.pathname.includes(`/presentacionPrueba/${idConvocatoria}`)){
+    return <Navigate to={`/presentacionPrueba/${idConvocatoria}`} replace />
+  }
 
   if (token) {
     if (!isValid) {
