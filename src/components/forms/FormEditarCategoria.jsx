@@ -1,4 +1,4 @@
-import { Box, Select, Center, Textarea, Input } from "@chakra-ui/react";
+import { Box,Skeleton, Select,Flex, Center, Textarea, Input } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { React, useContext, useEffect, useState } from "react";
 import * as Yup from "yup";
@@ -67,7 +67,7 @@ export default function FormularioEditarCategoria() {
     if (response.status === 200) {
       toast.success("¡Categoría actualizada correctamente!");
       navigate("/categorias")
-      
+
     }
 
   };
@@ -113,19 +113,39 @@ export default function FormularioEditarCategoria() {
 
 
   if (loading || loading2) {
-    return <div>Cargando...</div>;
+    return(
+      <Box
+        boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+      >
+        <Center h="100%">
+          <Box
+            p="20px"
+            w={["220px", "320px", "370px", "420px"]}
+            borderRadius="8px"
+            bgColor="white"
+            overflow="hidden" >
+            <Flex flexDir={"column"} gap={"10px"}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!loading&&!loading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!loading&&!loading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!loading&&!loading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"132px"} isLoaded={!loading&&!loading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"30px"} isLoaded={!loading&&!loading2}></Skeleton>
+            </Flex>
+          </Box>
+        </Center>
+      </Box>
+    );
   }
 
   return (
     <Box
-        boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+      boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
     >
       <Center h="100%">
         <Box
-          p="40px"
+          p="20px"
           borderRadius="8px"
           bgColor="white"
-          minW={["150px", "250px", "480px", "550px"]}
           overflow="hidden"
         >
           <Formik
@@ -177,7 +197,7 @@ export default function FormularioEditarCategoria() {
                       </FormControl>
                     </Box>
                     <Box
-                      mt="20px"
+                      mt="10px"
                       display="flex"
                       flexDirection="column"
                       justifyContent="center"
@@ -202,11 +222,11 @@ export default function FormularioEditarCategoria() {
                           }}
                         >
                           {competencias &&
-                            competencias.map((item, index) => (
-                              <option key={index} value={item.id}>
-                                {item.nombre}
-                              </option>
-                            ))}
+                              competencias.map((item, index) => (
+                                <option key={index} value={item.id}>
+                                  {item.nombre}
+                                </option>
+                              ))}
                         </Field>
                         <FormErrorMessage>
                           {errors.competencia}
@@ -214,7 +234,7 @@ export default function FormularioEditarCategoria() {
                       </FormControl>
                     </Box>
                     <Box
-                      mt="20px"
+                      mt="10px"
                       display="flex"
                       flexDirection="column"
                       justifyContent="center"
@@ -252,7 +272,6 @@ export default function FormularioEditarCategoria() {
                         <FormLabel htmlFor="descripcion">Descripción</FormLabel>
                         <Field
                           as={Textarea}
-                          mt="10px"
                           name="descripcion"
                           resize="vertical"
                           h="100px"
@@ -265,10 +284,10 @@ export default function FormularioEditarCategoria() {
                       </FormControl>
                     </Box>
                     <Btn
-                    isSubmit={true}
-                    w={["200px", "300px", "350px", "400px"]}
-                    mt={"20px"}
-                    msg={"Guardar"}
+                      isSubmit={true}
+                      w={["200px", "300px", "350px", "400px"]}
+                      mt={"10px"}
+                      msg={"Guardar"}
                     />
                   </Box>
                 </Form>

@@ -4,6 +4,7 @@ import {
   Box,
   Button,
   FormControl,
+  Skeleton,
   FormErrorMessage,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
@@ -29,6 +30,9 @@ export default function EditarInformacionAdmin() {
 
     return response.data;
   };
+
+
+  
 
   const getUser = async () => {
     const data = await getUsuario();
@@ -79,9 +83,33 @@ export default function EditarInformacionAdmin() {
       .min(5, "Mínimo 5 digitos"),
   });
 
-  if (isLoading) {
-    return <div>Cargando...</div>;
+  if(isLoading){
+    return (
+      <Box
+                p={"20px"}
+                borderRadius={"8px"}
+                bgColor={"white"}
+                minW={["200px", "350px", "400px", "500px"]}
+                maxHeight={"auto"}
+                overflow={"hidden"}
+              >
+
+                <Box
+                  display={"flex"}
+                  flexDirection={"column"}
+                  w={"100%"}
+                  h={"100%"}
+                  gap={"20px"}
+                  action=""
+                >
+              <Skeleton w={"100%"} h={"70px"} borderRadius={"10px"} isLoaded={!isLoading}/>
+              <Skeleton w={"100%"} h={"70px"} borderRadius={"10px"} isLoaded={!isLoading}/>
+              <Skeleton w={"100%"} h={"40px"} borderRadius={"10px"} isLoaded={!isLoading}/>
+                </Box>
+       </Box> 
+    )
   }
+
   return (
     <>
       <Formik

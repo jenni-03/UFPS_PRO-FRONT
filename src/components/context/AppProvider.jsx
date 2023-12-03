@@ -39,27 +39,7 @@ export function AppProvider({ children }) {
   }, [tiempoInicial, setTiempoInicial]);
 
 
-  {/* useEffect(() => {
-    if (user) {
-      const timeout = setTimeout(() => {
-        sessionStorage.removeItem("token");
-        setToken(sessionStorage.removeItem("token"));
-        setRole(null);
-        toast.success("Su sesión ha expirado, por favor ingrese nuevamente", {
-          duration: 4000,
-          position: "top-center",
-          style: {
-            width: "270px",
-          },
-          className: "",
-          iconTheme: {
-            primary: "#000",
-            secondary: "#fff",
-          },
-        });
-      }, 3600000);
-    }
-  }, [user]);*/}
+
 
   const decodeToken = (a) => {
     const decode = jwt_decode(sessionStorage.getItem(a));
@@ -68,7 +48,7 @@ export function AppProvider({ children }) {
     const id = decode.id;
     setId(id);
     setRole(rol);
-    //setUser(email);
+    setUser(email);
   };
 
   return (

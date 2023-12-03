@@ -92,7 +92,6 @@ export default function FormularioPasswordEstudiante() {
                   id="passwordActual"
                   name="passwordActual"
                   borderColor="gray.300"
-                  variant="filled"
                   type="password"
                 />
                 <FormErrorMessage>{errors.passwordActual}</FormErrorMessage>
@@ -106,7 +105,6 @@ export default function FormularioPasswordEstudiante() {
                   id="password"
                   name="password"
                   borderColor="gray.300"
-                  variant="filled"
                   type="password"
                 />
                 <FormErrorMessage>{errors.password}</FormErrorMessage>
@@ -120,7 +118,6 @@ export default function FormularioPasswordEstudiante() {
                   id="passwordR"
                   name="passwordR"
                   borderColor="gray.300"
-                  variant="filled"
                   type="password"
                 />
                 <FormErrorMessage>{errors.passwordR}</FormErrorMessage>

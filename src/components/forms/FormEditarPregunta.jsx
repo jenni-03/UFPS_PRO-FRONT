@@ -7,7 +7,9 @@ import {
   FormControl,
   FormErrorMessage,
   FormLabel,
-  Image
+  Image,
+  Skeleton,
+  Flex
 } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import { React, useContext, useEffect, useRef, useState } from "react";
@@ -24,6 +26,8 @@ export default function FormEditarPregunta() {
   const {id} = useParams()
   const { token } = useContext(AppContext);
   const [imagen, setImagen] = useState()
+  const [isLoading, setIsLoading] = useState(true)
+  const [isLoading2, setIsLoading2] = useState(true)
   const [initialValues, setInitialValues] = useState();
   const [categorias, setCategorias] = useState();
   const navigate = useNavigate()
@@ -51,6 +55,7 @@ export default function FormEditarPregunta() {
         toast.error(e.response.data.error);
       });
     setCategorias(response.data);
+    setIsLoading(false)
   };
 
 
@@ -110,6 +115,7 @@ export default function FormEditarPregunta() {
       respuesta: response.data.respuesta,
     });
     setImagen(response.data.imageFile)
+    setIsLoading2(false)
   };
 
   const validationSchema = Yup.object().shape({
@@ -141,15 +147,49 @@ export default function FormEditarPregunta() {
     }
   }, [categorias]);
 
-  if (!initialValues) {
-    return <div>Cargando...</div>;
+  if (isLoading || isLoading2) {
+    return (
+      <Box>
+        <Center h="100%">
+        <Box
+          p="20px"
+          borderRadius="8px"
+          bgColor="white"
+          w={["190px", "290px", "520px", "590px"]}
+        boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+          overflow="hidden"
+        >
+          <Flex flexDir={"column"} gap={"20px"}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"120px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+          <Flex gap={"20px"} flexDirection={["column","column","row"]}  >
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+          </Flex>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+          <Flex gap={"20px"}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+          </Flex>
+          <Flex gap={"20px"}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"82px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+          </Flex>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"50px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"30px"} isLoaded={!isLoading&&!isLoading2}></Skeleton>
+          </Flex>
+        </Box>
+        </Center>
+      </Box>
+    );
   }
 
   return (
     <Box>
       <Center h="100%">
         <Box
-          p="40px"
+          p="20px"
           borderRadius="8px"
           bgColor="white"
           minW={["150px", "250px", "480px", "550px"]}

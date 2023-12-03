@@ -6,6 +6,7 @@ import { SimpleGrid,Text,  CardHeader, CardBody, Button, Card , Heading, CardFoo
   AlertDialogHeader,
   AlertDialogContent,
   AlertDialogOverlay,
+  SkeletonText,
   AlertDialogCloseButton, useDisclosure, Box, Divider, Skeleton, Flex} from "@chakra-ui/react";
 import { Link, useNavigate } from "react-router-dom";
 import axiosApi from "../../utils/config/axios.config"
@@ -61,6 +62,39 @@ export default function ConvocatoriaBodyUser(){
   useEffect(()=>{
     obtenerConvocatorias()
   },[])
+
+
+  if(isLoading){
+    return( 
+<SimpleGrid 
+      spacing={4} 
+      width={"100%"}
+      columns={{ base: 1, sm: 1, md: 2, lg: 3, xl: 3 }}
+    >
+         <Card  width={"auto"}>
+              <CardHeader padding={"20px 20px 0 20px"} overflow={"hidden"}>
+                <Heading size='md' >
+                  <Skeleton borderRadius={"10px"} width={"100%"} height={"30px"} >
+                  </Skeleton>
+                  <Flex justifyContent={"center"} alignItems={"center"} flexDir={"column"} gap={"10px"} m={"10px 0 0 0"}>
+
+                  </Flex>
+                </Heading>
+              </CardHeader>
+              <Divider mt={"10px"} borderColor={"gray.200"}/>
+              <CardBody  padding={"20px 20px 0 20px"}>
+                  <Text>
+                    <SkeletonText  borderRadius={"10px"} mt='4' noOfLines={4} spacing='4' skeletonHeight='2' />
+                  </Text>
+              </CardBody>
+              <CardFooter>
+                <Skeleton borderRadius={"10px"} width={"100%"} height={"30px"}/>
+              </CardFooter>
+            </Card>
+    </SimpleGrid>
+      )
+       
+  }
 
 
 

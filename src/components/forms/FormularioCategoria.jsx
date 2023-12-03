@@ -1,5 +1,5 @@
 
-import { Box, Center, FormControl, FormErrorMessage, Input, Select, Textarea} from "@chakra-ui/react";
+import { Box, Center, FormControl, FormErrorMessage, FormLabel, Input, Select, Textarea} from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import React, { useContext, useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
@@ -57,7 +57,6 @@ export default function FormularioCategoria() {
 
   const elementosActivos = competencia.filter(item => item.estado === true);
 
-  const competencias = ["Competencia 1", "Competencia 2", "Competencia 3"];
 
   const initialValues = {
     nombre: "",
@@ -79,10 +78,9 @@ export default function FormularioCategoria() {
 
       <Center h="100%">
         <Box
-          p="40px"
+          p="20px"
           borderRadius="8px"
           bgColor="white"
-          minW={["150px", "250px", "480px", "550px"]}
           overflow="hidden"
         >
           <Formik
@@ -106,13 +104,11 @@ export default function FormularioCategoria() {
                   display="flex"
                   flexDirection="column"
                   justifyContent="center"
-                  alignItems={"center"}
                   isInvalid={formik.errors.nombre && formik.touched.nombre}
                 >
-                  <label htmlFor="nombre">Nombre</label>
+                  <FormLabel htmlFor="nombre">Nombre</FormLabel>
                   <Field
                   as={Input}
-                    mt="10px"
                     id="nombre"
                     name="nombre"
                     type="text"
@@ -126,13 +122,11 @@ export default function FormularioCategoria() {
                   display="flex"
                   flexDirection="column"
                   justifyContent="center"
-                  alignItems={"center"}
                   isInvalid={formik.errors.descripcion && formik.touched.descripcion}
                 >
-                  <label htmlFor="descripcion">Descripción</label>
+                  <FormLabel htmlFor="descripcion">Descripción</FormLabel>
                   <Field
                     as={Textarea}
-                    mt="10px"
                     id="descripcion"
               name="descripcion"
                     resize="vertical"
@@ -142,14 +136,14 @@ export default function FormularioCategoria() {
                   <FormErrorMessage>{formik.errors.descripcion}</FormErrorMessage>
                 </FormControl>
                 <FormControl
-                  mt="20px"
+                  mt="10px"
                   display="flex"
                   flexDirection="column"
                   justifyContent="center"
                   w={["200px", "300px", "350px", "400px"]}
                   isInvalid={formik.errors.competencia && formik.touched.competencia}
                 >
-                  <label htmlFor="competencia">Competencia</label>
+                  <FormLabel htmlFor="competencia">Competencia</FormLabel>
                   <Field
                   as={Select}
                     id="competencia"
@@ -157,7 +151,6 @@ export default function FormularioCategoria() {
                     maxW={["200px", "300px", "350px", "400px"]}
                     w="100%"
                     border="2px solid gray"
-                    mt={"10px"}
                   >
                     <option value="">Selecciona una competencia</option>
                     {elementosActivos.map((competencia) => (
@@ -171,9 +164,8 @@ export default function FormularioCategoria() {
                 <Btn
                   isSubmit={true}
                   w={["200px", "300px", "350px", "400px"]}
-                  mt={"30px"}
+                  mt={"20px"}
                   msg={"Guardar"}
-
                 />
               </Box>
               </Form>

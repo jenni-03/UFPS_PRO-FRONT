@@ -1,6 +1,6 @@
 import React, { useState , useContext, useEffect} from 'react'
 import { AppContext } from "../context/AppProvider";
-import { Box, FormLabel, FormErrorMessage, FormControl, Button, Input, Select, useSafeLayoutEffect } from '@chakra-ui/react';
+import { Box, FormLabel, FormErrorMessage, FormControl, Button, Input, Select, useSafeLayoutEffect, Skeleton, Flex } from '@chakra-ui/react';
 import * as Yup from "yup"
 import moment from 'moment';
 import {Formik, Form, Field} from "formik"
@@ -31,7 +31,6 @@ export default function FormEditarConvocatoria() {
     }).catch((e)=>{
         toast.error(e.response.data.error)
      })
-     console.log(response.data)
      setPruebas(response.data)
   } 
 
@@ -81,13 +80,9 @@ export default function FormEditarConvocatoria() {
       fecha_inicio: convocatoria.fecha_inicio? moment(convocatoria.fecha_inicio, "DD-MM-YYYY HH:mm").format("YYYY-MM-DDTHH:mm"): null,
       fecha_fin: convocatoria.fecha_fin? moment(convocatoria.fecha_fin, "DD-MM-YYYY HH:mm").format("YYYY-MM-DDTHH:mm"): null,
     })
-    console.log("Objeto",response.data)
     setLoading(false)
   }
 
-  if(datos){
-    console.log("datos",datos)
-  } 
 
   const validationSchema = Yup.object().shape({
   nombre: Yup.string().required("El nombre es requerido"),
@@ -98,7 +93,29 @@ export default function FormEditarConvocatoria() {
 });
 
 if(loading){
-    return <div>Cargando...</div>
+  return (
+         <Box
+          p="20px"
+          borderRadius="8px"
+          bgColor="white"
+          overflow="hidden"
+          w={["200px","300px","530px"]}
+          minW={"200px"}
+          boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+
+        > 
+           <Flex flexDir={["column","column","row"]} gap={"20px"}>
+           <Skeleton w={"100%"} h={"70px"} borderRadius={"10px"} isLoaded={!loading}/>
+           <Skeleton w={"100%"} h={"70px"}  borderRadius={"10px"} isLoaded={!loading}/>
+           </Flex>
+           <Flex mt={"20px"}flexDir={["column","column","row"]} gap={"20px"}>
+           <Skeleton w={"100%"} h={"70px"} borderRadius={"10px"} isLoaded={!loading}/>
+           <Skeleton w={"100%"} h={"70px"}  borderRadius={"10px"} isLoaded={!loading}/>
+           </Flex>
+           <Skeleton mt={"20px"} w={"100%"} h={"70px"} borderRadius={"10px"} isLoaded={!loading}/>
+           <Skeleton mt={"20px"} w={"100%"} h={"40px"} borderRadius={"10px"} isLoaded={!loading}/>
+    </Box>
+  )
 }
   return (
         <Box

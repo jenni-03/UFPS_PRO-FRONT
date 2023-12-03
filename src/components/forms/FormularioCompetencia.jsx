@@ -1,4 +1,4 @@
-import { Box, Center, Input, Textarea, FormControl, FormErrorMessage } from "@chakra-ui/react";
+import { Box, Center, Input, Textarea, FormControl, FormErrorMessage, FormLabel } from "@chakra-ui/react";
 import { Formik, Field, Form } from "formik";
 import {React, useContext} from "react";
 import { useNavigate } from "react-router-dom";
@@ -49,10 +49,9 @@ export default function FormularioCompetencia() {
     <Box position="fixed">
       <Center h="100%">
         <Box
-          p="40px"
+          p="20px"
           borderRadius="8px"
           bgColor="white"
-          minW={["150px", "250px", "480px", "550px"]}
           overflow="hidden"
           boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
         >
@@ -65,15 +64,14 @@ export default function FormularioCompetencia() {
             }}
           >
             {({ errors, touched }) => (
-              <Form>
+              <Form >
                 <Box
                   display="flex"
                   flexDirection="column"
                   alignItems="center"
-                  textAlign="center"
                 >
                   <Box display="flex" flexDirection="column" justifyContent="center">
-                    <label htmlFor="nombre">Nombre</label>
+                    <FormLabel htmlFor="nombre">Nombre</FormLabel>
                     <FormControl isInvalid={errors.nombre && touched.nombre}>
                       <Field
                         as={Input}
@@ -93,7 +91,7 @@ export default function FormularioCompetencia() {
                     flexDirection="column"
                     justifyContent="center"
                   >
-                    <label htmlFor="descripcion">Descripción</label>
+                    <FormLabel htmlFor="descripcion">Descripción</FormLabel>
                     <FormControl isInvalid={errors.descripcion && touched.descripcion}>
                       <Field
                         as={Textarea}

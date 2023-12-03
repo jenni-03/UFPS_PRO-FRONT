@@ -4,8 +4,10 @@ import {
   Select,
   Center,
   Input,
+  Flex,
   FormControl,
   FormErrorMessage,
+  Skeleton,
   FormLabel,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
@@ -106,7 +108,35 @@ export default function FormEditarEstudiante() {
   });
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return (
+      <Box
+      boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+    >
+      <Center h="100%">
+        <Box
+          p="20px"
+          borderRadius="8px"
+          bgColor="white"
+          w={["240px", "290px", "350px", "480px"]}
+          overflow="hidden"
+        >
+          <Flex gap={"20px"} flexDir={"column"}>
+          <Flex gap={"10px"} flexDir={["column", "column", "row"]}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!loading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!loading}></Skeleton>
+          </Flex>
+          <Flex  gap={"10px"} flexDir={["column", "column", "row"]}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!loading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!loading}></Skeleton>
+          </Flex>
+            <Skeleton  w={"100%"} borderRadius={"10px"} h={"60px"} isLoaded={!loading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"40px"} isLoaded={!loading}></Skeleton>
+          </Flex>
+        </Box>
+        </Center>
+        </Box>
+
+    );
   }
 
   return (

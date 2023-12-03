@@ -20,7 +20,7 @@ const TablaEstudianteXCvc = ({wCampo,ancho, showButton=false, showSwitch=false})
   const [estudiantes,setEstudiantes] = useState([])
   const [estudianteSelect, setEstudianteSelect] = useState()
   const { token } = useContext(AppContext);
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const inputPageRef = useRef(null)
   const [reloadData, setReloadData] = useState(false);
   const {id} = useParams()
@@ -243,6 +243,7 @@ const COLUMNS = [
           </Flex>
 
         <Stack spacing={10}>
+          <Skeleton isLoaded={!isLoading} borderRadius={"10px"}>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -250,8 +251,9 @@ const COLUMNS = [
             />
             <Input w={"100%"} placeholder={"Busca por código"} value={search} onChange={handleSearch} />
           </InputGroup>
+          </Skeleton>
         </Stack>
-
+          <Skeleton isLoaded={!isLoading} borderRadius={"10px"}>
         <Box   
           mb="15px"
           mt="20px"
@@ -269,6 +271,8 @@ const COLUMNS = [
         >
           <CompactTable  columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
         </Box>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading} borderRadius={"10px"}>
         <HStack justify="center">
           <IconButton
             aria-label="previous page"
@@ -305,7 +309,9 @@ const COLUMNS = [
             onClick={() => pagination.fns.onSetPage(getTotalPages()-1)}
           />
         </HStack>
-        <Flex width={"100%"} justifyContent={"center"} gap={"15px"}>
+          </Skeleton>
+          <Skeleton isLoaded={!isLoading} borderRadius={"10px"}>
+        <Flex mt={"10px"} width={"100%"} justifyContent={"center"} gap={"15px"}>
           <Input type="number" ref={inputPageRef} placeholder="Página" variant={"outline"} w={"100px"}/>
           <Button color={"primero.100"} variant={"solid"} onClick={()=>{
             const valor = parseInt(inputPageRef.current.value-1)
@@ -315,6 +321,7 @@ const COLUMNS = [
             inputPageRef.current.value=""
           }}>Ir</Button>
         </Flex>
+          </Skeleton>
 
  <AlertDialog
         motionPreset='slideInBottom'

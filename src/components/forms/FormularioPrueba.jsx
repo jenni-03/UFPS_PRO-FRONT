@@ -14,6 +14,8 @@ import {
   FormLabel,
   Checkbox,
   Flex,
+  Spinner,
+  Center
 } from "@chakra-ui/react";
 
 const initialValues = {
@@ -42,6 +44,8 @@ const validationSchema = Yup.object().shape({
 const FormularioPrueba = () => {
   const navigate = useNavigate()
   const { token } = useContext(AppContext);
+  const [isLoading,setLoading] = useState(true)
+  const [isLoading2,setLoading2] = useState(true)
   const [competencias, setCompetencias] = useState([]);
   const [categoriasObtenidas, setCategoriasObtenidas] = useState([])
 
@@ -54,6 +58,7 @@ const FormularioPrueba = () => {
     })
       .then((response) => {
         setCompetencias(response.data);
+        setLoading(false) 
       })
       .catch((error) => {
       });
@@ -67,6 +72,7 @@ const FormularioPrueba = () => {
       },
     }).then((response) => {
       setCategoriasObtenidas(response.data);
+      setLoading2(false)
     })
       .catch((error) => {
       });
@@ -143,6 +149,7 @@ const FormularioPrueba = () => {
     }
 
   }
+
 
   return (
     <Box
@@ -259,7 +266,7 @@ const FormularioPrueba = () => {
             </FormControl>
 
             <FormLabel>Competencias:</FormLabel>
-            {competencias
+            {isLoading || isLoading2 ? <Center m={"20px 0"}><Spinner/></Center> :competencias
                 .filter((competencia) => competencia.Categorias.length > 0) // Filtrar competencias con categorías
                 .map((competencia) => (
                   <Box key={competencia.id} m={"10px 0 10px 0"}>

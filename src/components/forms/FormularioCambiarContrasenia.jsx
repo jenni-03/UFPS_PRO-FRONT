@@ -20,24 +20,22 @@ export default function FormularioCambiarContraseña() {
   const navigate= useNavigate()
   const cambiarContraseña = async (password, newPassword) =>{
     let body = {
-        email:user.username,
-        password,
-        newPassword
+      email:user.username,
+      password,
+      newPassword
     }
     let response = await axiosApi.put("api/user/updatePassword",body,{
-       headers: {
-            "Content-Type": "application/json",
-            Authorization:"Bearer " + token
-        },
+      headers: {
+        "Content-Type": "application/json",
+        Authorization:"Bearer " + token
+      },
     }).catch((e)=>{
-      toast.error(e.response.data.error)
+       throw new Error(e.response.data.error)
     })
 
     if(response.status === 200){
-      toast.success(`¡${response.data.message}!`)
       navigate("/home")
     }
-    "" 
   }
 
   const initialValues = {
@@ -51,20 +49,19 @@ export default function FormularioCambiarContraseña() {
   const validationSchema = Yup.object().shape({
     passwordActual: Yup.string().required("Contraseña actual requerida"),
     password: Yup.string()
-      .required("Contraseña requerida")
-      .min(10, "La contraseña es muy corta")
-      .max(65, "La contraseña es muy larga"),
+    .required("Contraseña requerida")
+    .min(10, "La contraseña es muy corta")
+    .max(65, "La contraseña es muy larga"),
     passwordR: Yup.string()
-      .required("Contraseña requerida")
-      .oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
+    .required("Contraseña requerida")
+    .oneOf([Yup.ref("password")], "Las contraseñas no coinciden"),
   });
 
   return (
     <Box
       bg="white"
       borderRadius="md"
-      p={6}
-      pt={8}
+      p={"20px"}
       width={{ base: "100%", sm: "380px" }}
       height="auto"
       boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px"}
@@ -73,7 +70,12 @@ export default function FormularioCambiarContraseña() {
         initialValues={initialValues}
         validationSchema={validationSchema}
         onSubmit={({passwordR, passwordActual}) => {
-          cambiarContraseña(passwordActual, passwordR)
+          //cambiarContraseña(passwordActual, passwordR)
+          toast.promise(cambiarContraseña(passwordActual, passwordR), {
+            loading: 'Actualizando Contraseña...',
+            success: "¡Contraseña cambiada con éxito!",
+            error: (e)=>e+"",
+          });
 
         }}
       >
@@ -85,7 +87,7 @@ export default function FormularioCambiarContraseña() {
               <FormControl
                 isInvalid={errors.passwordActual && touched.passwordActual}
               >
-                <FormLabel htmlFor="passwordActual" mt={4}>
+                <FormLabel htmlFor="passwordActual">
                   Contraseña Actual
                 </FormLabel>
                 <Field
@@ -93,7 +95,6 @@ export default function FormularioCambiarContraseña() {
                   id="passwordActual"
                   name="passwordActual"
                   borderColor="gray.300"
-                  variant="filled"
                   type="password"
                 />
                 <FormErrorMessage>{errors.passwordActual}</FormErrorMessage>
@@ -107,7 +108,6 @@ export default function FormularioCambiarContraseña() {
                   id="password"
                   name="password"
                   borderColor="gray.300"
-                  variant="filled"
                   type="password"
                 />
                 <FormErrorMessage>{errors.password}</FormErrorMessage>
@@ -121,12 +121,11 @@ export default function FormularioCambiarContraseña() {
                   id="passwordR"
                   name="passwordR"
                   borderColor="gray.300"
-                  variant="filled"
                   type="password"
                 />
                 <FormErrorMessage>{errors.passwordR}</FormErrorMessage>
               </FormControl>
-                            <Btn
+              <Btn
                 color="white"
                 background="principal.100"
                 mt={4}

@@ -19,7 +19,7 @@ const TablaEstudiantes = ({wCampo,ancho, showButton=false, showSwitch=true}) => 
 
   const inputPageRef = useRef(null)
   const {token}= useContext(AppContext)
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const { isOpen, onOpen, onClose } = useDisclosure()
   const [estudianteSelect, setEstudianteSelect] = useState()
   const [reloadData, setReloadData] = useState(false);
@@ -38,7 +38,7 @@ const TablaEstudiantes = ({wCampo,ancho, showButton=false, showSwitch=true}) => 
    if(response.status===200){
     setEstudiantes(response.data)
     pagination.fns.onSetPage(0)
-
+    setLoading(false)
    }
   }
 
@@ -230,10 +230,10 @@ const eliminarEstudiante = async (id_estudiante) =>{
             )}
             { showSwitch && 
             <Flex align={"center"} gap={"5px"}>
-              <Skeleton isLoaded={!isLoading}>
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
                 <Text id="switch" m={"0"}>Mostrar Inactivos</Text>
               </Skeleton>
-              <Skeleton isLoaded={!isLoading}>
+              <Skeleton  borderRadius={"10px"}  isLoaded={!isLoading}>
                 <Switch id="switch" colorScheme="cyan" onChange={(e) => {
                   setActive(!active)
                   active === true ? obtenerEstudiantesByEstado(1) : obtenerEstudiantesByEstado(0)
@@ -243,6 +243,7 @@ const eliminarEstudiante = async (id_estudiante) =>{
           </Flex>
 
         <Stack spacing={10}>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -250,8 +251,10 @@ const eliminarEstudiante = async (id_estudiante) =>{
             />
             <Input w={"100%"} placeholder={"Busca por código"} value={search} onChange={handleSearch} />
           </InputGroup>
+            </Skeleton>
         </Stack>
 
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
         <Box   
           mb="15px"
           mt="20px"
@@ -269,6 +272,8 @@ const eliminarEstudiante = async (id_estudiante) =>{
         >
           <CompactTable  columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
         </Box>
+          </Skeleton>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
         <HStack justify="center">
           <IconButton
             aria-label="previous page"
@@ -305,7 +310,9 @@ const eliminarEstudiante = async (id_estudiante) =>{
             onClick={() => pagination.fns.onSetPage(getTotalPages()-1)}
           />
         </HStack>
-        <Flex width={"100%"} justifyContent={"center"} gap={"15px"}>
+            </Skeleton>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
+        <Flex width={"100%"} mt={"10px"} justifyContent={"center"} gap={"15px"}>
           <Input type="number" ref={inputPageRef} placeholder="Página" variant={"outline"} w={"100px"}/>
           <Button color={"primero.100"} variant={"solid"} onClick={()=>{
             const valor = parseInt(inputPageRef.current.value-1)
@@ -315,6 +322,7 @@ const eliminarEstudiante = async (id_estudiante) =>{
             inputPageRef.current.value=""
           }}>Ir</Button>
         </Flex>
+            </Skeleton>
 
 
  <AlertDialog

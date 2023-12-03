@@ -1,7 +1,7 @@
 import React,{useEffect, useState, useContext}from "react";
 import { Formik, Form, Field, FieldArray } from 'formik';
 import * as Yup from 'yup';
-import { Box,Flex, FormControl,FormLabel,Input,FormErrorMessage,Select} from "@chakra-ui/react";
+import { Box,Skeleton,Flex, FormControl,FormLabel,Input,FormErrorMessage,Select} from "@chakra-ui/react";
 import { useParams } from "react-router-dom";
 import { toast } from "react-hot-toast";
 import { useNavigate } from "react-router-dom";
@@ -88,8 +88,36 @@ export default function FormEditarPrueba(){
 
 
   if(isLoading){
-    return <div>Cargando..</div>
+    return (
+     <Box
+      bgColor={"white"}
+      boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+      w={{
+        base: "270px",
+        sm: "390px",
+        md: "540px",
+        lg: "640px",
+        tableBreakpoint: "800px",
+      }}
+      p={"40px"}
+      borderRadius={"8px"}
+    >
+       <Flex flexDir={"row"} gap={"20px"}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+       </Flex>
+            <Skeleton m={"20px 0"} w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!isLoading}></Skeleton>
+        <Flex flexDir={"row"} gap={"20px"}>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+       </Flex>
+            <Skeleton m={"20px 0"} w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!isLoading}></Skeleton>
+            <Skeleton m={"20px 0"} w={"100%"} borderRadius={"10px"} h={"40px"} isLoaded={!isLoading}></Skeleton>
+      </Box>  
+    ) 
   }
+
+
 
   return(
     <Box

@@ -8,7 +8,8 @@ import {
   Textarea,
   FormControl,
   FormErrorMessage,
-  FormLabel
+  FormLabel,
+  Skeleton
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import { useParams } from "react-router-dom";
@@ -47,7 +48,7 @@ export default function FormularioEditarCompetencia() {
     }
     if(body.estado===false){
       toast("¡Todas las categorías asociadas a esta competencia se desactivaran!", {
-      icon: '⚠️',
+        icon: '⚠️',
       });
     }
   };
@@ -66,7 +67,6 @@ export default function FormularioEditarCompetencia() {
       estado: response.data.estado.toString(),
       descripcion: response.data.descripcion
     });
-
     setLoading(false);
   };
 
@@ -84,17 +84,42 @@ export default function FormularioEditarCompetencia() {
 
 
   if (loading) {
-    return <div>Cargando...</div>;
+    return (
+      <Box position="fixed">
+        <Center h="100%">
+          <Box
+            p="20px"
+            borderRadius="8px"
+            w={["200px", "300px", "350px", "400px"]}
+            bgColor="white"
+            overflow="hidden"
+            boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
+          ><Box
+            display="flex"
+            flexDirection="column"
+            alignItems="center"
+            gap={"10px"}
+            textAlign="center"
+          >
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!loading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"70px"} isLoaded={!loading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"182px"} isLoaded={!loading}></Skeleton>
+            <Skeleton w={"100%"} borderRadius={"10px"} h={"40px"} isLoaded={!loading}></Skeleton>
+          </Box>
+          </Box>
+        </Center>
+      </Box>
+    )
   }
+
 
   return (
     <Box position="fixed">
       <Center h="100%">
         <Box
-          p="40px"
+          p="20px"
           borderRadius="8px"
           bgColor="white"
-          minW={["150px", "250px", "480px", "550px"]}
           overflow="hidden"
           boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
         >
@@ -124,7 +149,6 @@ export default function FormularioEditarCompetencia() {
                         <Field
                           name="nombre"
                           as={Input}
-                          mt="10px"
                           id="nombre"
                           type="text"
                           maxW={["200px", "300px", "350px", "400px"]}
@@ -134,15 +158,14 @@ export default function FormularioEditarCompetencia() {
                       </FormControl>
                     </Box>
                     <Box
-                      mt="20px"
+                      mt={"10px"}
                       w={["200px", "300px", "350px", "400px"]}
                     >
                       <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.estado && touched.estado}>
-               <FormLabel htmlFor="estado">Estado</FormLabel> 
+                        <FormLabel htmlFor="estado">Estado</FormLabel> 
                         <Field
                           name="estado"
                           as={Select}
-                          mt="10px"
                           id="estado"
                           type="text"
                           maxW={["200px", "300px", "350px", "400px"]}
@@ -155,17 +178,16 @@ export default function FormularioEditarCompetencia() {
                       </FormControl>
                     </Box>
                     <Box
-                      mt="10px"
                       display="flex"
                       flexDirection="column"
                       justifyContent="center"
+                      mt={"10px"}
                     >
                       <FormControl display="flex" flexDirection="column" justifyContent="center" isInvalid={errors.descripcion && touched.descripcion}>
                         <FormLabel htmlFor="descripcion">Descripción</FormLabel>
                         <Field
                           name="descripcion"
                           as={Textarea}
-                          mt="10px"
                           id="descripcion"
                           type="text"
                           maxW={["200px", "300px", "350px", "400px"]}
@@ -176,8 +198,8 @@ export default function FormularioEditarCompetencia() {
                       </FormControl>
                     </Box>
                     <Btn
+                      mt={"10px"}
                       w={["200px", "300px", "350px", "400px"]}
-                      mt={"30px"}
                       isSubmit={true}
                       msg={"Guardar"}
 

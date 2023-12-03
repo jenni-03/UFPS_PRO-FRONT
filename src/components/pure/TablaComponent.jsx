@@ -14,7 +14,7 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
 
 
   const inputPageRef = useRef(null)
-  const [isLoading, setLoading] = useState(false)
+  const [isLoading, setLoading] = useState(true)
   const [active, setActive] = useState(false)
   const [datos, setDatos] = useState([])
 
@@ -23,12 +23,14 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
     const nodes = await funcionSwitch(state)
     pagination.fns.onSetPage(0)
     setDatos(nodes)
+    setLoading(false)
   }
 
  const dataFetch= async () =>{
     const nodes = await funcionSwitch()
     pagination.fns.onSetPage(0)
     setDatos(nodes)
+    setLoading(false)
   }
 
   useEffect(()=>{
@@ -40,9 +42,6 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
 
   data = { nodes }
 
-  if(isLoading){
-    return <div>cARGANDO...</div>
-  }
 
 
   const chakraTheme = getTheme(DEFAULT_OPTIONS);
@@ -137,7 +136,7 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
       >
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={showButton ? "space-between" : "flex-end"} mb={"20px"}>
         {showButton && (
-            <Skeleton isLoaded={!isLoading}>
+            <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
               <Btn
                 leftIcon={<MdAdd/>}
                 path={buttonPath}
@@ -149,10 +148,10 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
             )}
             { showSwitch && 
             <Flex align={"center"} gap={"5px"}>
-              <Skeleton isLoaded={!isLoading}>
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
                 <Text id="switch" m={"0"}>Mostrar Inactivos</Text>
               </Skeleton>
-              <Skeleton isLoaded={!isLoading}>
+              <Skeleton borderRadius={"10px"}  isLoaded={!isLoading}>
                 <Switch id="switch" colorScheme="cyan" onChange={(e) => {
                   setActive(!active)
                   active === true ? dataFetchState(1) : dataFetchState(0)
@@ -162,6 +161,7 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
           </Flex>
 
         <Stack spacing={10}>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
@@ -169,8 +169,10 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
             />
             <Input w={"100%"} placeholder={inputPlaceHolder} value={search} onChange={handleSearch} />
           </InputGroup>
+            </Skeleton>
         </Stack>
 
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
         <Box   
           mb="15px"
           mt="20px"
@@ -188,6 +190,8 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
         >
           <CompactTable key={hasKey?hasKey:null} columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
         </Box>
+          </Skeleton>
+        <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
         <HStack justify="center">
           <IconButton
             aria-label="previous page"
@@ -224,6 +228,8 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
             onClick={() => pagination.fns.onSetPage(getTotalPages()-1)}
           />
         </HStack>
+        </Skeleton>
+        <Skeleton borderRadius={"10px"} mt={"10px"} isLoaded={!isLoading}>
         <Flex width={"100%"} justifyContent={"center"} gap={"15px"}>
           <Input type="number" ref={inputPageRef} placeholder="Página" variant={"outline"} w={"100px"}/>
           <Button color={"primero.100"} variant={"solid"} onClick={()=>{
@@ -234,6 +240,7 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
             inputPageRef.current.value=""
           }}>Ir</Button>
         </Flex>
+        </Skeleton>
 
       </Box>
     </>

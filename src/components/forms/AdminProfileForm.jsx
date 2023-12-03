@@ -1,5 +1,5 @@
 import {React, useState, useContext, useEffect, useRef} from "react";
-import { Input, Flex, Box, Button, Image, Icon, useEditable } from "@chakra-ui/react";
+import { Input, Flex, Box, Button, Image, Icon, FormLabel, Skeleton } from "@chakra-ui/react";
 import { Link } from "react-router-dom";
 import { RiEdit2Fill } from "react-icons/ri";
 import Boton from "../pure/Boton";
@@ -10,9 +10,9 @@ import Btn from "../pure/Btn";
 
 export default function AdminProfileForm() {
 
-  //const {token, setToken, imagen} = useContext(AppContext)
   const {token} = useContext(AppContext)
   const [data, setData] = useState({})
+  const [isLoading, setLoading] = useState(true)
 
   const nombreRef = useRef(null);
   const apellidoRef = useRef(null);
@@ -41,7 +41,7 @@ export default function AdminProfileForm() {
       codigo: data.codigo,
       imagen:data.foto_perfil && data.foto_perfil.url
     })
-
+    setLoading(false)
 
   }
 
@@ -80,6 +80,7 @@ export default function AdminProfileForm() {
             justifyContent={"center"}
             w={"100%"}
           >
+            <Skeleton borderRadius={"50%"} isLoaded={!isLoading}>
             <Image
               src={data && data.imagen ? data.imagen : "https://res.cloudinary.com/dojljgscf/image/upload/c_pad,b_auto:predominant,fl_preserve_transparency/v1700790025/ufps_pro/perfil_vyserv.jpg?_s=public-apps"}
               key={data && data.imagen}
@@ -105,6 +106,7 @@ export default function AdminProfileForm() {
             >
               <Icon color="#1a202c" as={RiEdit2Fill} />
             </Button>
+            </Skeleton>
           </Box>
           <Flex
             gap={["20px", "20px"]}
@@ -112,12 +114,12 @@ export default function AdminProfileForm() {
             w={"100%"}
             justifyContent={"space-between"}
           >
+            <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
-              <label htmlFor="nombre">Nombre</label>
+              <FormLabel htmlFor="nombre">Nombre</FormLabel>
               <Input
                 value={data && data.nombre}
                 ref={nombreRef}
-                mt={"10px"}
                 id="nombre"
                 name="nombre"
                 type="text"
@@ -125,12 +127,13 @@ export default function AdminProfileForm() {
                 disabled
               ></Input>
             </Box>
+            </Skeleton>
+            <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
-              <label htmlFor="apellido">Apellido</label>
+              <FormLabel htmlFor="apellido">Apellido</FormLabel>
               <Input
                 value={data && data.apellido}
                 ref={apellidoRef}
-                mt={"10px"}
                 id="apellido"
                 name="apellido"
                 type="text"
@@ -138,13 +141,14 @@ export default function AdminProfileForm() {
                 disabled
               ></Input>
             </Box>
+            </Skeleton>
           </Flex>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
           <Flex flexDir={"column"}>
-            <label htmlFor="direccion">Dirección</label>
+            <FormLabel htmlFor="direccion">Dirección</FormLabel>
             <Input
               value={data && data.direccion}
               ref={direccionRef}
-              mt={"10px"}
               id="direccion"
               name="direccion"
               type="text"
@@ -152,12 +156,13 @@ export default function AdminProfileForm() {
               disabled
             ></Input>
           </Flex>
+          </Skeleton>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
           <Flex flexDir={"column"}>
-            <label htmlFor="correo">Correo Institucional</label>
+            <FormLabel htmlFor="correo">Correo Institucional</FormLabel>
             <Input
               value={data && data.email}
               ref={correoRef}
-              mt={"10px"}
               id="correo"
               name="correo"
               type="text"
@@ -165,19 +170,19 @@ export default function AdminProfileForm() {
               disabled
             ></Input>
           </Flex>
-
+          </Skeleton>
           <Flex
             gap={["20px", "20px"]}
             direction={["column", "column", "row", "row", "row"]}
             w={"100%"}
             justifyContent={"space-between"}
           >
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
-              <label htmlFor="documento">Número de Documento</label>
+              <FormLabel htmlFor="documento">Número de Documento</FormLabel>
               <Input
                 value={data && data.documento}
                 ref={documentoRef}
-                mt={"10px"}
                 id="documento"
                 name="documento"
                 type="text"
@@ -185,12 +190,13 @@ export default function AdminProfileForm() {
                 disabled
               ></Input>
             </Box>
+          </Skeleton>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
-              <label htmlFor="celular">Celular</label>
+              <FormLabel htmlFor="celular">Celular</FormLabel>
               <Input
                 value={data && data.celular}
                 ref={celularRef}
-                mt={"10px"}
                 id="celular"
                 name="celular"
                 type="text"
@@ -198,6 +204,7 @@ export default function AdminProfileForm() {
                 disabled
               ></Input>
             </Box>
+          </Skeleton>
           </Flex>
           <Flex
             gap={["20px", "20px"]}
@@ -205,12 +212,12 @@ export default function AdminProfileForm() {
             w={"100%"}
             justifyContent={"space-between"}
           >
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
-              <label htmlFor="telefono">Teléfono</label>
+              <FormLabel htmlFor="telefono">Teléfono</FormLabel>
               <Input
                 value={data && data.telefono}
                 ref={telefonoRef}
-                mt={"10px"}
                 id="telefono"
                 name="telefono"
                 type="text"
@@ -218,12 +225,13 @@ export default function AdminProfileForm() {
                 disabled
               ></Input>
             </Box>
+          </Skeleton>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
-              <label htmlFor="codigo">Código</label>
+              <FormLabel htmlFor="codigo">Código</FormLabel>
               <Input
                 value={data && data.codigo}
                 ref={codigoRef}
-                mt={"10px"}
                 id="codigo"
                 name="codigo"
                 type="text"
@@ -231,6 +239,7 @@ export default function AdminProfileForm() {
                 disabled
               ></Input>
             </Box>
+          </Skeleton>
           </Flex>
           <Flex
             flexDirection={["column", "column", "row", "row", "row"]}
@@ -238,7 +247,7 @@ export default function AdminProfileForm() {
             gap={["8px", "8px", "0"]}
             justifyContent={"space-between"}
           >
-
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Btn
               w={["100%", "100%", "160px", "185px", "200px"]}
               path="/editarInformacion"
@@ -246,7 +255,8 @@ export default function AdminProfileForm() {
               msg={"Editar Información"}
 
             />
-            
+          </Skeleton>
+          <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
              <Btn
               w={["100%", "100%", "160px", "185px", "200px"]}
               path="/cambiarContrasenia"
@@ -254,8 +264,7 @@ export default function AdminProfileForm() {
               msg={"Cambiar Contraseña"}
 
             />
-
-
+          </Skeleton>
           </Flex>
         </Box>
       </Box>

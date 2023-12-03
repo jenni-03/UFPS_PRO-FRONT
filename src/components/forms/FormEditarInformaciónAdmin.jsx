@@ -6,6 +6,7 @@ import {
   FormControl,
   FormLabel,
   FormErrorMessage,
+  Skeleton,
 } from "@chakra-ui/react";
 import { Formik, Form, Field } from "formik";
 import * as Yup from "yup";
@@ -92,55 +93,117 @@ export default function EditarInformacionAdmin() {
 
   const validationSchema = Yup.object().shape({
     nombre: Yup.string()
-      .required("Campo requerido")
-      .max(25, "Maximo 25 dígitos")
-      .min(5, "Mínimo 5 digitos")
-      .matches(
-        "^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$",
-        "El nombre únicamente debe tene letras"
-      ),
+    .required("Campo requerido")
+    .max(25, "Maximo 25 dígitos")
+    .min(5, "Mínimo 5 digitos")
+    .matches(
+      "^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$",
+      "El nombre únicamente debe tene letras"
+    ),
     apellido: Yup.string()
-      .required("Campo requerido")
-      .max(35, "Maximo 35 dígitos")
-      .min(5, "Mínimo 5 digitos")
-      .matches(
-        "^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$",
-        "El apellido únicamente debe tene letras"
-      ),
+    .required("Campo requerido")
+    .max(35, "Maximo 35 dígitos")
+    .min(5, "Mínimo 5 digitos")
+    .matches(
+      "^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$",
+      "El apellido únicamente debe tene letras"
+    ),
     direccion: Yup.string()
-      .required("Campo requerido")
-      .max(60, "Maximo 60 caracteres")
-      .min(20, "Mínimo 20 caracteres")
-      .matches(
-        "^(?! )[-a-zA-ZÀ-ÖØ-öø-ÿ0-9#.,]+( [-a-zA-ZÀ-ÖØ-öø-ÿ0-9#.,]+)*(?<! )$",
-        "s"
-      ),
+    .required("Campo requerido")
+    .max(60, "Maximo 60 caracteres")
+    .min(20, "Mínimo 20 caracteres")
+    .matches(
+      "^(?! )[-a-zA-ZÀ-ÖØ-öø-ÿ0-9#.,]+( [-a-zA-ZÀ-ÖØ-öø-ÿ0-9#.,]+)*(?<! )$",
+      "s"
+    ),
     email: Yup.string().email("email inválido").required("Campo requerido"),
     documento: Yup.string()
-      .required("Campo requerido")
-      .max(10, "Maximo 10 dígitos")
-      .min(7, "Mínimo 7 digitos")
-      .matches("^[0-9]+$", "El documento solo debe contener numeros"),
+    .required("Campo requerido")
+    .max(10, "Maximo 10 dígitos")
+    .min(7, "Mínimo 7 digitos")
+    .matches("^[0-9]+$", "El documento solo debe contener numeros"),
     celular: Yup.string()
-      .required("Campo requerido")
-      .max(10, "Maximo 10 dígitos")
-      .min(10, "Mínimo 10 digitos")
-      .matches("^[0-9]+$", "El celular solo debe contener números"),
+    .required("Campo requerido")
+    .max(10, "Maximo 10 dígitos")
+    .min(10, "Mínimo 10 digitos")
+    .matches("^[0-9]+$", "El celular solo debe contener números"),
     telefono: Yup.string()
-      .required("Campo requerido")
-      .max(7, "Maximo 7 dígitos")
-      .min(7, "Mínimo 7 digitos")
-      .matches("^[0-9]+$", "El teléfono solo debe contener números"),
+    .required("Campo requerido")
+    .max(7, "Maximo 7 dígitos")
+    .min(7, "Mínimo 7 digitos")
+    .matches("^[0-9]+$", "El teléfono solo debe contener números"),
     codigo: Yup.string()
-      .required("Campo requerido")
-      .max(7, "Maximo 7 dígitos")
-      .min(7, "Mínimo 7 digitos")
-      .matches("^[0-9]+$", "El código solo puede contener numeros"),
+    .required("Campo requerido")
+    .max(7, "Maximo 7 dígitos")
+    .min(7, "Mínimo 7 digitos")
+    .matches("^[0-9]+$", "El código solo puede contener numeros"),
   });
 
-  if (isLoading) {
-    return <div>Cargando...</div>;
+  if( isLoading ){
+    return (
+      <Box
+        p={"20px"}
+        borderRadius={"8px"}
+        bgColor={"white"}
+        w={["200px", "350px", "450px", "550px"]}
+        maxHeight={"auto"}
+        overflow={"hidden"}
+        boxShadow={
+          "rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"
+        }
+      >
+        <Box
+          display={"flex"}
+          flexDirection={"column"}
+          w={"100%"}
+          h={"100%"}
+          gap={"20px"}
+          action=""
+        >
+          <Flex
+            gap={"20px"}
+            direction={["column", "column", "row", "row", "row"]}
+            w={"100%"}
+            justifyContent={"space-between"}
+          >
+            <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+            <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+          </Flex>
+          <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+          <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+          <Flex
+            gap={"20px"}
+            direction={["column", "column", "row", "row", "row"]}
+            w={"100%"}
+            justifyContent={"space-between"}
+          >
+            <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+            <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+          </Flex>
+          <Flex
+            gap={"20px"}
+            direction={["column", "column", "row", "row", "row"]}
+            w={"100%"}
+            justifyContent={"space-between"}
+          >
+            <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+            <Skeleton borderRadius={"10px"} w={"100%"} h={"80px"} isLoaded={!isLoading}></Skeleton>
+          </Flex>
+          <Flex
+                    flexDirection={["column", "column", "row", "row", "row"]}
+                    w={"100%"}
+                    gap={["8px", "8px", "0"]}
+                    justifyContent={"center"}
+                  >
+            <Skeleton borderRadius={"10px"} w={"100%"} h={"50px"} isLoaded={!isLoading}></Skeleton>
+          </Flex>
+        </Box>
+
+      </Box>
+
+    )
   }
+
   return (
     <>
       <Formik
@@ -148,12 +211,12 @@ export default function EditarInformacionAdmin() {
         validationSchema={validationSchema}
         onSubmit={({
           nombre,
-          apellido,
-          direccion,
-          documento,
-          celular,
-          telefono,
-          codigo,
+            apellido,
+            direccion,
+            documento,
+            celular,
+            telefono,
+            codigo,
         }) => {
           actualizarDatos(
             nombre,

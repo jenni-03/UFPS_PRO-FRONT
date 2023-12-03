@@ -3,6 +3,7 @@ import {
   Input,
   Flex,
   Box,
+  Skeleton,
 } from "@chakra-ui/react";
 import axiosApi from "../../utils/config/axios.config";
 import { AppContext } from "../context/AppProvider";
@@ -11,6 +12,7 @@ import Btn from "../pure/Btn";
 export default function UserProfileForm() {
   const { token } = useContext(AppContext);
   const [data, setData] = useState({});
+  const [isLoading, setIsLoading] = useState(true);
 
   const nombreRef = useRef(null);
   const apellidoRef = useRef(null);
@@ -32,12 +34,14 @@ export default function UserProfileForm() {
       codigo: data.codigo,
       semestre: data.semestre,
     });
+    setIsLoading(false)
   };
 
   const getUsuario = async () => {
     let response = await axiosApi.get("/api/user/profile/", {
       headers: { Authorization: "Bearer " + token },
     });
+
     return response.data;
   };
 
@@ -67,6 +71,7 @@ export default function UserProfileForm() {
             w={"100%"}
             justifyContent={"space-between"}
           >
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Flex flexDir={"column"}>
               <label htmlFor="nombre">Nombres</label>
               <Input
@@ -80,6 +85,9 @@ export default function UserProfileForm() {
                 disabled
               ></Input>
             </Flex>
+              </Skeleton>
+
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Flex flexDir={"column"}>
               <label htmlFor="apellido">Apellidos</label>
               <Input
@@ -93,7 +101,9 @@ export default function UserProfileForm() {
                 disabled
               ></Input>
             </Flex>
+              </Skeleton>
           </Flex>
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
           <Flex flexDir={"column"}>
             <label htmlFor="correo">Correo Institucional</label>
             <Input
@@ -107,6 +117,7 @@ export default function UserProfileForm() {
               disabled
             ></Input>
           </Flex>
+              </Skeleton>
 
           <Flex
             gap={["20px", "20px"]}
@@ -114,6 +125,7 @@ export default function UserProfileForm() {
             w={"100%"}
             justifyContent={"space-between"}
           >
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
               <label htmlFor="semestre">Semestre</label>
               <Input
@@ -127,6 +139,8 @@ export default function UserProfileForm() {
                 disabled
               ></Input>
             </Box>
+              </Skeleton>
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Box display={"flex"} flexDirection={"column"}>
               <label htmlFor="codigo">Código</label>
               <Input
@@ -140,6 +154,7 @@ export default function UserProfileForm() {
                 disabled
               ></Input>
             </Box>
+              </Skeleton>
           </Flex>
           <Flex
             gap={["20px", "20px"]}
@@ -147,16 +162,21 @@ export default function UserProfileForm() {
             w={"100%"}
             justifyContent={"space-between"}
           >
+
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Btn
               w={["100%", "100%","217px"]}
               path={"/editarInformacionEstudiante"}
               msg={"Editar Información"}
             />
+              </Skeleton>
+              <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
             <Btn
               w={["100%","100%","217px"]}
               path={"/cambiarContraseniaEstudiante"}
               msg={"Cambiar Contraseña"}
             />
+                </Skeleton>
           </Flex>
         </Box>
       </Box>
