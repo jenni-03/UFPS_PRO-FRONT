@@ -48,7 +48,8 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
   //--data-table-library_grid-template-columns:  200px;
   const customTheme = {
     Table: `
-      --data-table-library_grid-template-columns: ${wCampo};
+      
+        --data-table-library_grid-template-columns:  repeat(5,200px);
       font-family: Open Sans;
     `,
   };

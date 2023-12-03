@@ -36,7 +36,7 @@ export default function CompetenciaBody() {
       renderCell: (item) => item.id,
       sort: { sortKey: "ID" }
 
-    },
+    },,
     {
       label:"Nombre",
       renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
