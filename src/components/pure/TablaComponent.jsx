@@ -10,7 +10,7 @@ import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, Fa
 import { MdAdd } from "react-icons/md";
 import { Box, Stack, InputGroup, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
 
-const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho, wCampo="150px", hasKey=false}) => {
+const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho, wCampo="150px"}) => {
 
 
   const inputPageRef = useRef(null)
@@ -188,7 +188,7 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
           bgColor="white"
           boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
         >
-          <CompactTable key={hasKey?hasKey:null} columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
+          <CompactTable  columns={COLUMNS} data={data} sort={sort} theme={theme}  pagination={pagination} layout={{ custom: true, horizontalScroll: true }} />
         </Box>
           </Skeleton>
         <Skeleton borderRadius={"10px"} isLoaded={!isLoading}>
