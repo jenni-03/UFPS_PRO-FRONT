@@ -25,7 +25,7 @@ import Btn from "../pure/Btn";
     let response = await axiosApi.post("/api/auth/requestPasswordReset",body,{
 
     }).catch((e)=>{
-      Promise.reject(e.response.data.error)
+      throw new Error(e.response.data.error)
     })
 
   }
@@ -47,7 +47,7 @@ import Btn from "../pure/Btn";
 , {
              loading: 'Buscando Correo...',
              success: '¡Mensaje enviado correctamente!',
-             error: (e)=>e,
+             error: (e)=>e+"",
             });
           }}
         >

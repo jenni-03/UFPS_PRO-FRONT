@@ -10,7 +10,7 @@ import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, Fa
 import { MdAdd } from "react-icons/md";
 import { Box, Stack, InputGroup, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
 
-const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho, wCampo="150px", colsR}) => {
+const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",buttonMsg, inputPlaceHolder, cols, funcionSwitch, sortFns, aBuscar, ancho,base,sm,md,lg,xl, wCampo="150px",ancho_tres, ancho_cuatro, ancho_cinco, colsR}) => {
 
 
   const inputPageRef = useRef(null)
@@ -127,12 +127,15 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
     <>
       <Box 
       w={{
-            base: "265px",
-            sm: "310px",
-            md: "450px",
-            lg: "690px",
-            xl: "790px",
-            '2xl':ancho
+            base: base,
+            sm: sm,
+            md: md,
+            lg: lg,
+            xl: xl,
+            '2xl':ancho,
+            "3xl":ancho_tres,
+            "4xl":ancho_cuatro,
+            "5xl":ancho_cinco
           }}
       >
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={showButton ? "space-between" : "flex-end"} mb={"20px"}>
@@ -166,7 +169,7 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
           <InputGroup>
             <InputLeftElement
               pointerEvents="none"
-              children={<FaSearch style={{ color: '#4a5568' }} />}
+              children={<FaSearch style={{ color: '3#4a5568' }} />}
             />
             <Input w={"100%"} placeholder={inputPlaceHolder} value={search} onChange={handleSearch} />
           </InputGroup>
@@ -179,10 +182,10 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
           mt="20px"
           p="20px"
           w={{
-            base: "265px",
-            sm: "310px",
-            md: "450px",
-            lg: "690px",
+            base: "100%",
+            sm: "100%",
+            md: "100%",
+            lg: "100%",
             xl: "100%",
           }}
           borderRadius="8px"

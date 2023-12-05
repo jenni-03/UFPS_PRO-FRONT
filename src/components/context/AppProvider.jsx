@@ -32,6 +32,9 @@ export function AppProvider({ children }) {
         sessionStorage.setItem("time", tiempoInicial-1)
       } else {
         clearInterval(intervalo);
+        sessionStorage.setItem("time",0 )
+        sessionStorage.removeItem("time")
+        setTiempoInicial(0);
         // Aquí podrías ejecutar alguna lógica adicional cuando el cronómetro llegue a cero
       }
     }, 1000);

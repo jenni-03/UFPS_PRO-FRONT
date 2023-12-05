@@ -26,59 +26,67 @@ export default function CategoriaBody() {
     NOMBRE: (array) => array.sort((a, b) => a.nombre.localeCompare(b.nombre)),
     COMPETENCIA: (array) => array.sort((a, b) => a.Competencia.nombre.localeCompare(b.Competencia.nombre)),
     PREGUNTAS: (array) => array.sort((a, b) => a.total_preguntas-b.total_preguntas),
-}
-
-
-
-
-const columns = [
-  { label: 'Id',
-    renderCell: (item) => item.id,
-    sort: { sortKey: 'ID' },
-  },
-  { label: 'Nombre',
-    renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
-    sort: { sortKey: 'NOMBRE' },
-  },
-  {
-    label: 'Estado',
-    renderCell: (item) => item.estado===true? "Activo":"Inactivo",
-  },
-  { label: 'Competencia',
-    renderCell: (item) =>  <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.Competencia.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.Competencia.nombre}</Text></Tooltip>,
-    sort: { sortKey: 'COMPETENCIA' },
-  },
-  {
-    label: "Preguntas",
-    renderCell: (item)=> item.total_preguntas,
-    sort: { sortKey: 'PREGUNTAS' },
-  },
-  { label: 'Editar', renderCell: (item) =><Button
-    as={Link} to={`/editarCategoria/${item.id}`}
-  >
-    <Icon as={AiOutlineEdit}></Icon>
-  </Button>,
   }
 
-];
+
+
+
+  const columns = [
+    { label: 'Id',
+      renderCell: (item) => item.id,
+      sort: { sortKey: 'ID' },
+    },
+    { label: 'Nombre',
+      renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
+      sort: { sortKey: 'NOMBRE' },
+    },
+    {
+      label: 'Estado',
+      renderCell: (item) => item.estado===true? "Activo":"Inactivo",
+    },
+    { label: 'Competencia',
+      renderCell: (item) =>  <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.Competencia.nombre}><Text overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.Competencia.nombre}</Text></Tooltip>,
+      sort: { sortKey: 'COMPETENCIA' },
+    },
+    {
+      label: "Preguntas",
+      renderCell: (item)=> item.total_preguntas,
+      sort: { sortKey: 'PREGUNTAS' },
+    },
+    { label: 'Editar', renderCell: (item) =><Button
+      as={Link} to={`/editarCategoria/${item.id}`}
+    >
+      <Icon as={AiOutlineEdit}></Icon>
+    </Button>,
+    }
+
+  ];
 
 
 
 
-return (
+  return (
 
-  <TablaComponent 
-    inputPlaceHolder={"Busca por categoría"} 
-    buttonPath={"/formularioCategoria"} 
-    buttonMsg={"Agregar Categoría"}
-    funcionSwitch={obtenerCategoriasByEstado}
-    sortFns={sortFns}
-    cols={columns}
-    aBuscar={"nombre"}
-    ancho={"940px"}
-    colsR={6}
-    wCampo={"200px"}
-  >
-  </TablaComponent>
-);
+    <TablaComponent 
+      inputPlaceHolder={"Busca por categoría"} 
+      buttonPath={"/formularioCategoria"} 
+      buttonMsg={"Agregar Categoría"}
+      funcionSwitch={obtenerCategoriasByEstado}
+      sortFns={sortFns}
+      cols={columns}
+      aBuscar={"nombre"}
+      base={"265px"}
+      sm={"330px"}
+      md={"500px"}
+      lg={"750px"}
+      xl={"1000px"}
+      ancho={"1240px"}
+      ancho_tres={"1240px"}
+      ancho_cuatro={"1240px"}
+      ancho_cinco={"1240px"}
+      colsR={6}
+      wCampo={"200px"}
+    >
+    </TablaComponent>
+  );
 }

@@ -34,7 +34,9 @@ const theme = extendTheme({
     lg: '62em', 
     xl: '80em', 
     '2xl': '96em', 
-    tableBreakpoint: "1168px",
+    '3xl': "116em",
+    '4xl': "126em",
+    '5xl': "136em",
   },
   styles: {
     global: {

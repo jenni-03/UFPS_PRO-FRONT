@@ -75,7 +75,15 @@ export default function PruebaBody() {
       sortFns={sortFns}
       cols={columns}
       aBuscar={"nombre"}
-      ancho={"940px"}
+      base={"265px"}
+      sm={"330px"}
+      md={"500px"}
+      lg={"750px"}
+      xl={"1000px"}
+      ancho={"1240px"}
+      ancho_tres={"1240px"}
+      ancho_cuatro={"1240px"}
+      ancho_cinco={"1240px"}
       colsR={6}
       wCampo={"200px"}
 

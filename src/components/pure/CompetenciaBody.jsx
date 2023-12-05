@@ -9,8 +9,8 @@ import { Button, Icon, Tooltip, Text } from "@chakra-ui/react";
 
 export default function CompetenciaBody() {
   const {token} = useContext(AppContext)
-  
- const obtenerCompetenciasByEstado = async ( estado ) =>{
+
+  const obtenerCompetenciasByEstado = async ( estado ) =>{
     let response = await axiosApi.get(`/api/competencia/?estado=${estado}`,{
       headers:{
         Authorization:"Bearer " + token,
@@ -52,10 +52,10 @@ export default function CompetenciaBody() {
     {
       label: "Editar",
       renderCell: (item) => <Button
-    as={Link} to={`/editarCompetencia/${item.id}`}
-  >
-    <Icon as={AiOutlineEdit}></Icon>
-  </Button>
+        as={Link} to={`/editarCompetencia/${item.id}`}
+      >
+        <Icon as={AiOutlineEdit}></Icon>
+      </Button>
     }
   ]
   return (
@@ -66,11 +66,16 @@ export default function CompetenciaBody() {
       funcionSwitch={obtenerCompetenciasByEstado}
       sortFns={sortFns}
       cols={columns}
+      base={"265px"}
+      sm={"330px"}
+      md={"500px"}
+      lg={"750px"}
+      xl={"790px"}
       aBuscar={"nombre"}
       ancho={"790px"}
       colsR={5}
 
     />
-    
+
   );
 }

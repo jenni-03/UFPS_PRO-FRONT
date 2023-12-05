@@ -16,7 +16,7 @@ export default function PreguntaBody() {
     "Editar",
   ];
 
- const obtenerPreguntasByEstado = async (estado) => {
+  const obtenerPreguntasByEstado = async (estado) => {
     let response = await axiosApi.get(`/api/question/?estado=${estado}`, {
       headers: {
         Authorization: "Bearer " + token,
@@ -56,10 +56,10 @@ export default function PreguntaBody() {
     {
       label: "Editar",
       renderCell: (item)=><Button
-    as={Link} to={`/editarPregunta/${item.id}`}
-  >
-    <Icon as={AiOutlineEdit}></Icon>
-  </Button>,
+        as={Link} to={`/editarPregunta/${item.id}`}
+      >
+        <Icon as={AiOutlineEdit}></Icon>
+      </Button>,
 
     }
   ]
@@ -70,20 +70,28 @@ export default function PreguntaBody() {
     SEMESTRE: (array)=>array.sort((a,b)=>a.semestre-b.semestre),
     CATEGORIA: (array)=>array.sort((a,b)=>a.Categoria.nombre.localeCompare(b.Categoria.nombre))
   }
-  
+
   return (
-      <TablaComponent
-        inputPlaceHolder={"Busca por pregunta"}
-        buttonPath={"/tipoPregunta"}
-        buttonMsg={"Agregar Pregunta"}
-        funcionSwitch={obtenerPreguntasByEstado}
-        sortFns={sortFns}
-        cols={columns}
-        aBuscar={"texto_pregunta"}
-        ancho={"940px"}
-        colsR={6}
-        wCampo={"200px"}
-      />
+    <TablaComponent
+      inputPlaceHolder={"Busca por pregunta"}
+      buttonPath={"/tipoPregunta"}
+      buttonMsg={"Agregar Pregunta"}
+      funcionSwitch={obtenerPreguntasByEstado}
+      sortFns={sortFns}
+      cols={columns}
+      aBuscar={"texto_pregunta"}
+      base={"265px"}
+      sm={"330px"}
+      md={"500px"}
+      lg={"750px"}
+      xl={"1000px"}
+      ancho={"1240px"}
+      ancho_tres={"1240px"}
+      ancho_cuatro={"1240px"}
+      ancho_cinco={"1240px"}
+      colsR={6}
+      wCampo={"200px"}
+    />
 
   );
 }

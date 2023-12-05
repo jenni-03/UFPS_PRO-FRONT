@@ -13,7 +13,6 @@ export default function EstudianteBody() {
 
   return (
     <TablaEstudiantes
-      ancho={"1090px"}
       colsR={7}
       wCampo={"200px"}
     />

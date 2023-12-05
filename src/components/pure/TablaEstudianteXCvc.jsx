@@ -209,11 +209,14 @@ const COLUMNS = [
       <Box 
       w={{
             base: "265px",
-            sm: "310px",
-            md: "450px",
-            lg: "690px",
-            xl: "900px",
-            '2xl':ancho
+            sm: "330px",
+            md: "500px",
+            lg: "720px",
+            xl: ancho,
+            '2xl':ancho,
+            "3xl":ancho,
+            "4xl":ancho,
+            "5xl":ancho,
           }}
       >
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={showButton ? "space-between" : "flex-end"} mb={"20px"}>
@@ -259,10 +262,10 @@ const COLUMNS = [
           mt="20px"
           p="20px"
           w={{
-            base: "265px",
-            sm: "310px",
-            md: "450px",
-            lg: "690px",
+            base: "100%",
+            sm: "100%",
+            md: "100%",
+            lg: "100%",
             xl: "100%",
           }}
           borderRadius="8px"

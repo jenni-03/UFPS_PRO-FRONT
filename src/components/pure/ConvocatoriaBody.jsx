@@ -101,7 +101,6 @@ export default function ConvocatoriaBody() {
   ]
 
   return (
-    //<TablaConvocatoria columns={columns} path={"/formularioConvocatoria"} msg={"Agregar Convocatoria"} showButton={true}/>
 
       <TablaComponent
       inputPlaceHolder={"Busca por Convocatoria"}
@@ -112,7 +111,15 @@ export default function ConvocatoriaBody() {
       sortFns={sortFns}
       cols={columns}
       wCampo={"200px"}
-      ancho={"1400px"}
+      base={"265px"}
+      sm={"330px"}
+      md={"500px"}
+      lg={"750px"}
+      xl={"1000px"}
+      ancho={"1250px"}
+      ancho_tres={"1600px"}
+      ancho_cuatro={"1750px"}
+      ancho_cinco={"1850px"}
       colsR={9}
       aBuscar={"nombre"}
     />

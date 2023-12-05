@@ -58,6 +58,7 @@ const FormularioPrueba = () => {
     })
       .then((response) => {
         setCompetencias(response.data);
+        console.log("Competencias activas",response.data)
         setLoading(false) 
       })
       .catch((error) => {
@@ -72,6 +73,7 @@ const FormularioPrueba = () => {
       },
     }).then((response) => {
       setCategoriasObtenidas(response.data);
+      console.log("Categorias activas",response.data)
       setLoading2(false)
     })
       .catch((error) => {
@@ -88,39 +90,39 @@ const FormularioPrueba = () => {
 
     const {categorias,descripcion,duracion,nombre, semestre,totalPreguntas} = values
     try{
-    values && values.competencias.forEach((competenciaId) => {
-      const competencia = competencias.find((c) => c.id === competenciaId);
-      if (competencia) {
-        // Agrega el valor de `categoria.nombre` a `categoriaId`
-        values.categorias[competencia.id].forEach((categoria, index) => {
-          const categoriaObj = competencia.Categorias[index];
-          if (categoriaObj) {
-            const categoriaFinal = categoriasObtenidas.find((c) => c.nombre === categoriaObj.nombre)
-            categoria.categoriaId= categoriaFinal.id;
-          }
-        });
-      }
-    });
+      values && values.competencias.forEach((competenciaId) => {
+        const competencia = competencias.find((c) => c.id === competenciaId);
+        if (competencia) {
+          // Agrega el valor de `categoria.nombre` a `categoriaId`
+          values.categorias[competencia.id].forEach((categoria, index) => {
+            const categoriaObj = competencia.Categorias[index];
+            if (categoriaObj) {
+              const categoriaFinal = categoriasObtenidas.find((c) => c.nombre === categoriaObj.nombre)
+              categoria.categoriaId= categoriaFinal.id;
+            }
+          });
+        }
+      });
     }
     catch(e){
     }
 
     try{
-    values.categorias.map((categoria, index)=>{
-      if(categoria){
-        const arreglo = []
-        categoria.map((c,index)=>{
-          const objeto = {} 
-          objeto.categoria_id = c.categoriaId
-          objeto.preguntas= c.numPreguntas
-          objeto.valor= c.porcentaje
-          arreglo.push(objeto)
-          arregloCategoriasID.push(c.categoriaId)
-          arregloPreguntasPorCategorias.push(c.numPreguntas)
-        })   
-        arregloCategorias.push(arreglo)
-      }
-    })
+      values.categorias.map((categoria, index)=>{
+        if(categoria){
+          const arreglo = []
+          categoria.map((c,index)=>{
+            const objeto = {} 
+            objeto.categoria_id = c.categoriaId
+            objeto.preguntas= c.numPreguntas
+            objeto.valor= c.porcentaje
+            arreglo.push(objeto)
+            arregloCategoriasID.push(c.categoriaId)
+            arregloPreguntasPorCategorias.push(c.numPreguntas)
+          })   
+          arregloCategorias.push(arreglo)
+        }
+      })
     }catch(e){
 
     }
@@ -133,9 +135,9 @@ const FormularioPrueba = () => {
       total_preguntas: totalPreguntas,
       competencias: values.competencias,
       valorCategorias: arregloCategorias,
-      //categorias: arregloCategoriasID,
-      //preguntas: arregloPreguntasPorCategorias,
     }
+
+    console.log(body)
 
     const response = await axiosApi.post("/api/prueba/create",body,{
       headers: {
@@ -268,8 +270,7 @@ const FormularioPrueba = () => {
             </FormControl>
 
             <FormLabel>Competencias:</FormLabel>
-            {isLoading || isLoading2 ? <Center m={"20px 0"}><Spinner/></Center> :competencias
-                .filter((competencia) => competencia.Categorias.length > 0 && categoriasObtenidas.length!=0) // Filtrar competencias con categorías
+            {isLoading || isLoading2 ? <Center m={"20px 0"}><Spinner/></Center> :competencias.filter((competencia) => competencia.Categorias.length > 0 && categoriasObtenidas.some(c => c.Competencia.nombre===competencia.nombre)) // Filtrar competencias con categorías
                 .map((competencia) => (
                   <Box key={competencia.id} m={"10px 0 10px 0"}>
                     <Box display={"flex"} alignItems={"center"}>
@@ -310,46 +311,52 @@ const FormularioPrueba = () => {
                     {values.competencias.includes(competencia.id) && (
                       <FieldArray name="categorias">
                         {(arrayHelpers) =>
-                            categoriasObtenidas.map((categoria, index) => (
-                              <Box
-                                w={"90%"}
-                                display={"flex"}
-                                flexDir={"column"}
-                                ml={"30px"}
-                                gap={"10px"}
-                                key={categoria.nombre}
-                              >
-                                <Box mt={"10px"}>{categoria.nombre}</Box>
-                                <Box
-                                  w={"100%"}
-                                  display={"flex"}
-                                  flexDir={"row"}
-                                  gap={"15px"}
-                                  justifyContent={"center"}
-                                >
-                                  <Field
-                                    as={Input}
-                                    type="number"
-                                    name={`categorias.${competencia.id}.${index}.numPreguntas`}
-                                    placeholder="Número de preguntas"
-                                  />
-                                  <Field
-                                    as={Input}
-                                    type="number"
-                                    name={`categorias.${competencia.id}.${index}.porcentaje`}
-                                    placeholder="Porcentaje"
-                                  />
-                                  <Field
-                                    display={"none"}
-                                    as={Input}
-                                    type="text"
-                                    id={`categorias.${competencia.id}.${index}.categoriaNombre`}
-                                    name={`categorias.${competencia.id}.${index}.categoriaNombre`}
-                                    placeholder="Nombre"
-                                  />
-                                </Box>
-                              </Box>
-                            ))
+                            competencia.Categorias.map((categoria, index) =>{
+
+                              const categoriaEncontrada = categoriasObtenidas && categoriasObtenidas.find(
+                                (item) => item.nombre === categoria.nombre
+                              );
+                              if(categoriaEncontrada){
+                                return (
+                                  <Box
+                                    w={"90%"}
+                                    display={"flex"}
+                                    flexDir={"column"}
+                                    ml={"30px"}
+                                    gap={"10px"}
+                                    key={categoria.nombre}
+                                  >
+                                    <Box mt={"10px"}>{categoria.nombre}</Box>
+                                    <Box
+                                      w={"100%"}
+                                      display={"flex"}
+                                      flexDir={"row"}
+                                      gap={"15px"}
+                                      justifyContent={"center"}
+                                    >
+                                      <Field
+                                        as={Input}
+                                        type="number"
+                                        name={`categorias.${competencia.id}.${index}.numPreguntas`}
+                                        placeholder="Número de preguntas"
+                                      />
+                                      <Field
+                                        as={Input}
+                                        type="number"
+                                        name={`categorias.${competencia.id}.${index}.porcentaje`}
+                                        placeholder="Porcentaje"
+                                      />
+                                      <Field
+                                        display={"none"}
+                                        as={Input}
+                                        type="text"
+                                        id={`categorias.${competencia.id}.${index}.categoriaNombre`}
+                                        name={`categorias.${competencia.id}.${index}.categoriaNombre`}
+                                        placeholder="Nombre"
+                                      />
+                                    </Box>
+                                  </Box>
+                                )}})
                         }
                       </FieldArray>
                     )}

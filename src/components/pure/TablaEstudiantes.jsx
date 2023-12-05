@@ -209,11 +209,14 @@ const eliminarEstudiante = async (id_estudiante) =>{
       <Box 
       w={{
             base: "265px",
-            sm: "310px",
-            md: "450px",
-            lg: "690px",
-            xl: "790px",
-            '2xl':ancho
+            sm: "360px",
+            md: "500px",
+            lg: "750px",
+            xl: "1000px",
+            '2xl':"1280px",
+            "3xl":"1440px",
+            "4xl":"1440px",
+            "5xl":"1440px"
           }}
       >
         <Flex align={"center"} flexDir={["column", "column", "row"]} gap={"15px"} justifyContent={showButton ? "space-between" : "flex-end"} mb={"20px"}>
@@ -260,10 +263,10 @@ const eliminarEstudiante = async (id_estudiante) =>{
           mt="20px"
           p="20px"
           w={{
-            base: "265px",
-            sm: "310px",
-            md: "450px",
-            lg: "690px",
+            base: "100%",
+            sm: "100%",
+            md: "100%",
+            lg: "100%",
             xl: "100%",
           }}
           borderRadius="8px"

@@ -17,30 +17,53 @@ const PruebaPresentacionBody = ({}) =>{
     const [isLoading, setIsLoading] = useState(true)
     const [opciones, setOpciones] = useState([]);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const [questionId, setQuestionId] = useState(null);
     const [showNextButton, setShowNextButton] = useState(false);
+    const [respuestasSeleccionadas, setRespuestasSeleccionadas] = useState(()=>JSON.parse(sessionStorage.getItem("res")))
 
     const showQuestion = (index) => {
         resetState();
         let currentQuestion =  preguntas[index];
+        console.log(currentQuestion)
         let questionNumber = index + 1;
         setQuestionImage(currentQuestion.imagen)
+        setQuestionId(currentQuestion.id)
         setQuestionText(`${questionNumber}. ${currentQuestion.texto}`);
         setOpciones(currentQuestion.opciones)
+        console.log(currentQuestion.id)
+        obtenerRespuestas(currentQuestion.id)
     };  
 
-    const selectChoice = (index) =>{
-        setSelectedAnswer(index)
+    const obtenerRespuestas = (id) =>{
+        if(respuestasSeleccionadas){
+         if(respuestasSeleccionadas[id]!==undefined&&respuestasSeleccionadas[id]!==null){
+            setSelectedAnswer(respuestasSeleccionadas[id])
+            }
+            
+        }
     }
 
-   
-     const resetState = () => {
-    setOpciones([]);
-    //setCorrectAnswer(null);
-    setSelectedAnswer(null);
-  };
+    const selectChoice = (index) =>{
+        setSelectedAnswer(prev => index)
+    }
 
-    const nextQuestion = () => currentQuestionIndex+1 < preguntas.length && setCurrentQuestionIndex(currentQuestionIndex+1)
-    const prevQuestion = () => currentQuestionIndex>0 && setCurrentQuestionIndex(currentQuestionIndex-1)
+
+    const resetState = () => {
+        setOpciones([]);
+        setSelectedAnswer(null);
+    };
+
+    const nextQuestion = () => {
+        if(currentQuestionIndex+1 < preguntas.length){
+            setCurrentQuestionIndex(currentQuestionIndex+1)
+            procesoPregunta()
+    }}
+    const prevQuestion = () =>{ 
+        if(currentQuestionIndex>0){
+            setCurrentQuestionIndex(currentQuestionIndex-1)
+            procesoPregunta()
+        }
+    }
 
     const terminarPrueba = async (id, mensaje) =>{
         const response = await axiosApi.post(`/api/convocatoria/${id}/terminarPrueba`,{},{
@@ -48,11 +71,43 @@ const PruebaPresentacionBody = ({}) =>{
                 Authorization: "Bearer " + token
             }
         }).catch(e=>{
-            toast.error(e)
+            toast.error(e.response.data.error)
         })
         if(response.status===200){
             toast.success(mensaje)
         }
+    }
+
+
+    const procesoPregunta = () => {
+        if(selectedAnswer!==null){
+            // Actualizamos el objeto con la nueva respuesta y opción
+            const updatedRespuestas = { ...respuestasSeleccionadas, [questionId]: selectedAnswer };
+            //Actualizamos el estado
+            setRespuestasSeleccionadas(updatedRespuestas);
+            //Actualizamos el sessiónStorage
+            sessionStorage.setItem("res", JSON.stringify(updatedRespuestas))
+            //Envíamos la información
+            enviarPregunta(questionId,tiempoInicial,selectedAnswer)
+        }else{
+            enviarPregunta(questionId,tiempoInicial,null)
+        }
+    }
+
+    const enviarPregunta = async (id_pregunta, tiempo, opcionElegida) =>{
+        const body={
+            id_pregunta:id_pregunta,
+            tiempo:tiempo,
+            opcion:opcionElegida
+        }
+        console.log(body)
+        const response = await axiosApi.put(`/api/convocatoria/${id}/guardarProgreso`,body,{
+            headers:{
+                Authorization:"Bearer " + token
+            }
+        }).catch(e =>{
+            toast.error(e.response.data.error)
+        })
     }
 
 
@@ -69,9 +124,9 @@ const PruebaPresentacionBody = ({}) =>{
     }
 
     if(tiempoInicial===0){
-            terminarPrueba(id,"El tiempo se ha agotado, prueba finalizada con exito")
-            setIsInPrueba(prev => "false")
-            sessionStorage.setItem("isInPrueba", false)
+        terminarPrueba(id,"El tiempo se ha agotado, prueba finalizada con exito")
+        setIsInPrueba(prev => "false")
+        sessionStorage.setItem("isInPrueba", false)
     }
 
     useEffect(()=>{
@@ -84,7 +139,7 @@ const PruebaPresentacionBody = ({}) =>{
 
     if(isLoading){
         return(
-                <Spinner mt={"300px"}/>
+            <Spinner mt={"300px"}/>
         )
     }
 
@@ -93,7 +148,7 @@ const PruebaPresentacionBody = ({}) =>{
             <Box w={"400px"} p={"20px"} backgroundColor={"white"} borderRadius={"8px"}>
                 <Text fontSize={"20px"}>{questionText}</Text>
                 { questionImage && <Image w={"100%"} m={"10px auto"} objectFit={"cover"}
-              src={questionImage.url} />}
+                    src={questionImage.url} />}
                 <Divider m={"10px"}/>
                 <Flex flexDir={"column"} gap={"10px"}>
                     {opciones&&opciones.map((o, index) => (
@@ -101,7 +156,8 @@ const PruebaPresentacionBody = ({}) =>{
                             key={index}
                             textAlign={"left"} 
                             onClick={() => {
-                            selectChoice(index)}}
+                                selectChoice(index)
+                            }}
                             backgroundColor={selectedAnswer===index?"#e4fcbc":"cuarto.100"}
                             fontSize={"17px"}
                             borderRadius={"10px"}
@@ -114,15 +170,21 @@ const PruebaPresentacionBody = ({}) =>{
                         <Button colorScheme={"red"}   onClick={()=>prevQuestion()}>Anterior</Button>
                         {
                             currentQuestionIndex+1!==preguntas.length ?
-                        <Button colorScheme={"blue"}  onClick={()=>nextQuestion()}>Siguiente</Button>
-                        :
-                         <Button colorScheme={"green"} onClick={()=>{
-                             terminarPrueba(id,"Prueba finalzada correctamente") 
-                             setIsInPrueba(prev => "false")
-                             sessionStorage.setItem("isInPrueba", false)
-                             sessionStorage.removeItem("idConvocatoria")
+                                <Button colorScheme={"blue"}  onClick={()=>{
+                                    nextQuestion()
+                                }
+                                    }>Siguiente</Button>
+                                    :
+                                    <Button colorScheme={"green"} onClick={()=>{
+                                        procesoPregunta()
+                                        //terminarPrueba(id,"Prueba finalzada correctamente") 
+                                        setIsInPrueba(prev => "false")
+                                        sessionStorage.setItem("isInPrueba", false)
+                                        //sessionStorage.removeItem("idConvocatoria")
+                                        sessionStorage.removeItem("res")
+                                        sessionStorage.removeItem("time")
 
-                        }}>Finalizar</Button>
+                                    }}>Finalizar</Button>
                         }
                     </Flex>
                 </Flex>
