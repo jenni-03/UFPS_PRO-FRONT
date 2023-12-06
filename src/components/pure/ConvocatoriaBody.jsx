@@ -19,7 +19,6 @@ export default function ConvocatoriaBody() {
     }).catch(()=>{
       toast.error("No se pueden obtener las convocatorias!")
     })
-    console.log(response.data)
     return response.data
   }
 

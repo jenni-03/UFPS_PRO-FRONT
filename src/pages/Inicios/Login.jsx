@@ -32,7 +32,7 @@ export default function Login() {
 
 
 
-  const { setToken, setRole,role,token,user, setUser, setIsInPrueba} = useContext(AppContext)
+  const { setToken, setRole,role,token,user, setUser, setIsInPrueba, encriptar, desencriptar} = useContext(AppContext)
 
   const navigate = useNavigate()
 
@@ -55,11 +55,11 @@ export default function Login() {
 
   const ingresar = async (email, password) =>{
     const data = await login(email,password)
-    sessionStorage.setItem("token",data.accessToken)
-    sessionStorage.setItem("isInPrueba",false)
-    setIsInPrueba(sessionStorage.getItem("isInPrueba"))
-    setToken(sessionStorage.getItem("token"))
-    const decoded = jwt_decode(sessionStorage.getItem("token"))
+    encriptar("token",data.accessToken)
+    encriptar("isInPrueba","false")
+    setIsInPrueba(desencriptar("isInPrueba"))
+    setToken(prev =>desencriptar("token"))
+    const decoded = jwt_decode(desencriptar("token"))
     setUser(data)
     setRole(decoded.tipo)
     redireccion(decoded.tipo)

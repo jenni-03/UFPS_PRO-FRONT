@@ -22,7 +22,7 @@ export default function ConvocatoriaBodyUser(){
   const navigate = useNavigate()
   const cancelRef = React.useRef()
   const { isOpen, onOpen, onClose } = useDisclosure()
-  const {token, setIsInPrueba,setTiempoInicial,setIdConvocatoria, isInPrueba} = useContext(AppContext)
+  const {token, setIsInPrueba,setTiempoInicial,setIdConvocatoria, isInPrueba, encriptar, desencriptar} = useContext(AppContext)
 
   const obtenerConvocatorias = async() =>{
     const response = await axiosApi.get("api/convocatoria/obtenerConvocatorias/estudiante",{
@@ -48,19 +48,17 @@ export default function ConvocatoriaBodyUser(){
       toast.error(e.response.data.error)
     })
     if(response.status===200){
-      setIsInPrueba(prev => "true")
-      sessionStorage.setItem("isInPrueba", true)
-      sessionStorage.setItem("idConvocatoria", id)
-      sessionStorage.setItem("time",response.data.tiempo_prueba)
-      setTiempoInicial(prev =>response.data.tiempo_prueba)
+      encriptar("isInPrueba","true")
+      setIsInPrueba(prev => desencriptar("isInPrueba"))
+      encriptar("idConvocatoria",id.toString())
+      encriptar("time",(response.data.tiempo_prueba*60).toString())
+      console.log(response.data.tiempo_prueba*60)
+      setTiempoInicial(prev =>desencriptar("time"))
       if(response.data.respuestas.length!==0){
         const objeto = {}
         response.data.respuestas.forEach( r => objeto[r.pregunta_id]=parseInt(r.opcion))
-        console.log("aaaaaa",response.data)
-        console.log("aaaaaa",objeto)
-        sessionStorage.setItem("res",JSON.stringify(objeto))
+        encriptar("res",JSON.stringify(objeto))
       }else{
-        console.log("aaaaa",response.data)
       }
       navigate(`/presentacionPrueba/${id}`)
 
@@ -198,9 +196,9 @@ export default function ConvocatoriaBodyUser(){
                   Cancelar
                 </Button>
                 <Button   backgroundColor={"#d8e7f5"} color={"#1285f1"} onClick={()=>{
+                  //encriptar("idConvocatoria",convSeleccionada.id.toString())
                   presentarPrueba(convSeleccionada.id)
                   setIdConvocatoria(convSeleccionada.id)
-                  sessionStorage.setItem("idConvocatoria", convSeleccionada.id)
                   onClose()
                 }}  _hover={{"backgroundColor":"none"}} _active={{"backgroundColor":"#96bef3"}} ml={3}>
                   Comenzar

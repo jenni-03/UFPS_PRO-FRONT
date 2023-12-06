@@ -4,11 +4,11 @@ import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
 import axiosApi from "../../../../utils/config/axios.config"
 import { AppContext } from "../../../context/AppProvider";
-import {Image, Box, Text, Button, Divider, Flex, Spinner } from "@chakra-ui/react";
+import {Image, Box, Text, Button,Radio, Divider, Flex, Spinner } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 
 const PruebaPresentacionBody = ({}) =>{
-    const {isInPrueba,setIsInPrueba, tiempoInicial, role, token} = useContext(AppContext)
+    const {isInPrueba,encriptar,setIsInPrueba, tiempoInicial, role, token, desencriptar} = useContext(AppContext)
     const {id} = useParams()
     const [preguntas, setPreguntas] = useState([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -19,7 +19,7 @@ const PruebaPresentacionBody = ({}) =>{
     const [selectedAnswer, setSelectedAnswer] = useState(null);
     const [questionId, setQuestionId] = useState(null);
     const [showNextButton, setShowNextButton] = useState(false);
-    const [respuestasSeleccionadas, setRespuestasSeleccionadas] = useState(()=>JSON.parse(sessionStorage.getItem("res")))
+    const [respuestasSeleccionadas, setRespuestasSeleccionadas] = useState(()=>desencriptar("res")?JSON.parse(desencriptar("res")):null)
 
     const showQuestion = (index) => {
         resetState();
@@ -86,7 +86,8 @@ const PruebaPresentacionBody = ({}) =>{
             //Actualizamos el estado
             setRespuestasSeleccionadas(updatedRespuestas);
             //Actualizamos el sessiónStorage
-            sessionStorage.setItem("res", JSON.stringify(updatedRespuestas))
+            //sessionStorage.setItem("res", JSON.stringify(updatedRespuestas))
+            encriptar("res",JSON.stringify(updatedRespuestas))
             //Envíamos la información
             enviarPregunta(questionId,tiempoInicial,selectedAnswer)
         }else{
@@ -97,10 +98,10 @@ const PruebaPresentacionBody = ({}) =>{
     const enviarPregunta = async (id_pregunta, tiempo, opcionElegida) =>{
         const body={
             id_pregunta:id_pregunta,
-            tiempo:tiempo,
+            tiempo:Math.floor(parseInt(tiempo)/60),
             opcion:opcionElegida
         }
-        console.log(body)
+        console.log("xd",body)
         const response = await axiosApi.put(`/api/convocatoria/${id}/guardarProgreso`,body,{
             headers:{
                 Authorization:"Bearer " + token
@@ -125,8 +126,10 @@ const PruebaPresentacionBody = ({}) =>{
 
     if(tiempoInicial===0){
         terminarPrueba(id,"El tiempo se ha agotado, prueba finalizada con exito")
+        sessionStorage.removeItem("idConvocatoria")
         setIsInPrueba(prev => "false")
-        sessionStorage.setItem("isInPrueba", false)
+        encriptar("isInPrueba","false")
+
     }
 
     useEffect(()=>{
@@ -145,9 +148,11 @@ const PruebaPresentacionBody = ({}) =>{
 
     return(
         <>
-            <Box w={"400px"} p={"20px"} backgroundColor={"white"} borderRadius={"8px"}>
+            <Box  p={"20px"} w={"70%"} 
+                boxShadow={"rgba(67, 71, 85, 0.27) 0px 0px 0.25em, rgba(90, 125, 188, 0.05) 0px 0.25em 1em"}
+                backgroundColor={"white"} borderRadius={"8px"}>
                 <Text fontSize={"20px"}>{questionText}</Text>
-                { questionImage && <Image w={"100%"} m={"10px auto"} objectFit={"cover"}
+                { questionImage && <Image w={"60%"} m={"10px auto"} objectFit={"cover"}
                     src={questionImage.url} />}
                 <Divider m={"10px"}/>
                 <Flex flexDir={"column"} gap={"10px"}>
@@ -157,8 +162,12 @@ const PruebaPresentacionBody = ({}) =>{
                             textAlign={"left"} 
                             onClick={() => {
                                 selectChoice(index)
+                                enviarPregunta(questionId,tiempoInicial,index)
                             }}
-                            backgroundColor={selectedAnswer===index?"#e4fcbc":"cuarto.100"}
+                            border={"2px solid"}
+                            borderColor={selectedAnswer===index?"black":"black"}
+                            backgroundColor={selectedAnswer===index?"black":"white"}
+                            color={selectedAnswer===index?"white":"black"}
                             fontSize={"17px"}
                             borderRadius={"10px"}
                             p={"10px"}
@@ -167,20 +176,20 @@ const PruebaPresentacionBody = ({}) =>{
                         </Box>
                     ))}
                     <Flex justifyContent={"space-between"}>
-                        <Button colorScheme={"red"}   onClick={()=>prevQuestion()}>Anterior</Button>
+                        <Button backgroundColor={"white"} color={"telegram.500"} border={"1px solid"} borderColor={"telegram.5000"}  onClick={()=>prevQuestion()}>Anterior</Button>
                         {
                             currentQuestionIndex+1!==preguntas.length ?
-                                <Button colorScheme={"blue"}  onClick={()=>{
+                                <Button colorScheme={"telegram"} color="white"  onClick={()=>{
                                     nextQuestion()
                                 }
                                     }>Siguiente</Button>
                                     :
                                     <Button colorScheme={"green"} onClick={()=>{
                                         procesoPregunta()
-                                        //terminarPrueba(id,"Prueba finalzada correctamente") 
+                                        terminarPrueba(id,"Prueba finalzada correctamente") 
                                         setIsInPrueba(prev => "false")
-                                        sessionStorage.setItem("isInPrueba", false)
-                                        //sessionStorage.removeItem("idConvocatoria")
+                                        encriptar("isInPrueba","false")
+                                        sessionStorage.removeItem("idConvocatoria")
                                         sessionStorage.removeItem("res")
                                         sessionStorage.removeItem("time")
 

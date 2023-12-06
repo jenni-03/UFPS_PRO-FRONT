@@ -21,7 +21,7 @@ export default function NavBar({ changeOpen, msg, isOpen }) {
 
 
   useEffect(() => {
-    setFormattedTime(formatTime(tiempoInicial));
+    setFormattedTime(formatTime(parseInt(tiempoInicial)));
   }, [tiempoInicial]);
 
 
