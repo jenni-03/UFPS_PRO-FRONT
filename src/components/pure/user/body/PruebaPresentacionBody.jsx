@@ -158,6 +158,7 @@ const PruebaPresentacionBody = ({}) =>{
                 <Flex flexDir={"column"} gap={"10px"}>
                     {opciones&&opciones.map((o, index) => (
                         <Box
+                            _hover={{cursor:"pointer"}}
                             key={index}
                             textAlign={"left"} 
                             onClick={() => {

@@ -76,7 +76,7 @@ export default function FormularioEditarCompetencia() {
 
 
   const validationSchema = Yup.object().shape({
-    nombre: Yup.string().required("El nombre es requerido").max(25, "Máximo 25 caracteres").min(5, "Mínimo 5 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$", "El nombre solamente debe contener letras"),
+    nombre: Yup.string().required("El nombre es requerido").max(45, "Máximo 45 caracteres").min(3, "Mínimo 3 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$", "El nombre solamente debe contener letras"),
     estado: Yup.string().required("El estado es requerido"),
     descripcion: Yup.string().required("La descripción es requerida").max(200, "Máximo 200 caracteres").min(10, "Mínimo 10 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ.,\r\n0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ,.\r\n0-9]+)*(?<! )$","La descripcion solamente debe contener letras")
   });
