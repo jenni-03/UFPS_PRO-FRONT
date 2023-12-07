@@ -89,12 +89,12 @@ export default function FormEditarEstudiante() {
   const validationSchema = Yup.object().shape({
     nombre: Yup.string()
       .required("El nombre es requerido")
-      .max(25, "Máximo 25 caracteres")
-      .min(5, "Mínimo 5 caracteres"),
+      .max(50, "Máximo 50 caracteres")
+      .min(2, "Mínimo 2 caracteres"),
     apellido: Yup.string()
       .required("El nombre es requerido")
-      .max(25, "Máximo 25 caracteres")
-      .min(5, "Mínimo 5 caracteres"),
+      .max(55, "Máximo 55 caracteres")
+      .min(2, "Mínimo 2 caracteres"),
     semestre: Yup.string()
       .required("El nombre es requerido")
       .max(2, "Máximo 2 dígitos")

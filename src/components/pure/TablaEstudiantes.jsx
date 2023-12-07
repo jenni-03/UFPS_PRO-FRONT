@@ -338,7 +338,7 @@ const eliminarEstudiante = async (id_estudiante) =>{
           <AlertDialogOverlay />
 
           <AlertDialogContent>
-            <AlertDialogHeader>¿Estas Seguro?</AlertDialogHeader>
+            <AlertDialogHeader>¿Estás Seguro?</AlertDialogHeader>
             <AlertDialogCloseButton />
             <AlertDialogBody>
               {

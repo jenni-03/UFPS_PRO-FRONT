@@ -75,12 +75,12 @@ export default function EditarInformacionAdmin() {
   const validationSchema = Yup.object().shape({
     nombre: Yup.string()
       .required("Campo requerido")
-      .max(25, "Maximo 25 dígitos")
-      .min(5, "Mínimo 5 digitos"),
+      .max(50, "Maximo 50 dígitos")
+      .min(2, "Mínimo 2 digitos"),
     apellido: Yup.string()
       .required("Campo requerido")
-      .max(35, "Maximo 35 dígitos")
-      .min(5, "Mínimo 5 digitos"),
+      .max(55, "Maximo 55 dígitos")
+      .min(2, "Mínimo 2 digitos"),
   });
 
   if(isLoading){

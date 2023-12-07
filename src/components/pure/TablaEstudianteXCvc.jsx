@@ -224,7 +224,7 @@ const COLUMNS = [
             <Skeleton isLoaded={!isLoading}>
               <Btn
                 leftIcon={<MdAdd/>}
-                path={"/"}
+                path={`/convocatoria/${id}/agregarEstudiante`}
                 msg={"Agregar Estudiante"}
                 w={["100%", "250px"]}
               >

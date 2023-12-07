@@ -28,7 +28,7 @@ export default function FormAgregarEstudiante() {
         Authorization:"Bearer " + token
       }
     }).catch((e)=>{
-      toast.error(e.response.data.error)
+      throw new Error(e.response.data.error)
     })
 
     if(response.status === 200){
@@ -48,8 +48,8 @@ export default function FormAgregarEstudiante() {
 
   const validationSchema= Yup.object().shape(
     {
-      nombre: Yup.string().required("El nombre es requerido").min(5,"Minimo 5 caracteres").max(25,"Maximo 25 caracteres").matches("^(?! )[-a-zA-ZÀ-ÖØ-öø-ÿ]+( [-a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$","El nombre solamente debe contener letras"),
-      apellido: Yup.string().required("El apellido es requerido").min(5,"Minimo 5 caracteres").max(200,"Máximo 200 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ.,\r\n0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ,.\r\n0-9]+)*(?<! )$","La descripción solamente debe contener letras"),
+      nombre: Yup.string().required("El nombre es requerido").min(2,"Mínimo 2 caracteres").max(50,"Máximo 50 caracteres").matches("^(?! )[-a-zA-ZÀ-ÖØ-öø-ÿ]+( [-a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$","El nombre solamente debe contener letras"),
+      apellido: Yup.string().required("El apellido es requerido").min(2,"Mínimo 2 caracteres").max(55,"Máximo 55 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ.,\r\n0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ,.\r\n0-9]+)*(?<! )$","La descripción solamente debe contener letras"),
       codigo: Yup.number().required("El código es requerido"),
       email: Yup.string().required("El correo es requerido").matches("^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9-]+(?:\.[a-zA-Z0-9-]+)*$","Formato inválido"), 
       semestre: Yup.string().required("El semestre es requerido").max(2,"Máximo dos digitos")
@@ -71,7 +71,12 @@ export default function FormAgregarEstudiante() {
             initialValues={initialValues}
             validationSchema={validationSchema}
             onSubmit={({nombre,apellido,codigo, email, semestre}) => {
-              AgregarEstudiante(nombre, apellido,codigo,email,semestre)
+              //AgregarEstudiante(nombre, apellido,codigo,email,semestre)
+              toast.promise(AgregarEstudiante(nombre, apellido,codigo,email,semestre), {
+                loading: 'Añadiendo al estudiante...',
+                success: 'Estudiante añadido exitosamente',
+                error: (e)=>e+"",
+              });
             }}
           >
             {({ errors, touched }) => (
@@ -81,70 +86,70 @@ export default function FormAgregarEstudiante() {
                   flexDirection="column"
                 >
                   <Flex flexDir={["column","row","row","row"]} gap={"25px"} width={"100%"} mb={"15px"}>
-                  <Box display="flex" flexDirection="column" justifyContent="center" w={"100%"}>
-                    <FormLabel htmlFor="nombre">Nombre</FormLabel>
-                    <FormControl isInvalid={errors.nombre && touched.nombre}>
-                      <Field
-                        as={Input}
-                        id="nombre"
-                        name="nombre"
-                        type="text"
-                        w={"100%"}
-                      />
-                      <FormErrorMessage>{errors.nombre}</FormErrorMessage>
-                    </FormControl>
-                  </Box>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    w={"100%"}
-                  >
-                    <FormLabel htmlFor="apellido">Apellido</FormLabel>
-                    <FormControl isInvalid={errors.apellido && touched.apellido}>
-                      <Field
-                        as={Input}
-                        id="apellido"
-                        name="apellido"
-                        w={"100%"}
-                      />
-                      <FormErrorMessage>{errors.apellido}</FormErrorMessage>
-                    </FormControl>
-                  </Box>
-                </Flex>
-                <Flex  flexDir={["column","row","row","row"]} gap={"25px"} width={"100%"} mb={"10px"}>
-                  <Box display="flex" flexDirection="column" justifyContent="center" w={"100%"}>
-                    <FormLabel htmlFor="nombre">Semestre</FormLabel>
-                    <FormControl isInvalid={errors.semestre && touched.semestre}>
-                      <Field
-                        as={Input}
-                        id="semestre"
-                        name="semestre"
-                        type="number"
-                        w={"100%"}
-                      />
-                      <FormErrorMessage>{errors.semestre}</FormErrorMessage>
-                    </FormControl>
-                  </Box>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    justifyContent="center"
-                    width={"100%"}
-                  >
-                    <FormLabel htmlFor="apellido">Código</FormLabel>
-                    <FormControl isInvalid={errors.codigo && touched.codigo}>
-                      <Field
-                        as={Input}
-                        id="codigo"
-                        type={"number"}
-                        name="codigo"
-                        w={"100%"}
-                      />
-                      <FormErrorMessage>{errors.codigo}</FormErrorMessage>
-                    </FormControl>
-                  </Box>
-                </Flex>
+                    <Box display="flex" flexDirection="column" justifyContent="center" w={"100%"}>
+                      <FormLabel htmlFor="nombre">Nombre</FormLabel>
+                      <FormControl isInvalid={errors.nombre && touched.nombre}>
+                        <Field
+                          as={Input}
+                          id="nombre"
+                          name="nombre"
+                          type="text"
+                          w={"100%"}
+                        />
+                        <FormErrorMessage>{errors.nombre}</FormErrorMessage>
+                      </FormControl>
+                    </Box>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                      w={"100%"}
+                    >
+                      <FormLabel htmlFor="apellido">Apellido</FormLabel>
+                      <FormControl isInvalid={errors.apellido && touched.apellido}>
+                        <Field
+                          as={Input}
+                          id="apellido"
+                          name="apellido"
+                          w={"100%"}
+                        />
+                        <FormErrorMessage>{errors.apellido}</FormErrorMessage>
+                      </FormControl>
+                    </Box>
+                  </Flex>
+                  <Flex  flexDir={["column","row","row","row"]} gap={"25px"} width={"100%"} mb={"10px"}>
+                    <Box display="flex" flexDirection="column" justifyContent="center" w={"100%"}>
+                      <FormLabel htmlFor="nombre">Semestre</FormLabel>
+                      <FormControl isInvalid={errors.semestre && touched.semestre}>
+                        <Field
+                          as={Input}
+                          id="semestre"
+                          name="semestre"
+                          type="number"
+                          w={"100%"}
+                        />
+                        <FormErrorMessage>{errors.semestre}</FormErrorMessage>
+                      </FormControl>
+                    </Box>
+                    <Box
+                      display="flex"
+                      flexDirection="column"
+                      justifyContent="center"
+                      width={"100%"}
+                    >
+                      <FormLabel htmlFor="apellido">Código</FormLabel>
+                      <FormControl isInvalid={errors.codigo && touched.codigo}>
+                        <Field
+                          as={Input}
+                          id="codigo"
+                          type={"number"}
+                          name="codigo"
+                          w={"100%"}
+                        />
+                        <FormErrorMessage>{errors.codigo}</FormErrorMessage>
+                      </FormControl>
+                    </Box>
+                  </Flex>
                   <Box
                     display="flex"
                     flexDirection="column"
@@ -162,7 +167,7 @@ export default function FormAgregarEstudiante() {
                       <FormErrorMessage>{errors.email}</FormErrorMessage>
                     </FormControl>
                   </Box>
-                 <Btn
+                  <Btn
                     isSubmit={true}
                     mt={"15px"}
                     width={"100%"}

@@ -1,26 +1,17 @@
 import React,{useContext} from "react";
-import TablaConvocatoria from "./TablaConvocatoria";
 import axiosApi from "../../utils/config/axios.config"
 import TablaComponent from "./TablaComponent";
+import TablaConvocatoria from "./TablaConvocatoria";
 import moment from "moment/moment";
 import { AppContext } from "../context/AppProvider";
 import { Tooltip, Button, Icon, Text} from "@chakra-ui/react";
 import { AiOutlineEdit , AiOutlineEye,AiOutlineTeam } from "react-icons/ai";
 import { Link } from "react-router-dom";
+import { toast } from "react-hot-toast";
 
 export default function ConvocatoriaBody() {
 
-  const {token} = useContext(AppContext)
-  const obtenerConvocatorias = async () =>{
-    let response = await axiosApi.get("/api/convocatoria",{
-       headers:{
-        Authorization:"Bearer " + token,
-      }
-    }).catch(()=>{
-      toast.error("No se pueden obtener las convocatorias!")
-    })
-    return response.data
-  }
+  
 
 
   const sortFns = {
@@ -41,74 +32,16 @@ export default function ConvocatoriaBody() {
   return dateA.isBefore(dateB) ? -1 : dateA.isAfter(dateB) ? 1 : 0;
   }
 
-  const columns= [
-     {
-      label:"Id",
-      renderCell: (item) => item.id,
-      sort: { sortKey: "ID" }
-
-    },
-    {
-      label:"Nombre",
-      renderCell: (item) => <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.nombre}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.nombre}</Text></Tooltip>,
-      sort: { sortKey: "NOMBRE" }
-    },
-    {
-      label:"Estado",
-      renderCell: (item) => item.estado?"Activo":"Inactivo",
-    },
-    {
-      label:"Fecha de Inicio",
-      renderCell: (item) => item.fecha_inicio,
-      sort: { sortKey: "FECHAINI" }
-    },
-    {
-      label:"Fecha de Fin",
-      renderCell: (item) => item.fecha_fin,
-      sort: { sortKey: "FECHAFIN" }
-    },
-
-    {
-      label:"Prueba",
-      renderCell: (item) =>  <Tooltip borderRadius={"5px"} bgColor={"primero.100"} placement={"top"} hasArrow label={item.prueba.nombre}><Text  maxW={"auto"} overflow="hidden" textOverflow="ellipsis" whiteSpace="nowrap" >{item.prueba.nombre}</Text></Tooltip>,
-      sort: { sortKey: "PRUEBA" }
-    },
-    {
-      label: "Editar",
-      renderCell: (item) => <Button
-    as={Link} to={`/editarConvocatoria/${item.id}`}
-  >
-    <Icon as={AiOutlineEdit}></Icon>
-  </Button>
-    },
-    {
-      label: "Estudiantes",
-      renderCell: (item) => <Button
-    as={Link} to={`/convocatoria/${item.id}/estudiantes`}
-  >
-    <Icon as={AiOutlineTeam}></Icon>
-  </Button>
-    },
-    {
-      label: "Resultados",
-      renderCell: (item) => <Button
-    as={Link} to={`/resultadoConvocatoria/${item.id}`}
-  >
-    <Icon as={AiOutlineEye}></Icon>
-  </Button>
-    }
-  ]
 
   return (
 
-      <TablaComponent
+      <TablaConvocatoria
       inputPlaceHolder={"Busca por Convocatoria"}
       buttonPath={"/formularioConvocatoria"}
       buttonMsg={"Crear Convocatoria"}
-      funcionSwitch={obtenerConvocatorias}
-      showSwitch={false}
+      showButton={true}
+      showSwitch={true}
       sortFns={sortFns}
-      cols={columns}
       wCampo={"200px"}
       base={"265px"}
       sm={"330px"}
@@ -119,7 +52,7 @@ export default function ConvocatoriaBody() {
       ancho_tres={"1600px"}
       ancho_cuatro={"1750px"}
       ancho_cinco={"1850px"}
-      colsR={9}
+      colsR={10}
       aBuscar={"nombre"}
     />
   );

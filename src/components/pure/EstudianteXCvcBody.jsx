@@ -17,6 +17,7 @@ export default function EstudianteXCvcBody() {
     <TablaEstudianteXCvc 
       wCampo="200px"
       colsR={"5"}
+      showButton={"true"}
       ancho={"1040px"}
     />
   )

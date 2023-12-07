@@ -20,10 +20,10 @@ export default function FormularioEditarCategoria() {
   const [compeSeleccionada, setCompeSeleccionada] = useState();
 
   const validationSchema = Yup.object().shape({
-    nombre: Yup.string().required("El nombre es requerido").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$","El nombre solamente debe contener letras").min(3,"Minimo 3 caracteres").max(45,"Maximo 45 caracteres"),
+    nombre: Yup.string().required("El nombre es requerido").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$","El nombre solamente debe contener letras").min(2,"Mínimo 2 caracteres").max(70,"Maximo 70 caracteres"),
     competencia: Yup.string().required("La competencia es requerida, verifique si la perteneciente a esta categoria esta desactivada"),
     estado: Yup.string().required("El estado es requerido"),
-    descripcion: Yup.string().required("La descripción es requerida").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ.,\r\n0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ,.\r\n0-9]+)*(?<! )$","La descripción solamente debe contener letras").min(10,"Minimo 10 caracteres").max(200,"Maximo 200 caracteres"),
+    descripcion: Yup.string().required("La descripción es requerida").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ.,\r\n0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ,.\r\n0-9]+)*(?<! )$","La descripción solamente debe contener letras").min(5,"Mínimo 5 caracteres").max(240,"Máximo 240 caracteres"),
   });
 
   const obtenerCompetencias = async () => {

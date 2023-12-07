@@ -85,8 +85,8 @@ export default function FormEditarConvocatoria() {
 
 
   const validationSchema = Yup.object().shape({
-  nombre: Yup.string().required("El nombre es requerido"),
-  descripcion: Yup.string().required("La descripción es requerida"),
+  nombre: Yup.string().required("El nombre es requerido").min(5,"Mínimo 5 caracteres").max(70,"Máximo 70 caracteres"),
+  descripcion: Yup.string().required("La descripción es requerida").min(10,"Mínimo 10 caracteres").max(450,"Máximo 450 caracteres"),
   fecha_inicio: Yup.string().required("La fecha inicial es requerida"),
   fecha_fin: Yup.string().required("La fecha final es requerida"),
   prueba_id: Yup.string().required("La prueba es requerida")

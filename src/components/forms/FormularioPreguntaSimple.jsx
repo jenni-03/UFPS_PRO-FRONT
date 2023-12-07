@@ -100,7 +100,7 @@ export default function FormularioSimple() {
   };
 
   const validationSchema = Yup.object().shape({
-    enunciado: Yup.string().required("El enunciado es requerido"),
+    enunciado: Yup.string().required("El enunciado es requerido").min(10,"Mínimo 10 caracteres").max(850,"Máximo 850 caracteres"),
     opcionA: Yup.string().required("La opción A es requerida"),
     opcionB: Yup.string().required("La opción B es requerida"),
     opcionC: Yup.string().required("La opción C es requerida"),

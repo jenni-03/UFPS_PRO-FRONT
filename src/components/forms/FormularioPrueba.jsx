@@ -28,8 +28,8 @@ const initialValues = {
 };
 
 const validationSchema = Yup.object().shape({
-  nombre: Yup.string().required("El nombre es requerido").max(55, "Máximo 55 caracteres").min(10, "Mínimo 10 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ0-9]+)*(?<! )$", "El nombre solamente debe contener letras y números"),
-  descripcion: Yup.string().required("La descripcion es requerida").max(200, "Máximo 200 caracteres").min(30, "Mínimo 30 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ0-9]+)*(?<! )$", "El descripcion solamente debe contener letras y números"),
+  nombre: Yup.string().required("El nombre es requerido").max(70, "Máximo 70 caracteres").min(10, "Mínimo 10 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ0-9]+)*(?<! )$", "El nombre solamente debe contener letras y números"),
+  descripcion: Yup.string().required("La descripcion es requerida").max(200, "Máximo 200 caracteres").min(20, "Mínimo 20 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ0-9]+)*(?<! )$", "El descripcion solamente debe contener letras y números"),
   semestre: Yup.string().required('El semestre es obligatorio').max(2,"Máximo dos caracteres").matches("[0-9]","El semestre solo puede contener números"),
   duracion: Yup.number().required('La duración es obligatoria'),
   totalPreguntas: Yup.number().required("El total de preguntas de la prueba es obligatorio"),
