@@ -43,7 +43,6 @@ const TablaComponent = ({showButton=true, showSwitch=true, buttonPath="/",button
   data = { nodes }
 
 
-
   const chakraTheme = getTheme(DEFAULT_OPTIONS);
   //--data-table-library_grid-template-columns:  200px;
   const customTheme = {

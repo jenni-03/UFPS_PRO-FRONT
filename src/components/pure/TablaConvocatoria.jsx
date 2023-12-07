@@ -15,6 +15,7 @@ import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, Fa
 import {AiOutlineEdit, AiOutlineTeam, AiOutlineEye} from "react-icons/ai"
 import { MdAdd } from "react-icons/md";
 import {AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter,Icon, Box, Stack, InputGroup,Tooltip, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch, Badge} from '@chakra-ui/react';
+import { useNavigate } from "react-router-dom";
 
 const TablaConvocatoria = ({aBuscar,colsR,sortFns,wCampo, showButton=false, showSwitch=true, base,sm,md,lg,xl,ancho,ancho_tres,ancho_cuatro,ancho_cinco,inputPlaceHolder, buttonPath, buttonMsg}) => {
 
@@ -27,7 +28,8 @@ const TablaConvocatoria = ({aBuscar,colsR,sortFns,wCampo, showButton=false, show
   const [active, setActive] = useState(false)
   const [convocatorias, setConvocatorias] = useState([])
   const cancelRef = useRef()
-
+  const navigate = useNavigate()
+  
   const obtenerConvocatoriasByEstado= async (estado) =>{
     let response = await axiosApi.get(`/api/convocatoria/?estado=${estado}`,{
       headers:{
@@ -51,16 +53,27 @@ const TablaConvocatoria = ({aBuscar,colsR,sortFns,wCampo, showButton=false, show
     }).catch((e)=>{
       toast.error("Error al finalizar la convocatoria")
     })
-    console.log(response)
     if(response.status===200){
       onClose()
-      console.log(response)
       toast.success("¡Convocatoria finalizada con éxito!")
       setReloadData(true);
     }
       
   }
 
+const verResultados = async (id) =>{
+    const response = await axiosApi.get(`/api/resultados/convocatoria/${id}`,{
+      headers:{
+        Authorization: "Bearer " + token
+      }
+    }).catch((e)=>{
+      toast.error(e.response.data.error)
+    })
+    if(response.status===200){
+      navigate(`/resultadosAdmin/${id}`)
+    }
+      
+  }
 
 
 
@@ -210,7 +223,7 @@ const TablaConvocatoria = ({aBuscar,colsR,sortFns,wCampo, showButton=false, show
       {
         label: "Resultados",
         renderCell: (item) => <Button
-          as={Link} to={`/resultadoConvocatoria/${item.id}`}
+          onClick={()=>verResultados(item.id)}
         >
           <Icon as={AiOutlineEye}></Icon>
         </Button>

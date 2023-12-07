@@ -32,7 +32,7 @@ export default function ProtectedRoute({ isValid, children, redirectTo = "/" }) 
     // Mientras se carga el rol, puedes mostrar un mensaje de carga o lo que desees
     //
     return (<Flex justify={"center"} align={"center"} h="100vh">
-      <Spinner size='xl' color="red.500" />
+      <Spinner size='xl' color="black" />
     </Flex>)
   }
 

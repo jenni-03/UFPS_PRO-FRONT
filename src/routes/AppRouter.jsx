@@ -44,6 +44,8 @@ import EstudianteXConvocatoria from "../pages/Admin/convocatorias/EstudiantesXCo
 import AgregarEstudiante from "../pages/Admin/convocatorias/AgregarEstudiante";
 import ResultadoConvocatoria from "../components/pure/admin/convocatoria/ResultadoConvocatoria";
 import PruebaPresentacion from "../components/pure/user/PruebaPresentacion";
+import ResultadosUser from "../components/pure/user/ResultadosUser";
+import ResultadosAdmin from "../components/pure/admin/convocatoria/ResultadosAdmin";
 export default function AppRouter() {
   const { role, isInPrueba, idConvocatoria } = useContext(AppContext);
 
@@ -110,10 +112,7 @@ export default function AppRouter() {
               path="/editarConvocatoria/:id"
               element={<EditarConvocatoria />}
             />
-            <Route
-              path="/resultadoConvocatoria/:id"
-              element={<ResultadoConvocatoria/>}
-            />
+            <Route path="/resultadosAdmin/:id" element={<ResultadosAdmin/>} />
           </Route>
 
           <Route
@@ -137,6 +136,7 @@ export default function AppRouter() {
             />
             <Route path="/pruebasUser" element={<PruebasUser />} />
             <Route path="/convocatoriasUser" element={<ConvocatoriaUser />} />
+            <Route path="/resultadosUser/:id" element={<ResultadosUser/>} />
           </Route>
 
 
