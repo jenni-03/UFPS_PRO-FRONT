@@ -20,7 +20,6 @@ export default function PruebaEstudianteBody() {
         }).catch(e=>{
             toast.success(e)
         })
-        console.log(response.data)
         if(response.status===200){
             return response.data
         }

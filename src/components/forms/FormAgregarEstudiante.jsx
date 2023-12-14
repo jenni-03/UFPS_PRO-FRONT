@@ -21,7 +21,7 @@ export default function FormAgregarEstudiante() {
       codigo:codigo.toString(),
       semestre:semestre
     }
-    console.log(body)
+  
     let response = await axiosApi.post(`/api/convocatoria/${id}/registroEstudiante`,body,{
       headers:{
         "Content-Type": "application/json",

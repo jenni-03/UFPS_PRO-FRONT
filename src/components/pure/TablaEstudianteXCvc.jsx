@@ -13,8 +13,8 @@ import { useTheme } from "@table-library/react-table-library/theme";
 import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, FaChevronCircleLeft, FaChevronCircleRight } from 'react-icons/fa';
 import { PiWarningFill } from "react-icons/pi";
 import {AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter,Icon, Box,Tooltip, Stack, InputGroup, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
-import { AiOutlineDelete } from "react-icons/ai";
-import {useParams} from "react-router-dom";
+import { AiOutlineDelete,AiOutlineEye} from "react-icons/ai";
+import {useParams, useNavigate} from "react-router-dom";
 import {useRef} from "react";
 const TablaEstudianteXCvc = ({colsR,wCampo,ancho, showButton=false, showSwitch=false}) =>{
   const [estudiantes,setEstudiantes] = useState([])
@@ -25,6 +25,7 @@ const TablaEstudianteXCvc = ({colsR,wCampo,ancho, showButton=false, showSwitch=f
   const [reloadData, setReloadData] = useState(false);
   const {id} = useParams()
   const cancelRef = useRef()
+  const navigate = useNavigate()
   const { isOpen, onOpen, onClose } = useDisclosure()
 
 
@@ -40,7 +41,6 @@ const TablaEstudianteXCvc = ({colsR,wCampo,ancho, showButton=false, showSwitch=f
       setLoading(false)
     })
 
-    console.log(response)
     if(response.status===200){
       setEstudiantes(response.data)
       setLoading(false)
@@ -67,6 +67,20 @@ const TablaEstudianteXCvc = ({colsR,wCampo,ancho, showButton=false, showSwitch=f
       onClose()
       toast.success("¡Estudiante expulsado correctamente!")
       setReloadData(true);
+    }
+  }
+
+
+  const resultadosEstudiante = async (id_conv,id_user) =>{
+    const response = await axiosApi.get(`/api/resultados/estudiante/${id_user}/convocatoria/${id_conv}`,{
+      headers:{
+        Authorization: "Bearer " + token
+      }
+    }).catch(e=>{
+      toast.error(e.response.data.error)
+    })
+    if(response.status===200){
+      navigate(`/resultadosXestudianteAdmin/${id_conv}/${id_user}`)
     }
   }
 
@@ -156,7 +170,6 @@ const TablaEstudianteXCvc = ({colsR,wCampo,ancho, showButton=false, showSwitch=f
     pagination.fns.onSetPage(pagination.state.page - 1)
   }
   
-  console.log(estudiantes)
   const getTotalPages = () => pagination.state.getTotalPages(data.nodes && data.nodes)
 
   const isEmpty = () => getTotalPages()===0
@@ -197,6 +210,14 @@ const COLUMNS = [
         setEstudianteSelect(estudiantes.find(e => e.id === item.id))
       }}>
         <Icon color={"primero.100"} as={AiOutlineDelete} />
+      </Button>,
+    },
+    {
+      label: "Resultados",
+      renderCell: (item)=><Button display={"flex"} justifyContent={"center"}  alignItems={"center"} backgroundColor={"segundo.100"} variant={"unstyled"} onClick={()=>{
+        resultadosEstudiante(id,item.id)
+      }}>
+        <Icon color={"primero.100"} as={AiOutlineEye} />
       </Button>,
     }
   ]

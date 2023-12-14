@@ -30,9 +30,9 @@ const initialValues = {
 const validationSchema = Yup.object().shape({
   nombre: Yup.string().required("El nombre es requerido").max(70, "Máximo 70 caracteres").min(10, "Mínimo 10 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ0-9]+)*(?<! )$", "El nombre solamente debe contener letras y números"),
   descripcion: Yup.string().required("La descripcion es requerida").max(200, "Máximo 200 caracteres").min(20, "Mínimo 20 caracteres").matches("^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ0-9]+( [a-zA-ZÀ-ÖØ-öø-ÿ0-9]+)*(?<! )$", "El descripcion solamente debe contener letras y números"),
-  semestre: Yup.string().required('El semestre es obligatorio').max(2,"Máximo dos caracteres").matches("[0-9]","El semestre solo puede contener números"),
-  duracion: Yup.number().required('La duración es obligatoria'),
-  totalPreguntas: Yup.number().required("El total de preguntas de la prueba es obligatorio"),
+  semestre: Yup.string().required('El semestre es obligatorio').max(2,"Máximo dos caracteres").matches("[0-9]","El semestre solo puede contener números").matches(/^\d+$/,"Solo números positivos"),
+  duracion: Yup.string().required('La duración es obligatoria').matches("[0-9]","El semestre solo puede contener números").matches(/^\d+$/,"Solo números positivos"),
+  totalPreguntas: Yup.string().required("El total de preguntas de la prueba es obligatorio").matches("[0-9]","El semestre solo puede contener números").matches(/^\d+$/,"Solo números positivos"),
   competencias: Yup.array().required('Selecciona al menos una competencia'),
 
 
@@ -58,7 +58,6 @@ const FormularioPrueba = () => {
     })
       .then((response) => {
         setCompetencias(response.data);
-        console.log("Competencias activas",response.data)
         setLoading(false) 
       })
       .catch((error) => {
@@ -73,7 +72,6 @@ const FormularioPrueba = () => {
       },
     }).then((response) => {
       setCategoriasObtenidas(response.data);
-      console.log("Categorias activas",response.data)
       setLoading2(false)
     })
       .catch((error) => {
@@ -137,7 +135,6 @@ const FormularioPrueba = () => {
       valorCategorias: arregloCategorias,
     }
 
-    console.log(body)
 
     const response = await axiosApi.post("/api/prueba/create",body,{
       headers: {
@@ -167,7 +164,7 @@ const FormularioPrueba = () => {
         lg: "640px",
         tableBreakpoint: "800px",
       }}
-      p={"40px"}
+      p={"20px"}
       borderRadius={"8px"}
     >
       <Formik
@@ -230,6 +227,7 @@ const FormularioPrueba = () => {
                 <Field 
                   as={Input}
                   type="number" 
+                  min="0"
                   id="semestre" 
                   name="semestre"
                   w={"100%"}
@@ -247,6 +245,7 @@ const FormularioPrueba = () => {
                 <Field 
                   as={Input}
                   w={"100%"}
+                  min="0"
                   type="number" id="duracion" name="duracion" />
                 <FormErrorMessage>{errors.duracion}</FormErrorMessage>
               </FormControl>
@@ -265,6 +264,7 @@ const FormularioPrueba = () => {
               <Field 
                 as={Input}
                 w={"100%"}
+                min={"0"}
                 type="number" id="totalPreguntas" name="totalPreguntas" />
               <FormErrorMessage>{errors.totalPreguntas}</FormErrorMessage>
             </FormControl>
@@ -309,7 +309,8 @@ const FormularioPrueba = () => {
                     </Box>
                     <FormErrorMessage>{errors.competencias}</FormErrorMessage>
                     {values.competencias.includes(competencia.id) && (
-                      <FieldArray name="categorias">
+                      <FieldArray name="categorias" 
+                      >
                         {(arrayHelpers) =>
                             competencia.Categorias.map((categoria, index) =>{
 
@@ -319,10 +320,9 @@ const FormularioPrueba = () => {
                               if(categoriaEncontrada){
                                 return (
                                   <Box
-                                    w={"90%"}
+                                    w={"100%"}
                                     display={"flex"}
                                     flexDir={"column"}
-                                    ml={"30px"}
                                     gap={"10px"}
                                     key={categoria.nombre}
                                   >
@@ -330,19 +330,23 @@ const FormularioPrueba = () => {
                                     <Box
                                       w={"100%"}
                                       display={"flex"}
-                                      flexDir={"row"}
+                                      flexDir={["column","column","row"]}
                                       gap={"15px"}
                                       justifyContent={"center"}
                                     >
                                       <Field
                                         as={Input}
                                         type="number"
+                                        min={"0"}
+                                        w={"100%"}
                                         name={`categorias.${competencia.id}.${index}.numPreguntas`}
                                         placeholder="Número de preguntas"
                                       />
                                       <Field
                                         as={Input}
                                         type="number"
+                                        min={"0"}
+                                        w={"100%"}
                                         name={`categorias.${competencia.id}.${index}.porcentaje`}
                                         placeholder="Porcentaje"
                                       />
@@ -359,6 +363,7 @@ const FormularioPrueba = () => {
                                 )}})
                         }
                       </FieldArray>
+
                     )}
                   </Box>
                 ))

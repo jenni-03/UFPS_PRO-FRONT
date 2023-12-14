@@ -126,7 +126,6 @@ export default function FormularioConvocatoria() {
           onSubmit={({nombre,descripcion,fecha_inicio,fecha_fin,prueba_id}) => {
             const fechaInicial = fecha_inicio.replace("T", " ")
             const fechaTerminal = fecha_fin.replace("T", " ")
-            console.log(nombre,descripcion,fechaInicial,fechaTerminal,prueba_id,inputRef.current.files[0])
             toast.promise(agregarConvocatoria(nombre,descripcion,fechaInicial,fechaTerminal,prueba_id,inputRef.current.files[0])
 , {
             loading: 'Creando convocatoria...',

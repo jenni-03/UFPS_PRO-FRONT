@@ -52,7 +52,6 @@ export default function ConvocatoriaBodyUser(){
       setIsInPrueba(prev => desencriptar("isInPrueba"))
       encriptar("idConvocatoria",id.toString())
       encriptar("time",(response.data.tiempo_prueba*60).toString())
-      console.log(response.data.tiempo_prueba*60)
       setTiempoInicial(prev =>desencriptar("time"))
       if(response.data.respuestas.length!==0){
         const objeto = {}

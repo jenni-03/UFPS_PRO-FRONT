@@ -114,7 +114,7 @@ export default function EditarInformacionAdmin() {
     .min(20, "Mínimo 20 caracteres")
     .matches(
       "^(?! )[-a-zA-ZÀ-ÖØ-öø-ÿ0-9#.,]+( [-a-zA-ZÀ-ÖØ-öø-ÿ0-9#.,]+)*(?<! )$",
-      "s"
+      "Ingrese una direccion adecuada"
     ),
     email: Yup.string().email("email inválido").required("Campo requerido"),
     documento: Yup.string()

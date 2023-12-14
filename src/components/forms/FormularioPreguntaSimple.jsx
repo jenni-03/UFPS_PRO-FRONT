@@ -136,7 +136,7 @@ export default function FormularioSimple() {
       <Box
         boxShadow={"rgba(0, 0, 0, 0.1) 0px 4px 6px -1px, rgba(0, 0, 0, 0.06) 0px 2px 4px -1px;"}
         bg="white"
-        p="40px"
+        p="20px"
         borderRadius="8px"
         w={{
           base: "270px",
@@ -330,7 +330,7 @@ export default function FormularioSimple() {
               <Form>
                 <Flex
                   direction={{ base: "column", md: "row" }}
-                  justify={"space-between"}
+                  gap={"20px"}
                 >
                   <FormControl isInvalid={errors.archivo && touched.archivo}>
                     <Field id="archivo" name="archivo">
@@ -358,7 +358,7 @@ export default function FormularioSimple() {
                     <FormErrorMessage>{errors.archivo}</FormErrorMessage>
                   </FormControl>
                   <Btn
-                    mt={"10px"}
+                    mt={["0","0","10px"]}
                     isSubmit={true}
                     colorScheme={"blue"}
                     msg={"Guardar"}

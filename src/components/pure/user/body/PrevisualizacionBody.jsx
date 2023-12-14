@@ -2,13 +2,14 @@ import React, {useContext, useState}from "react";
 import {useEffect} from "react";
 import toast from "react-hot-toast";
 import { useParams } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 import axiosApi from "../../../../utils/config/axios.config"
 import { AppContext } from "../../../context/AppProvider";
 import {Image, Box, Text, Button,Radio, Divider, Flex, Spinner } from "@chakra-ui/react";
 import Cookies from "js-cookie";
 
-const PruebaPresentacionBody = ({}) =>{
-    const {isInPrueba,encriptar,setIsInPrueba, tiempoInicial, role, token, desencriptar} = useContext(AppContext)
+const PrevisualizacionBody = ({}) =>{
+    const {token} = useContext(AppContext)
     const {id} = useParams()
     const [preguntas, setPreguntas] = useState([])
     const [currentQuestionIndex, setCurrentQuestionIndex] = useState(0);
@@ -17,9 +18,8 @@ const PruebaPresentacionBody = ({}) =>{
     const [isLoading, setIsLoading] = useState(true)
     const [opciones, setOpciones] = useState([]);
     const [selectedAnswer, setSelectedAnswer] = useState(null);
+    const navigate = useNavigate()
     const [questionId, setQuestionId] = useState(null);
-    const [showNextButton, setShowNextButton] = useState(false);
-    const [respuestasSeleccionadas, setRespuestasSeleccionadas] = useState(()=>desencriptar("res")?JSON.parse(desencriptar("res")):null)
 
     const showQuestion = (index) => {
         resetState();
@@ -29,17 +29,8 @@ const PruebaPresentacionBody = ({}) =>{
         setQuestionId(currentQuestion.id)
         setQuestionText(`${questionNumber}. ${currentQuestion.texto}`);
         setOpciones(currentQuestion.opciones)
-        obtenerRespuestas(currentQuestion.id)
     };  
 
-    const obtenerRespuestas = (id) =>{
-        if(respuestasSeleccionadas){
-         if(respuestasSeleccionadas[id]!==undefined&&respuestasSeleccionadas[id]!==null){
-            setSelectedAnswer(respuestasSeleccionadas[id])
-            }
-            
-        }
-    }
 
     const selectChoice = (index) =>{
         setSelectedAnswer(prev => index)
@@ -54,63 +45,16 @@ const PruebaPresentacionBody = ({}) =>{
     const nextQuestion = () => {
         if(currentQuestionIndex+1 < preguntas.length){
             setCurrentQuestionIndex(currentQuestionIndex+1)
-            procesoPregunta()
     }}
     const prevQuestion = () =>{ 
         if(currentQuestionIndex>0){
             setCurrentQuestionIndex(currentQuestionIndex-1)
-            procesoPregunta()
         }
     }
 
-    const terminarPrueba = async (id, mensaje) =>{
-        const response = await axiosApi.post(`/api/convocatoria/${id}/terminarPrueba`,{},{
-            headers:{
-                Authorization: "Bearer " + token
-            }
-        }).catch(e=>{
-            toast.error(e.response.data.error)
-        })
-        if(response.status===200){
-            toast.success(mensaje)
-        }
-    }
-
-
-    const procesoPregunta = () => {
-        if(selectedAnswer!==null){
-            // Actualizamos el objeto con la nueva respuesta y opción
-            const updatedRespuestas = { ...respuestasSeleccionadas, [questionId]: selectedAnswer };
-            //Actualizamos el estado
-            setRespuestasSeleccionadas(updatedRespuestas);
-            //Actualizamos el sessiónStorage
-            //sessionStorage.setItem("res", JSON.stringify(updatedRespuestas))
-            encriptar("res",JSON.stringify(updatedRespuestas))
-            //Envíamos la información
-            enviarPregunta(questionId,tiempoInicial,selectedAnswer)
-        }else{
-            enviarPregunta(questionId,tiempoInicial,null)
-        }
-    }
-
-    const enviarPregunta = async (id_pregunta, tiempo, opcionElegida) =>{
-        const body={
-            id_pregunta:id_pregunta,
-            tiempo:Math.floor(parseInt(tiempo)/60),
-            opcion:opcionElegida
-        }
-        const response = await axiosApi.put(`/api/convocatoria/${id}/guardarProgreso`,body,{
-            headers:{
-                Authorization:"Bearer " + token
-            }
-        }).catch(e =>{
-            toast.error(e.response.data.error)
-        })
-    }
-
-
+    
     const obtenerPreguntasPrueba = async (id) =>{
-        const response = await axiosApi.get(`/api/convocatoria/${id}/getPreguntas`,{
+        const response = await axiosApi.get(`/api/prueba/preguntas/${id}`,{
             headers:{
                 Authorization:"Bearer " + token
             }
@@ -121,13 +65,6 @@ const PruebaPresentacionBody = ({}) =>{
         setIsLoading(false)
     }
 
-    if(tiempoInicial===0){
-        terminarPrueba(id,"El tiempo se ha agotado, prueba finalizada con exito")
-        sessionStorage.removeItem("idConvocatoria")
-        setIsInPrueba(prev => "false")
-        encriptar("isInPrueba","false")
-
-    }
 
     useEffect(()=>{
         obtenerPreguntasPrueba(id)
@@ -160,7 +97,6 @@ const PruebaPresentacionBody = ({}) =>{
                             textAlign={"left"} 
                             onClick={() => {
                                 selectChoice(index)
-                                enviarPregunta(questionId,tiempoInicial,index)
                             }}
                             border={"2px solid"}
                             borderColor={selectedAnswer===index?"black":"black"}
@@ -173,25 +109,20 @@ const PruebaPresentacionBody = ({}) =>{
                             {o}
                         </Box>
                     ))}
-                    <Flex justifyContent={"space-between"}>
-                        <Button backgroundColor={"white"} color={"telegram.500"} border={"1px solid"} borderColor={"telegram.5000"}  onClick={()=>prevQuestion()}>Anterior</Button>
+                    <Flex justifyContent={"space-between"} gap={"20px"} >
+                        <Button w={"100%"} backgroundColor={"white"} color={"telegram.500"} border={"1px solid"} borderColor={"telegram.5000"}  onClick={()=>prevQuestion()}>Anterior</Button>
                         {
                             currentQuestionIndex+1!==preguntas.length ?
-                                <Button colorScheme={"telegram"} color="white"  onClick={()=>{
+                                <Button w={"100%"} colorScheme={"telegram"} color="white"  onClick={()=>{
                                     nextQuestion()
                                 }
                                     }>Siguiente</Button>
                                     :
-                                    <Button colorScheme={"green"} onClick={()=>{
-                                        procesoPregunta()
-                                        terminarPrueba(id,"Prueba finalzada correctamente") 
-                                        setIsInPrueba(prev => "false")
-                                        encriptar("isInPrueba","false")
-                                        sessionStorage.removeItem("idConvocatoria")
-                                        sessionStorage.removeItem("res")
-                                        sessionStorage.removeItem("time")
+                                    <Button w={"100%"} colorScheme={"green"} onClick={()=>{
+                                        
+                                        navigate("/pruebas")
 
-                                    }}>Finalizar</Button>
+                                    }}>Volver</Button>
                         }
                     </Flex>
                 </Flex>
@@ -200,4 +131,4 @@ const PruebaPresentacionBody = ({}) =>{
     )
 }
 
-export default PruebaPresentacionBody
+export default PrevisualizacionBody

@@ -2,12 +2,11 @@ import React,{useContext}from 'react'
 import { AppContext } from '../../../context/AppProvider'
 import Page from '../../../container/Page'
 import {useParams} from 'react-router-dom'
-import ResultadosAdminBody from './body/ResultadosAdminBody'
+import ResultadosGlobalesBody from './body/ResultadosGlobalesBody'
 
-export default function ResultadosAdmin() {
-    const {id} = useParams()
+export default function ResultadosGlobales() {
     const {change, open} = useContext(AppContext)
     return (
-        <Page changeOpen={change} isOpen={open} componente={<ResultadosAdminBody id={id}/>} msg={"Estadísticas"}/>
+        <Page changeOpen={change} isOpen={open} componente={<ResultadosGlobalesBody/>} msg={"Resultados Globales"}/>
         )
 }

@@ -90,21 +90,31 @@ export default function FormEditarEstudiante() {
     nombre: Yup.string()
       .required("El nombre es requerido")
       .max(50, "Máximo 50 caracteres")
-      .min(2, "Mínimo 2 caracteres"),
+      .min(2, "Mínimo 2 caracteres")
+      .matches(
+      "^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$",
+      "El nombre únicamente debe tene letras"
+      ),
     apellido: Yup.string()
-      .required("El nombre es requerido")
+      .required("El apellido es requerido")
       .max(55, "Máximo 55 caracteres")
-      .min(2, "Mínimo 2 caracteres"),
+      .min(2, "Mínimo 2 caracteres")
+      .matches(
+       "^(?! )[a-zA-ZÀ-ÖØ-öø-ÿ]+( [a-zA-ZÀ-ÖØ-öø-ÿ]+)*(?<! )$",
+      "El Apellido únicamente debe tene letras"
+      ),
     semestre: Yup.string()
-      .required("El nombre es requerido")
+      .required("El semestre es requerido")
       .max(2, "Máximo 2 dígitos")
       .min(1, "Mínimo 1 dígido"),
     email: Yup.string().email().required("El email es requerido"),
     estado: Yup.string().required("El estado es requerido"),
     codigo: Yup.string()
-      .required("El estado es requerido")
-      .max(7, "Máximo 7 caracters")
-      .min(7, "Mínimo 7 caracteres"),
+      .required("El código es requerido")
+      .max(7, "Máximo 7 caracteres")
+      .min(7, "Mínimo 7 caracteres")
+      .matches("^[0-9]+$", "El código solo puede contener numeros")
+    ,
   });
 
   if (loading) {
@@ -142,7 +152,7 @@ export default function FormEditarEstudiante() {
   return (
     <Box>
       <Center h="100%">
-        <Box p="20px" borderRadius="8px" bgColor="white" overflow="hidden">
+        <Box p="20px" borderRadius="8px" bgColor="white" overflow="hidden" >
           <Formik
             initialValues={datos}
             validationSchema={validationSchema}
@@ -166,24 +176,17 @@ export default function FormEditarEstudiante() {
               const { errors, touched } = props;
               return (
                 <Form>
-                  <Box
-                    display="flex"
-                    flexDirection="column"
-                    alignItems="center"
-                    textAlign="center"
-                    gap={"20px"}
-                  >
+                  <Box gap={"20px"} display={"flex"} flexDir={"column"}>
                     <Box
                       display={"flex"}
                       flexDir={["column", "column", "row"]}
-                      alignItems={"center"}
-                      justifyContent={"center"}
+                      w={"100%"}
+                      justifyContent={"space-between"}
                       gap={"15px"}
                     >
                       <FormControl
                         display="flex"
                         flexDirection="column"
-                        justifyContent="center"
                         isInvalid={errors.nombre && touched.nombre}
                       >
                         <FormLabel htmlFor="nombre">Nombre</FormLabel>
@@ -192,15 +195,12 @@ export default function FormEditarEstudiante() {
                           as={Input}
                           id="nombre"
                           type="text"
-                          maxW={["200px", "250px", "200px", "200px"]}
-                          w="400px"
                         />
                         <FormErrorMessage>{errors.nombre}</FormErrorMessage>
                       </FormControl>
                       <FormControl
                         display="flex"
                         flexDirection="column"
-                        justifyContent="center"
                         isInvalid={errors.apellido && touched.apellido}
                       >
                         <FormLabel htmlFor="apellido">Apellido</FormLabel>
@@ -209,8 +209,6 @@ export default function FormEditarEstudiante() {
                           as={Input}
                           id="apellido"
                           type="text"
-                          maxW={["200px", "250px", "200px", "200px"]}
-                          w="400px"
                         />
                         <FormErrorMessage>{errors.apellido}</FormErrorMessage>
                       </FormControl>
@@ -218,14 +216,12 @@ export default function FormEditarEstudiante() {
                     <Box
                       display={"flex"}
                       flexDir={["column", "column", "row"]}
-                      alignItems={"center"}
                       justifyContent={"center"}
                       gap={"15px"}
                     >
                       <FormControl
                         display="flex"
                         flexDirection="column"
-                        justifyContent="center"
                         isInvalid={errors.estado && touched.estado}
                       >
                         <FormLabel htmlFor="estado">Estado</FormLabel>
@@ -234,8 +230,6 @@ export default function FormEditarEstudiante() {
                           as={Select}
                           id="estado"
                           type="text"
-                          maxW={["200px", "250px", "200px", "200px"]}
-                          w="400px"
                         >
                           <option value={"true"}>Activo</option>
                           <option value={"false"}>Inactivo</option>
@@ -245,7 +239,6 @@ export default function FormEditarEstudiante() {
                       <FormControl
                         display="flex"
                         flexDirection="column"
-                        justifyContent="center"
                         isInvalid={errors.codigo && touched.codigo}
                       >
                         <FormLabel htmlFor="codigo">Código</FormLabel>
@@ -254,7 +247,6 @@ export default function FormEditarEstudiante() {
                           as={Input}
                           id="codigo"
                           type="text"
-                          maxW={["200px", "250px", "200px", "200px"]}
                         />
                         <FormErrorMessage>{errors.codigo}</FormErrorMessage>
                       </FormControl>
@@ -262,7 +254,6 @@ export default function FormEditarEstudiante() {
                     <FormControl
                       display="flex"
                       flexDirection="column"
-                      justifyContent="center"
                       isInvalid={errors.email && touched.email}
                     >
                       <FormLabel htmlFor="email">Correo</FormLabel>
@@ -271,8 +262,6 @@ export default function FormEditarEstudiante() {
                         as={Input}
                         id="email"
                         type="text"
-                        maxW={["200px", "250px", "415px", "415px"]}
-                        w="415px"
                       />
                       <FormErrorMessage>{errors.email}</FormErrorMessage>
                     </FormControl>

@@ -1,5 +1,5 @@
 import React,{useContext} from "react";
-import { AiOutlineEdit } from "react-icons/ai";
+import { AiOutlineEdit, AiOutlineFileSearch} from "react-icons/ai";
 import { AppContext } from "../context/AppProvider";
 import axiosApi from "../../utils/config/axios.config"
 import TablaComponent from "./TablaComponent";
@@ -61,12 +61,19 @@ export default function PruebaBody() {
   >
     <Icon as={AiOutlineEdit}></Icon>
   </Button>
+    },
+    {
+      label: "Previsualizción",
+      renderCell: (item) => <Button
+    as={Link} to={`/previsualizacionPrueba/${item.id}`}
+  >
+    <Icon as={AiOutlineFileSearch}></Icon>
+  </Button>
     }
   ]
 
 
   return (
-//    <TablaPrueba columns={columns} path={"/crearPrueba"} msg={"Crear Prueba"} showButton={true}/>
   <TablaComponent
       inputPlaceHolder={"Busca por prueba"}
       buttonPath={"/crearPrueba"}
@@ -84,7 +91,7 @@ export default function PruebaBody() {
       ancho_tres={"1240px"}
       ancho_cuatro={"1240px"}
       ancho_cinco={"1240px"}
-      colsR={6}
+      colsR={7}
       wCampo={"200px"}
 
     />

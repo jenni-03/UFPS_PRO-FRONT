@@ -120,7 +120,7 @@ export default function FormEditarPregunta() {
 
   const validationSchema = Yup.object().shape({
     enunciado: Yup.string().required("El enunciado es requerido").min(10,"Mínimo 10 caracteres").max(850,"Máximo 850 caracteres"),
-    semestre: Yup.string().required("El semestre es requerido"),
+    semestre: Yup.string().required("El semestre es requerido").max(2,"Máximo dos caracteres").matches("[0-9]","El semestre solo puede contener números"),
     estado: Yup.string().required("El estado es requerido"),
     categoria: Yup.string().nullable(),
     imagen: Yup.mixed()

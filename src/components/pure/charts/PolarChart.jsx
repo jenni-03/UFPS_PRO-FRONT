@@ -24,7 +24,6 @@ const PolarChart = ({id}) =>{
       toast.error(e.response.data.error)
     })
     if(response.status===200){
-      console.log(response.data)
       setMedia(parseInt(response.data.promedio))
       setModa(parseInt(response.data.moda))
       setMediana(parseInt(response.data.mediana))
@@ -39,7 +38,6 @@ const PolarChart = ({id}) =>{
  if(loading){
     return <Spinner color={"black"} size={"xl"} m={"20% auto"}  ></Spinner>
  }else{
-   console.log(media,moda,mediana)
  }
 
 

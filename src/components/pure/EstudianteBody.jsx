@@ -13,7 +13,7 @@ export default function EstudianteBody() {
 
   return (
     <TablaEstudiantes
-      colsR={7}
+      colsR={8}
       wCampo={"200px"}
     />
   )

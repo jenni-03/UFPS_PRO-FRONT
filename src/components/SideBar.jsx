@@ -23,14 +23,14 @@ export default function SideBar({isOpen}) {
     {icon:AiOutlineFlag,msg:"Competencias",active:false,path:["/competencias","/formularioCompetencia","/editarCompetencia"]},
     {icon:AiOutlineAppstore,msg:"Categorías",active:false,path:["/categorias","/formularioCategoria","/editarCategoria"]},
     {icon:AiOutlineCalendar,msg:"Preguntas",active:false,path:["/preguntas","/tipoPregunta","/formularioPreguntaSimple","/formularioPreguntaImagen","/editarPregunta"]},
-    {icon:AiOutlineTeam,msg:"Estudiantes",active:false,path:["/estudiantes","/editarEstudiante"]},
-    {icon:AiOutlineFileAdd,msg:"Pruebas",active:false,path:["/pruebas","/crearPrueba","/editarPrueba"]},
-    {icon:AiOutlineBook,msg:"Convocatorias",active:false, path:["/convocatorias","/formularioConvocatoria","/editarConvocatoria","/convocatoria"]},
+    {icon:AiOutlineTeam,msg:"Estudiantes",active:false,path:["/estudiantes","/editarEstudiante","/resultadosGlobales"]},
+    {icon:AiOutlineFileAdd,msg:"Pruebas",active:false,path:["/pruebas","/crearPrueba","/editarPrueba","/previsualizacionPrueba"]},
+    {icon:AiOutlineBook,msg:"Convocatorias",active:false, path:["/convocatorias","/formularioConvocatoria","/editarConvocatoria","/convocatoria","/resultadosAdmin","/resultadosXestudianteAdmin"]},
   ]
 
   const userNavItems = [
     {icon:AiOutlineHome,msg:"Panel Principal",active:false,path:["/user", "/editarInformacionEstudiante","/cambiarContraseniaEstudiante"]},
-    {icon:AiOutlineFileAdd,msg:"Pruebas",active:false,path:["/pruebasUser"]},
+    {icon:AiOutlineFileAdd,msg:"Pruebas",active:false,path:["/pruebasUser","/resultadosUser"]},
     {icon:AiOutlineBook,msg:"Convocatorias",active:false, path:["/convocatoriasUser"]},
   ]
 

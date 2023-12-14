@@ -11,7 +11,7 @@ import Btn from "./Btn";
 import { DEFAULT_OPTIONS, getTheme } from '@table-library/react-table-library/chakra-ui';
 import { Link } from 'react-router-dom';
 import { FaChevronDown, FaChevronUp, FaSearch, FaChevronLeft, FaChevronRight, FaChevronCircleLeft, FaChevronCircleRight } from 'react-icons/fa';
-import {AiOutlineEdit, AiOutlineDelete} from "react-icons/ai"
+import {AiOutlineEdit, AiOutlineDelete, AiOutlineEye} from "react-icons/ai"
 import { MdAdd } from "react-icons/md";
 import {AlertDialog, useDisclosure, AlertDialogOverlay, AlertDialogContent, AlertDialogHeader, AlertDialogCloseButton, AlertDialogBody, AlertDialogFooter,Icon, Box, Stack, InputGroup,Tooltip, InputLeftElement, Input, HStack, IconButton, Button, Flex, Skeleton, Text, Switch} from '@chakra-ui/react';
 
@@ -202,6 +202,12 @@ const eliminarEstudiante = async (id_estudiante) =>{
         <Icon color={"primero.100"} as={AiOutlineDelete}/>
       </Button>,
     },
+    {
+      label: "Resultados Globales",
+      renderCell: (item)=><Button as={Link} to={`/resultadosGlobales/${item.id}`} >
+        <Icon color={"primero.100"} as={AiOutlineEye} />
+      </Button>,
+    }
   ]
 
   return (
