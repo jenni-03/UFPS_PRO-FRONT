@@ -8,20 +8,20 @@ export const AppContext = createContext();
 export function AppProvider({ children }) {
 
   const encriptar = (keySession,valueSession) =>{
-    const text_encrypt = CryptoJS.AES.encrypt(valueSession,options.secretPassword).toString()
-    sessionStorage.setItem(keySession, text_encrypt)
+    //const text_encrypt = CryptoJS.AES.encrypt(valueSession,options.secretPassword).toString()
+    sessionStorage.setItem(keySession, valueSession);
   }
 
   const desencriptar = (keySession) =>{
     const valueSession = sessionStorage.getItem(keySession);
 
     if (valueSession) {
-      let text_decrypt = CryptoJS.AES.decrypt(valueSession, options.secretPassword);
+      //let text_decrypt = CryptoJS.AES.decrypt(valueSession, options.secretPassword);
 
-      if (text_decrypt) {
-        text_decrypt = text_decrypt.toString(CryptoJS.enc.Utf8);
-        return text_decrypt;
-      }
+      //if (text_decrypt) {
+      //  text_decrypt = text_decrypt.toString(CryptoJS.enc.Utf8);
+        return valueSession;
+      //}
     }
 
   }

@@ -6,7 +6,7 @@ import { Flex,Button} from "@chakra-ui/react";
 import BarChart from "../../../charts/BarChart";
 import { Chart } from "chart.js";
 import DoughnutChart from "../../../charts/DoughnutChart";
-import ChartJsImage from "chartjs-to-image";
+// import ChartJsImage from "chartjs-to-image";
 import { Document, Page, Text, View, PDFViewer, StyleSheet, Image} from '@react-pdf/renderer';
 import { PDFDownloadLink } from '@react-pdf/renderer';
 import LogoPrincipal from "../../../../../assets/images/LogoPrincipal.jpg"
@@ -30,49 +30,49 @@ const ResultadosXestudianteBody = ({id_conv,id_estudiante}) =>{
     const createChartBar = (labels, datos, titulo) =>{
 
 
-        const myChart = new ChartJsImage();
-        myChart.setConfig({
-            type: 'bar',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        label: titulo,
-                        data: datos,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.1)',
-                            'rgba(54, 162, 235, 0.1)',
-                            'rgba(255, 206, 86, 0.1)',
-                            'rgba(192, 65, 192, 0.1)',
-                            'rgba(200, 230, 65, 0.1)',
-                            'rgba(255, 192, 192, 0.1)',
-                            'rgba(150, 5, 152, 0.1)',
-                        ],
-                        borderColor:[
-                            'rgba(255, 99, 132, 0.6)',
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(255, 206, 86, 0.6)',
-                            'rgba(192, 65, 192, 0.6)',
-                            'rgba(200, 230, 65, 0.6)',
-                            'rgba(255, 192, 192, 0.6)',
-                            'rgba(150, 5, 152, 0.6)',
-                        ],
-                        borderWidth: 3,
-                    }
-                ]
-            },
-            options:{
-                plugins: {
-                    datalabels: {
-                        anchor: 'center', // Ubicación de la etiqueta (end, center, start, etc.)
-                        align: 'end',
-                    }
-                }}}
-        );
+        // const myChart = new ChartJsImage();
+        // myChart.setConfig({
+        //     type: 'bar',
+        //     data: {
+        //         labels: labels,
+        //         datasets: [
+        //             {
+        //                 label: titulo,
+        //                 data: datos,
+        //                 backgroundColor: [
+        //                     'rgba(255, 99, 132, 0.1)',
+        //                     'rgba(54, 162, 235, 0.1)',
+        //                     'rgba(255, 206, 86, 0.1)',
+        //                     'rgba(192, 65, 192, 0.1)',
+        //                     'rgba(200, 230, 65, 0.1)',
+        //                     'rgba(255, 192, 192, 0.1)',
+        //                     'rgba(150, 5, 152, 0.1)',
+        //                 ],
+        //                 borderColor:[
+        //                     'rgba(255, 99, 132, 0.6)',
+        //                     'rgba(54, 162, 235, 0.6)',
+        //                     'rgba(255, 206, 86, 0.6)',
+        //                     'rgba(192, 65, 192, 0.6)',
+        //                     'rgba(200, 230, 65, 0.6)',
+        //                     'rgba(255, 192, 192, 0.6)',
+        //                     'rgba(150, 5, 152, 0.6)',
+        //                 ],
+        //                 borderWidth: 3,
+        //             }
+        //         ]
+        //     },
+        //     options:{
+        //         plugins: {
+        //             datalabels: {
+        //                 anchor: 'center', // Ubicación de la etiqueta (end, center, start, etc.)
+        //                 align: 'end',
+        //             }
+        //         }}}
+        // );
 
-        // Convertir el gráfico a una imagen
-        myChart.setWidth(800).setHeight(300);
-        setImageBarSrc(myChart.getUrl())
+        // // Convertir el gráfico a una imagen
+        // myChart.setWidth(800).setHeight(300);
+        // setImageBarSrc(myChart.getUrl())
 
     }
 
@@ -80,32 +80,32 @@ const ResultadosXestudianteBody = ({id_conv,id_estudiante}) =>{
     const createChartDonut = (labels, datos) =>{
 
 
-        const myChart = new ChartJsImage();
-        myChart.setConfig({
-            type: 'doughnut',
-            data: {
-                labels: labels,
-                datasets: [
-                    {
-                        data: datos,
-                        backgroundColor: [
-                            'rgba(255, 99, 132, 0.6)',
-                            'rgba(54, 162, 235, 0.6)',
-                            'rgba(255, 206, 86, 0.6)',
-                            'rgba(192, 65, 192, 0.6)',
-                            'rgba(200, 230, 65, 0.6)',
-                            'rgba(255, 192, 192, 0.6)',
-                            'rgba(150, 5, 152, 0.6)',
-                        ],
-                        borderWidth: 3,
-                    }
-                ]
-            }}
-        );
+        // const myChart = new ChartJsImage();
+        // myChart.setConfig({
+        //     type: 'doughnut',
+        //     data: {
+        //         labels: labels,
+        //         datasets: [
+        //             {
+        //                 data: datos,
+        //                 backgroundColor: [
+        //                     'rgba(255, 99, 132, 0.6)',
+        //                     'rgba(54, 162, 235, 0.6)',
+        //                     'rgba(255, 206, 86, 0.6)',
+        //                     'rgba(192, 65, 192, 0.6)',
+        //                     'rgba(200, 230, 65, 0.6)',
+        //                     'rgba(255, 192, 192, 0.6)',
+        //                     'rgba(150, 5, 152, 0.6)',
+        //                 ],
+        //                 borderWidth: 3,
+        //             }
+        //         ]
+        //     }}
+        // );
 
-        // Convertir el gráfico a una imagen
-        myChart.setWidth(800).setHeight(300);
-        setImageDonutSrc(myChart.getUrl())
+        // // Convertir el gráfico a una imagen
+        // myChart.setWidth(800).setHeight(300);
+        // setImageDonutSrc(myChart.getUrl())
 
     }
 
